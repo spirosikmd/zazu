@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Hello World!</title>
+</head>
+<body ng-app="app">
+  <div ng-controller="TodoController as todoCtrl">
+    <form name="todoForm" ng-submit="todoCtrl.create(todoCtrl.todo)">
+      <label for="label">
+        Give a label:
+        <input type="text" ng-model="todoCtrl.todo.label" name="label" id="label" required>
+        <span ng-if="todoForm.label.$error.required">Provide a label</span>
+      </label>
+      <label for="checked">
+        Is it done?
+        <input type="checkbox" ng-model="todoCtrl.todo.checked" name="checked" id="checked">
+      </label>
+      <input type="submit" value="Create">
+    </form>
+    <div ng-repeat="todo in todoCtrl.todos">
+      <input type="checkbox" ng-model="todo.checked" title="Todo checked">
+      <span>{{ todo.label }}</span>
+    </div>
+  </div>
+
+  <script src="node_modules/angular/angular.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
