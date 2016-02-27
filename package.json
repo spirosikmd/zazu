@@ -12,5 +12,13 @@
     "angular": "^1.5.0",
     "angular-hotkeys": "^1.7.0",
     "source-code-pro": "git://github.com/adobe-fonts/source-code-pro.git#release"
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "^6.5.0",
+    "babelify": "^7.2.0",
+    "browserify": "^13.0.0",
+    "gulp": "^3.9.1",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
   }
 }

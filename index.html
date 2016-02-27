@@ -2,10 +2,15 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Todos</title>
+  <title>Zazu</title>
   <link rel="stylesheet" type="text/css" href="app.css">
+  <style>
+    [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+      display: none !important;
+    }
+  </style>
 </head>
-<body ng-app="app">
+<body ng-app="app" class="ng-cloak">
 <div ng-controller="TodoController as todoCtrl">
   <div ng-repeat="todo in todoCtrl.todos">
     <input type="checkbox" ng-model="todo.checked" title="Todo checked"
@@ -18,8 +23,6 @@
   </form>
 </div>
 
-<script src="node_modules/angular/angular.min.js"></script>
-<script src="node_modules/angular-hotkeys/build/hotkeys.min.js"></script>
-<script src="app.js"></script>
+<script src="dist/zazu.min.js"></script>
 </body>
 </html>
