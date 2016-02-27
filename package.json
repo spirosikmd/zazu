@@ -1,5 +1,5 @@
 {
-  "name": "electron-app",
+  "name": "zazu",
   "version": "0.1.0",
   "main": "main.js",
   "description": "Dead simple, mac osx hotkey powered todo app",
