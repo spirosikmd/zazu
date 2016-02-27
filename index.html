@@ -2,29 +2,24 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Hello World!</title>
+  <title>Todos</title>
+  <link rel="stylesheet" type="text/css" href="app.css">
 </head>
 <body ng-app="app">
-  <div ng-controller="TodoController as todoCtrl">
-    <form name="todoForm" ng-submit="todoCtrl.create(todoCtrl.todo)">
-      <label for="label">
-        Give a label:
-        <input type="text" ng-model="todoCtrl.todo.label" name="label" id="label" required>
-        <span ng-if="todoForm.label.$error.required">Provide a label</span>
-      </label>
-      <label for="checked">
-        Is it done?
-        <input type="checkbox" ng-model="todoCtrl.todo.checked" name="checked" id="checked">
-      </label>
-      <input type="submit" value="Create">
-    </form>
-    <div ng-repeat="todo in todoCtrl.todos">
-      <input type="checkbox" ng-model="todo.checked" title="Todo checked">
-      <span>{{ todo.label }}</span>
-    </div>
+<div ng-controller="TodoController as todoCtrl">
+  <div ng-repeat="todo in todoCtrl.todos">
+    <input type="checkbox" ng-model="todo.checked" title="Todo checked"
+           ng-change="todoCtrl.updateChecked(todo.id, todo.checked)">
+    <span>{{ todo.label }}</span>
   </div>
+  <form ng-show="todoCtrl.modes.create" name="todoForm" ng-submit="todoCtrl.create(todoCtrl.todo)">
+    <input type="text" ng-model="todoCtrl.todo.label" name="label" id="label" title="Label" required
+           focus="todoCtrl.modes.create">
+  </form>
+</div>
 
-  <script src="node_modules/angular/angular.min.js"></script>
-  <script src="app.js"></script>
+<script src="node_modules/angular/angular.min.js"></script>
+<script src="node_modules/angular-hotkeys/build/hotkeys.min.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
