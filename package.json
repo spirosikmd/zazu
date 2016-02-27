@@ -2,6 +2,12 @@
   "name": "electron-app",
   "version": "0.1.0",
   "main": "main.js",
+  "description": "Dead simple, mac osx hotkey powered todo app",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/spirosikmd/zazu"
+  },
   "dependencies": {
     "angular": "^1.5.0",
     "angular-hotkeys": "^1.7.0",
