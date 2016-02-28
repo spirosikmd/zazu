@@ -8,6 +8,9 @@
     "type": "git",
     "url": "https://github.com/spirosikmd/zazu"
   },
+  "scripts": {
+    "package": "./node_modules/.bin/electron-packager . Zazu --platform=darwin --arch=x64 --version=0.36.9 --overwrite"
+  },
   "dependencies": {
     "angular": "^1.5.0",
     "angular-hotkeys": "^1.7.0",
@@ -18,6 +21,7 @@
     "babel-preset-es2015": "^6.5.0",
     "babelify": "^7.2.0",
     "browserify": "^13.0.0",
+    "electron-packager": "^5.2.1",
     "gulp": "^3.9.1",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"

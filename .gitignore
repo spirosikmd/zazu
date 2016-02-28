@@ -29,4 +29,9 @@ build/Release
 node_modules
 
 # Created by .ignore support plugin (hsz.mobi)
+
+# Project specific
 dist
+
+# Electron package
+Zazu-darwin-x64
