@@ -10,16 +10,17 @@
     }
   </style>
 </head>
-<body ng-app="app" class="ng-cloak">
-<div ng-controller="TodoController as todoCtrl">
-  <div ng-repeat="todo in todoCtrl.todos">
-    <input type="checkbox" ng-model="todo.checked" title="Todo checked"
-           ng-change="todoCtrl.updateChecked(todo.id, todo.checked)">
-    <span>{{ todo.label }}</span>
+<body ng-app="zazu" class="ng-cloak">
+<div ng-controller="ZazuController as zazuCtrl">
+  <div ng-repeat="zazu in zazuCtrl.zazus">
+    <input type="checkbox" ng-model="zazu.checked" title="Zazu checked"
+           ng-change="zazuCtrl.updateChecked(zazu.id, zazu.checked)">
+    <span>{{ zazu.label }}</span>
+    <span ng-if="zazuCtrl.isSelected($index)"><</span>
   </div>
-  <form ng-show="todoCtrl.modes.create" name="todoForm" ng-submit="todoCtrl.create(todoCtrl.todo)">
-    <input type="text" ng-model="todoCtrl.todo.label" name="label" id="label" title="Label" required
-           focus="todoCtrl.modes.create">
+  <form ng-show="zazuCtrl.modes.create" ng-submit="zazuCtrl.create(zazuCtrl.zazu)">
+    <input type="text" ng-model="zazuCtrl.zazu.label" name="label" id="label" title="Zazu label" required
+           focus="zazuCtrl.modes.create">
   </form>
 </div>
 

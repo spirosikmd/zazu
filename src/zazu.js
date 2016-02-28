@@ -1,11 +1,11 @@
 import angular from 'angular';
 import hotkeys from 'angular-hotkeys';
 
-import {TodoService} from './services/TodoService';
-import {TodoController} from './controllers/TodoController';
+import {ZazuService} from './services/ZazuService';
+import {ZazuController} from './controllers/ZazuController';
 import {FocusDirective} from './directives/FocusDirective';
 
-angular.module('app', ['cfp.hotkeys'])
-  .service('TodoService', TodoService)
-  .controller('TodoController', TodoController)
+angular.module('zazu', ['cfp.hotkeys'])
+  .service('ZazuService', ZazuService)
+  .controller('ZazuController', ZazuController)
   .directive('focus', FocusDirective);
