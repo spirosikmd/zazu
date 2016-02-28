@@ -14,6 +14,7 @@ export class ZazuController {
     this.modes = {
       create: false
     };
+    this.editing = null;
 
     this.refresh();
     this.reset();
@@ -142,6 +143,19 @@ export class ZazuController {
             return;
           }
           this.updateChecked(selected.id, !selected.checked);
+          this.refresh();
+        }
+      })
+      .add({
+        combo: 'enter',
+        description: 'Edit mode',
+        allowIn: ['INPUT'],
+        callback: () => {
+          if (this.ZazuService.isEditing()) {
+            this.ZazuService.setEditing(false);
+          } else{
+            this.ZazuService.setEditing(true);
+          }
           this.refresh();
         }
       })

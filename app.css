@@ -11,13 +11,38 @@ body {
     color: rgb(109, 194, 194);
 }
 
-input {
+input[type="text"] {
     background: none;
     border: none;
     border-bottom: 1px dotted rgb(255, 203, 107);
     color: rgb(109, 194, 194);
     font-family: "Source Code Pro", sans-serif;
     font-size: 12px;
+}
+
+input[type="checkbox"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 1px solid #fff;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    padding: 4px;
+    vertical-align: middle;
+}
+
+input[type="checkbox"]:checked {
+    background-color: rgb(199, 146, 234);
+}
+
+input[type="checkbox"]:checked + label {
+    color: rgb(104, 104, 104);
+    text-decoration: line-through;
+}
+
+.label {
+    margin-left: 25px;
 }
 
 input:focus {

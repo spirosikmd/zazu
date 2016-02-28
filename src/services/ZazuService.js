@@ -3,16 +3,29 @@ export class ZazuService {
   constructor () {
     this.zazus = [{
       id: 1,
-      checked: true,
-      label: 'Zazu item one'
+      checked: false,
+      label: 'Use local storage to store zazus',
+      editing: false
     }, {
       id: 2,
       checked: false,
-      label: 'Zazu item two'
+      label: 'When enter on selected zazu then edit mode so user can update label',
+      editing: false
     }, {
       id: 3,
-      checked: true,
-      label: 'Another zazu item'
+      checked: false,
+      label: 'Style the checkboxes!',
+      editing: false
+    }, {
+      id: 4,
+      checked: false,
+      label: 'Style the checked zazu a bit differently',
+      editing: false
+    }, {
+      id: 5,
+      checked: false,
+      label: 'Increase input width with text',
+      editing: false
     }];
     this.selected = 0;
   }
@@ -116,5 +129,15 @@ export class ZazuService {
    */
   resetSelected () {
     this.selected = 0;
+  }
+
+  setEditing (flag) {
+    var selected = this.getSelected();
+    selected.editing = flag;
+  }
+
+  isEditing () {
+    var selected = this.getSelected();
+    return selected.editing;
   }
 }
