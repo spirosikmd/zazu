@@ -48,3 +48,8 @@ input[type="checkbox"]:checked + label {
 input:focus {
     outline: none;
 }
+
+.cfp-hotkeys-close {
+    min-width: 25px;
+    min-height: 25px;
+}
