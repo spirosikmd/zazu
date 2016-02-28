@@ -64,7 +64,24 @@ export class ZazuController {
    */
   updateChecked (id, checked) {
     this.ZazuService.update(id, 'checked', checked);
+    this.refresh();
   };
+
+  /**
+   * Update the label attribute of zazu with the specified id in case key press is "enter",
+   * and set editing mode to false.
+   * @param $event The ng-keypress event
+   * @param {number} id The zazu id.
+   * @param {string} label The zazu label.
+   */
+  updateLabel ($event, id, label) {
+    if ($event.which !== 13) {
+      return;
+    }
+    this.ZazuService.update(id, 'label', label);
+    this.ZazuService.setEditing(false);
+    this.refresh();
+  }
 
   /**
    * Remove the specified zazu and refresh the list.
@@ -107,6 +124,10 @@ export class ZazuController {
         callback: (event) => {
           event.preventDefault();
           this.setMode('create', false);
+          if (this.ZazuService.isEditing()) {
+            this.ZazuService.setEditing(false);
+            this.refresh();
+          }
         }
       })
       .add({
@@ -135,7 +156,7 @@ export class ZazuController {
         }
       })
       .add({
-        combo: 'mod+enter',
+        combo: 'space',
         description: 'Change check status of zazu',
         callback: () => {
           var selected = this.ZazuService.getSelected();
@@ -143,21 +164,21 @@ export class ZazuController {
             return;
           }
           this.updateChecked(selected.id, !selected.checked);
-          this.refresh();
         }
       })
       .add({
-        combo: 'enter',
+        combo: 'mod+enter',
         description: 'Edit mode',
         allowIn: ['INPUT'],
-        callback: () => {
+        callback: (event) => {
+          event.preventDefault();
           if (this.ZazuService.isEditing()) {
             this.ZazuService.setEditing(false);
-          } else{
+          } else {
             this.ZazuService.setEditing(true);
           }
           this.refresh();
         }
-      })
+      });
   }
 }

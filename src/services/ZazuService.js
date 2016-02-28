@@ -8,17 +8,17 @@ export class ZazuService {
       editing: false
     }, {
       id: 2,
-      checked: false,
+      checked: true,
       label: 'When enter on selected zazu then edit mode so user can update label',
       editing: false
     }, {
       id: 3,
-      checked: false,
+      checked: true,
       label: 'Style the checkboxes!',
       editing: false
     }, {
       id: 4,
-      checked: false,
+      checked: true,
       label: 'Style the checked zazu a bit differently',
       editing: false
     }, {
@@ -131,11 +131,19 @@ export class ZazuService {
     this.selected = 0;
   }
 
+  /**
+   * Set editing mode of selected zazu to the specified flag.
+   * @param {boolean} flag
+   */
   setEditing (flag) {
     var selected = this.getSelected();
     selected.editing = flag;
   }
 
+  /**
+   * Whether the selected zazu is in edit mode.
+   * @returns {boolean} True in case selected zazu is in edit mode.
+   */
   isEditing () {
     var selected = this.getSelected();
     return selected.editing;
