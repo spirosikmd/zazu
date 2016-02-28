@@ -11,6 +11,7 @@
   "dependencies": {
     "angular": "^1.5.0",
     "angular-hotkeys": "^1.7.0",
+    "randomstring": "^1.1.4",
     "source-code-pro": "git://github.com/adobe-fonts/source-code-pro.git#release"
   },
   "devDependencies": {

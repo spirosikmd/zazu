@@ -1,37 +1,21 @@
 export class ZazuService {
 
-  constructor () {
-    this.zazus = [{
-      id: 1,
-      checked: false,
-      label: 'Use local storage to store zazus',
-      editing: false
-    }, {
-      id: 2,
-      checked: true,
-      label: 'When enter on selected zazu then edit mode so user can update label',
-      editing: false
-    }, {
-      id: 3,
-      checked: true,
-      label: 'Style the checkboxes!',
-      editing: false
-    }, {
-      id: 4,
-      checked: true,
-      label: 'Style the checked zazu a bit differently',
-      editing: false
-    }, {
-      id: 5,
-      checked: false,
-      label: 'Increase input width with text',
-      editing: false
-    }];
+  constructor (StorageService) {
+    this.storage = StorageService;
+
+    this.refresh();
     this.selected = 0;
   }
 
   /**
-   * Get the list of zazu.
+   * Refresh the list of zazus.
+   */
+  refresh () {
+    this.zazus = this.storage.get();
+  }
+
+  /**
+   * Get the list of zazus.
    * @returns {object[]} The current list of zazus.
    */
   get () {
@@ -43,50 +27,28 @@ export class ZazuService {
    * @param {object} zazu The zazu.
    */
   create (zazu) {
-    zazu.id = this.zazus.length + 1;
-    this.zazus.push(zazu);
+    this.storage.create(zazu);
+    this.refresh();
   }
 
   /**
    * Update the key of zazu with value using the specified id.
-   * @param {number} id The id of zazu.
-   * @param {string} key The key of zazu object to update.
+   * @param {string} id The id of zazu.
+   * @param {string} prop The property of zazu object to update.
    * @param {string|boolean} value The new value.
    */
-  update (id, key, value) {
-    var index = this.find(id);
-    if (index === -1) {
-      return;
-    }
-    var current = this.zazus[index];
-    current[key] = value;
+  update (id, prop, value) {
+    this.storage.update(id, prop, value);
+    this.refresh();
   }
 
   /**
    * Remove zazu with the specified id.
-   * @param {number} id The zazu id.
+   * @param {string} id The zazu id.
    */
   remove (id) {
-    var index = this.find(id);
-    if (index === -1) {
-      return;
-    }
-    this.zazus.splice(index, 1);
-  }
-
-  /**
-   * Find zazu with id.
-   * @param {number} id The zazu id.
-   * @returns {number} The index of zazu in the list, -1 if it doesn't exist.
-   */
-  find (id) {
-    for (var index = 0; index < this.zazus.length; index++) {
-      var current = this.zazus[index];
-      if (current.id === id) {
-        return index;
-      }
-    }
-    return -1;
+    this.storage.remove(id);
+    this.refresh();
   }
 
   /**
