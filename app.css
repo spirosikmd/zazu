@@ -10,3 +10,16 @@ body {
     background-color: rgb(38, 50, 56);
     color: rgb(109, 194, 194);
 }
+
+input {
+    background: none;
+    border: none;
+    border-bottom: 1px dotted rgb(255, 203, 107);
+    color: rgb(109, 194, 194);
+    font-family: "Source Code Pro", sans-serif;
+    font-size: 12px;
+}
+
+input:focus {
+    outline: none;
+}
