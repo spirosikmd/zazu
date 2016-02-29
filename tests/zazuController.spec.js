@@ -16,11 +16,13 @@ describe('ZazuController', () => {
       this.get = jasmine.createSpy('get').and.callFake(function () {
         return [{label: 'label', checked: true}];
       });
-      this.create = jasmine.createSpy('create').and.callFake(function (zazu) {
-        return zazu;
-      });
-      this.update = jasmine.createSpy('update').and.callFake(function (id, prop, value) {
-        return [id, prop, value];
+      this.create = jasmine.createSpy('create').and.callThrough();
+      this.update = jasmine.createSpy('update').and.callThrough();
+      this.setEditing = jasmine.createSpy('setEditing').and.callThrough();
+      this.remove = jasmine.createSpy('remove').and.callThrough();
+      this.resetSelected = jasmine.createSpy('resetSelected').and.callThrough();
+      this.isSelected = jasmine.createSpy('isSelected').and.callFake(function (index) {
+        return index === 1;
       });
     });
   }));
@@ -103,6 +105,48 @@ describe('ZazuController', () => {
       controller.updateChecked('zazu-id', true);
       expect(ZazuService.update).toHaveBeenCalledWith('zazu-id', 'checked', true);
       expect(controller.refresh).toHaveBeenCalled();
+    });
+  });
+
+  describe('updateLabel', () => {
+    it('should not update label if key code is not 13', () => {
+      controller.updateLabel({which: 15}, 'zazu-id', 'label');
+      expect(ZazuService.update).not.toHaveBeenCalled();
+    });
+
+    it('should update label if key code is 13 and set editing mode to false', () => {
+      spyOn(controller, 'refresh');
+      controller.updateLabel({which: 13}, 'zazu-id', 'zazu-label');
+      expect(ZazuService.update).toHaveBeenCalledWith('zazu-id', 'label', 'zazu-label');
+      expect(ZazuService.setEditing).toHaveBeenCalledWith(false);
+      expect(controller.refresh).toHaveBeenCalled();
+    });
+  });
+
+  describe('remove', () => {
+    it('should not remove if zazu is undefined', () => {
+      controller.remove();
+      expect(ZazuService.remove).not.toHaveBeenCalled();
+    });
+
+    it('should call remove from ZazuService, refresh, and reset selected', () => {
+      spyOn(controller, 'refresh');
+      controller.remove({id: 'zazu-id'});
+      expect(ZazuService.remove).toHaveBeenCalledWith('zazu-id');
+      expect(controller.refresh).toHaveBeenCalled();
+      expect(ZazuService.resetSelected).toHaveBeenCalled();
+    });
+  });
+
+  describe('isSelected', () => {
+    it('should call ZazuService isSelected with index 1 and return true', () => {
+      expect(controller.isSelected(1)).toEqual(true);
+      expect(ZazuService.isSelected).toHaveBeenCalledWith(1);
+    });
+
+    it('should call ZazuService isSelected with index 0 and return false', () => {
+      expect(controller.isSelected(0)).toEqual(false);
+      expect(ZazuService.isSelected).toHaveBeenCalledWith(0);
     });
   });
 });
