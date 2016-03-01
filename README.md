@@ -1,4 +1,4 @@
-# Zazu
+# Zazu [![Build Status](https://travis-ci.org/spirosikmd/zazu.svg?branch=master)](https://travis-ci.org/spirosikmd/zazu)
 
 Dead simple,  keyboard powered todo app. Theme inspired from
 [material theme](http://equinusocio.github.io/material-theme/), and built with
