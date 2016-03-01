@@ -131,14 +131,14 @@ export default class ZazuController {
         }
       })
       .add({
-        combo: 'mod+down',
+        combo: 'mod+shift+down',
         description: 'Select next zazu',
         callback: () => {
           this.ZazuService.next();
         }
       })
       .add({
-        combo: 'mod+up',
+        combo: 'mod+shift+up',
         description: 'Select previous zazu',
         callback: () => {
           this.ZazuService.previous();

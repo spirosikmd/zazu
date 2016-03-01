@@ -19,7 +19,7 @@
     <label ng-hide="zazu.editing" for="zazu-checked-{{ $index }}">{{ zazu.label }}</label>
     <input ng-show="zazu.editing" type="text" ng-model="zazu.label" name="label" title="Zazu label"
            focus="zazu.editing" ng-keypress="zazuCtrl.updateLabel($event, zazu.id, zazu.label)" required>
-    <span ng-if="zazuCtrl.isSelected($index)"><</span>
+    <span class="arrow" ng-if="zazuCtrl.isSelected($index)"><</span>
   </div>
   <form ng-show="zazuCtrl.modes.create" ng-submit="zazuCtrl.create(zazuCtrl.zazu)">
     <input type="text" ng-model="zazuCtrl.zazu.label" name="label" id="label" title="Zazu label" required

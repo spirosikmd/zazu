@@ -53,3 +53,7 @@ input:focus {
     min-width: 25px;
     min-height: 25px;
 }
+
+.arrow {
+    color: rgb(255, 203, 107);
+}
