@@ -119,7 +119,7 @@ export default class ZazuController {
       })
       .add({
         combo: 'esc',
-        description: 'Default state',
+        description: 'Cancel edit or create new zazu',
         allowIn: ['INPUT'],
         callback: (event) => {
           event.preventDefault();
@@ -168,7 +168,7 @@ export default class ZazuController {
       })
       .add({
         combo: 'mod+enter',
-        description: 'Edit mode',
+        description: 'Edit zazu',
         allowIn: ['INPUT'],
         callback: (event) => {
           event.preventDefault();
