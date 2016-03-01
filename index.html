@@ -13,7 +13,7 @@
 </head>
 <body ng-app="zazu" class="ng-cloak">
 <div ng-controller="ZazuController as zazuCtrl">
-  <div ng-repeat="zazu in zazuCtrl.zazus">
+  <div class="zazu" ng-repeat="zazu in zazuCtrl.zazus">
     <input type="checkbox" ng-model="zazu.checked" id="zazu-checked-{{ $index }}"
            ng-change="zazuCtrl.updateChecked(zazu.id, zazu.checked)">
     <label ng-hide="zazu.editing" for="zazu-checked-{{ $index }}">{{ zazu.label }}</label>
