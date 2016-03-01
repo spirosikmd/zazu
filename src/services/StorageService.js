@@ -1,6 +1,6 @@
 const randomstring = require('randomstring');
 
-export class StorageService {
+export default class StorageService {
 
   constructor () {
     this.storage = localStorage;

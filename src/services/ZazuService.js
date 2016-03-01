@@ -1,4 +1,4 @@
-export class ZazuService {
+export default class ZazuService {
 
   constructor (StorageService) {
     this.storage = StorageService;
@@ -108,6 +108,6 @@ export class ZazuService {
    */
   isEditing () {
     var selected = this.getSelected();
-    return selected.editing;
+    return angular.isDefined(selected.editing) && selected.editing;
   }
 }

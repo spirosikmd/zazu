@@ -1,4 +1,4 @@
-export function FocusDirective ($timeout) {
+export default function FocusDirective ($timeout) {
   return {
     link: function (scope, element, attributes) {
       scope.$watch(attributes.focus, function (value) {

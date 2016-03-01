@@ -9,6 +9,8 @@
     "url": "https://github.com/spirosikmd/zazu"
   },
   "scripts": {
+    "test": "./node_modules/.bin/karma start",
+    "start": "./node_modules/.bin/electron .",
     "package": "./node_modules/.bin/electron-packager . Zazu --platform=darwin --arch=x64 --version=0.36.9 --overwrite"
   },
   "dependencies": {
