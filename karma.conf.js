@@ -73,6 +73,7 @@ module.exports = function (config) {
 
   if (process.env.TRAVIS) {
     base.browsers = ['Chrome_travis_ci'];
+    base.singleRun = true;
   }
 
   config.set(base);
