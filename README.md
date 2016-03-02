@@ -8,4 +8,4 @@ Dead simple,  keyboard shortcut todo app. Theme inspired from
 - [Electron](http://electron.atom.io/)
 - [Source Code Pro](http://adobe-fonts.github.io/source-code-pro/)
 
-To see the keyboard shortcuts type `?`
+To check the keyboard shortcuts type `?`
