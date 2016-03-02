@@ -1,8 +1,8 @@
 require('angular-mocks');
 const randomstring = require('randomstring');
 
-import zazu from '../src/zazu';
-import Storage from '../src/services/StorageService';
+import zazu from '../src/js/zazu';
+import Storage from '../src/js/services/StorageService';
 
 describe('StorageService', () => {
   let service;

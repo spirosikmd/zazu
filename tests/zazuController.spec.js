@@ -1,7 +1,7 @@
 require('angular-mocks');
 
-import zazu from '../src/zazu';
-import ZazuController from '../src/controllers/ZazuController';
+import zazu from '../src/js/zazu';
+import ZazuController from '../src/js/controllers/ZazuController';
 
 describe('ZazuController', () => {
   let $controller;

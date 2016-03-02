@@ -10,8 +10,8 @@
   },
   "scripts": {
     "test": "./node_modules/.bin/karma start",
-    "start": "./node_modules/.bin/electron .",
-    "package": "./node_modules/.bin/electron-packager . Zazu --platform=darwin --arch=x64 --version=0.36.9 --overwrite"
+    "start": "./node_modules/.bin/electron ./dist",
+    "package": "./node_modules/.bin/electron-packager ./dist Zazu --platform=darwin --arch=x64 --version=0.36.9 --overwrite"
   },
   "dependencies": {
     "angular": "^1.5.0",
@@ -26,6 +26,9 @@
     "browserify": "^13.0.0",
     "electron-packager": "^5.2.1",
     "gulp": "^3.9.1",
+    "gulp-load-plugins": "^1.2.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.2.0",
     "jasmine-core": "^2.4.1",
     "karma": "^0.13.21",
     "karma-browserify": "^5.0.2",
