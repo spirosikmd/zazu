@@ -1,3 +1,8 @@
+/**
+ * focus directive which focus on an element when element is loaded.
+ * @param $timeout
+ * @constructor
+ */
 export default function FocusDirective ($timeout) {
   return {
     link: function (scope, element, attributes) {

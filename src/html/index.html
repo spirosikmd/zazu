@@ -22,7 +22,7 @@
   </div>
   <form ng-show="zazuCtrl.modes.create" ng-submit="zazuCtrl.create(zazuCtrl.zazu)">
     <input type="text" ng-model="zazuCtrl.zazu.label" name="label" id="label" title="Zazu label" required
-           focus="zazuCtrl.modes.create" class="label">
+           focus="zazuCtrl.modes.create" class="label" elastic-input elastic-input-min-width="100px">
   </form>
 </div>
 
