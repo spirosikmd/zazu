@@ -1,15 +1,14 @@
 require('angular-mocks');
 const randomstring = require('randomstring');
 
-import zazu from '../src/js/zazu';
-import Storage from '../src/js/services/StorageService';
+import zazuApp from '../src/index';
 
-describe('StorageService', () => {
+describe('service: StorageService', () => {
   let service;
   let storage;
   let zazus;
 
-  beforeEach(angular.mock.module(zazu));
+  beforeEach(angular.mock.module(zazuApp));
 
   beforeEach(inject((_StorageService_) => {
     zazus = [{id: 'zazu-id', label: 'label', checked: true}];

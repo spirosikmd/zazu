@@ -1,14 +1,13 @@
 require('angular-mocks');
 
-import zazu from '../src/js/zazu';
-import ZazuService from '../src/js/services/ZazuService';
+import zazuApp from '../src/index';
 
-describe('ZazuService', () => {
+describe('service: ZazuService', () => {
   let service;
   let storage;
   let zazus;
 
-  beforeEach(angular.mock.module(zazu));
+  beforeEach(angular.mock.module(zazuApp));
 
   beforeEach(angular.mock.module(($provide) => {
     $provide.service('StorageService', function () {
