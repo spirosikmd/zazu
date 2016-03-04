@@ -59,7 +59,7 @@ export class ZazuController {
 
   /**
    * Update the checked attribute of zazu with the specified id.
-   * @param {number} id The id of the zazu.
+   * @param {string} id The id of the zazu.
    * @param {boolean} checked Either true or false.
    */
   updateChecked (id, checked) {
@@ -71,7 +71,7 @@ export class ZazuController {
    * Update the label attribute of zazu with the specified id in case key press is "enter",
    * and set editing mode to false.
    * @param $event The ng-keypress event
-   * @param {number} id The zazu id.
+   * @param {string} id The zazu id.
    * @param {string} label The zazu label.
    */
   updateLabel ($event, id, label) {

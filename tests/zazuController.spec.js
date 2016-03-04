@@ -1,15 +1,14 @@
 require('angular-mocks');
 
-import zazu from '../src/js/zazu';
-import ZazuController from '../src/js/controllers/ZazuController';
+import zazuApp from '../src/index';
 
-describe('ZazuController', () => {
-  let $controller;
+describe('component: zazu', () => {
+  let $componentController;
   let $scope;
-  let controller;
+  let component;
   let ZazuService;
 
-  beforeEach(angular.mock.module(zazu));
+  beforeEach(angular.mock.module(zazuApp));
 
   beforeEach(angular.mock.module(($provide) => {
     $provide.service('ZazuService', function () {
@@ -27,125 +26,119 @@ describe('ZazuController', () => {
     });
   }));
 
-  beforeEach(inject((_$controller_, _$rootScope_, _ZazuService_) => {
-    $controller = _$controller_;
+  beforeEach(inject((_$componentController_, _$rootScope_, _ZazuService_) => {
+    $componentController = _$componentController_;
     $scope = _$rootScope_.$new();
     ZazuService = _ZazuService_;
   }));
 
   beforeEach(() => {
-    controller = $controller(ZazuController, {$scope: $scope, ZazuService: ZazuService});
+    component = $componentController('zazu', {$scope: $scope, ZazuService: ZazuService});
   });
 
   afterEach(() => {
-    $controller = null;
+    $componentController = null;
     $scope = null;
-    controller = null;
+    component = null;
     ZazuService = null;
   });
 
   it('should be defined', () => {
-    expect(controller).toBeDefined();
+    expect(component).toBeDefined();
   });
 
   describe('setMode', () => {
-    it('should set the app mode to specified state', () => {
-      expect(controller.modes.create).toEqual(false);
-      controller.setMode('create', true);
-      expect(controller.modes.create).toEqual(true);
-    });
-
-    it('should set a new mode to specified state', () => {
-      expect(controller.modes.new).toBeUndefined();
-      controller.setMode('new', true);
-      expect(controller.modes.new).toEqual(true);
+    it('should set the create mode to specified state', () => {
+      expect(component.modes.create).toEqual(false);
+      component.setMode('create', true);
+      expect(component.modes.create).toEqual(true);
     });
   });
 
   describe('refresh', () => {
     it('should get ', () => {
       let zazu = {label: 'label', checked: true};
-      expect(controller.zazus.length).toEqual(1);
-      controller.refresh();
+      expect(component.zazus.length).toEqual(1);
+      component.refresh();
       expect(ZazuService.get).toHaveBeenCalled();
-      expect(controller.zazus.length).toEqual(1);
-      expect(controller.zazus[0]).toEqual(zazu);
+      expect(component.zazus.length).toEqual(1);
+      expect(component.zazus[0]).toEqual(zazu);
     });
   });
 
   describe('reset', () => {
     it('should copy the default zazu to current zazu', () => {
-      expect(controller.zazu).toEqual({label: '', checked: false});
-      controller.zazu = {label: 'label', checked: true};
-      controller.reset();
-      expect(controller.zazu).toEqual({label: '', checked: false});
+      expect(component.zazu).toEqual({label: '', checked: false});
+      component.zazu = {label: 'label', checked: true};
+      component.reset();
+      expect(component.zazu).toEqual({label: '', checked: false});
     });
   });
 
   describe('create', () => {
     it('should not create new zazu if label is length 0', () => {
-      controller.create({label: '', checked: false});
+      component.create({label: '', checked: false});
       expect(ZazuService.create).not.toHaveBeenCalled();
     });
 
     it('should create new zazu', () => {
       let zazu = {label: 'label', checked: false};
-      spyOn(controller, 'refresh');
-      spyOn(controller, 'reset');
-      controller.create(zazu);
+      spyOn(component, 'refresh');
+      spyOn(component, 'reset');
+      component.create(zazu);
       expect(ZazuService.create).toHaveBeenCalledWith(zazu);
-      expect(controller.refresh).toHaveBeenCalled();
-      expect(controller.reset).toHaveBeenCalled();
+      expect(component.refresh).toHaveBeenCalled();
+      expect(component.reset).toHaveBeenCalled();
     });
   });
 
   describe('updateChecked', () => {
     it('should update the checked property of zazu with the specified id', () => {
-      spyOn(controller, 'refresh');
-      controller.updateChecked('zazu-id', true);
+      spyOn(component, 'refresh');
+      component.updateChecked('zazu-id', true);
       expect(ZazuService.update).toHaveBeenCalledWith('zazu-id', 'checked', true);
-      expect(controller.refresh).toHaveBeenCalled();
+      expect(component.refresh).toHaveBeenCalled();
     });
   });
 
   describe('updateLabel', () => {
     it('should not update label if key code is not 13', () => {
-      controller.updateLabel({which: 15}, 'zazu-id', 'label');
+      component.updateLabel({which: 15}, 'zazu-id', 'label');
       expect(ZazuService.update).not.toHaveBeenCalled();
     });
 
     it('should update label if key code is 13 and set editing mode to false', () => {
-      spyOn(controller, 'refresh');
-      controller.updateLabel({which: 13}, 'zazu-id', 'zazu-label');
+      spyOn(component, 'refresh');
+      component.updateLabel({which: 13}, 'zazu-id', 'zazu-label');
       expect(ZazuService.update).toHaveBeenCalledWith('zazu-id', 'label', 'zazu-label');
       expect(ZazuService.setEditing).toHaveBeenCalledWith(false);
-      expect(controller.refresh).toHaveBeenCalled();
+      expect(component.refresh).toHaveBeenCalled();
     });
   });
 
   describe('remove', () => {
     it('should not remove if zazu is undefined', () => {
-      controller.remove();
+      component.remove();
       expect(ZazuService.remove).not.toHaveBeenCalled();
     });
 
     it('should call remove from ZazuService, refresh, and reset selected', () => {
-      spyOn(controller, 'refresh');
-      controller.remove({id: 'zazu-id'});
+      spyOn(component, 'refresh');
+      component.remove({id: 'zazu-id'});
       expect(ZazuService.remove).toHaveBeenCalledWith('zazu-id');
-      expect(controller.refresh).toHaveBeenCalled();
+      expect(component.refresh).toHaveBeenCalled();
       expect(ZazuService.resetSelected).toHaveBeenCalled();
     });
   });
 
   describe('isSelected', () => {
     it('should call ZazuService isSelected with index 1 and return true', () => {
-      expect(controller.isSelected(1)).toEqual(true);
+      expect(component.isSelected(1)).toEqual(true);
       expect(ZazuService.isSelected).toHaveBeenCalledWith(1);
     });
 
     it('should call ZazuService isSelected with index 0 and return false', () => {
-      expect(controller.isSelected(0)).toEqual(false);
+      expect(component.isSelected(0)).toEqual(false);
       expect(ZazuService.isSelected).toHaveBeenCalledWith(0);
     });
   });
