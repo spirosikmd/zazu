@@ -1,0 +1,11 @@
+<zazu-item ng-repeat="zazu in $ctrl.zazus"
+           zazu="zazu"
+           is-selected="$ctrl.isSelected($index)"
+           on-update-checked="$ctrl.updateChecked(id, checked)"
+           on-update-label="$ctrl.updateLabel($event, id, label)">
+</zazu-item>
+
+<form ng-show="$ctrl.modes.create" ng-submit="$ctrl.create($ctrl.zazu)">
+  <input type="text" ng-model="$ctrl.zazu.label" name="label" id="label" title="Zazu label" required
+         focus="$ctrl.modes.create" class="label" elastic-input elastic-input-min-width="100px">
+</form>

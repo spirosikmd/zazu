@@ -1,4 +1,4 @@
-export default class ZazuController {
+export class ZazuController {
 
   constructor ($scope, ZazuService, hotkeys) {
     this.$scope = $scope;

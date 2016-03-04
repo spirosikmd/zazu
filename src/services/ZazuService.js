@@ -1,4 +1,4 @@
-export default class ZazuService {
+export class ZazuService {
 
   constructor (StorageService) {
     this.storage = StorageService;

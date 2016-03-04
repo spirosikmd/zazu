@@ -1,0 +1,9 @@
+<div class="zazu">
+  <input type="checkbox" ng-model="$ctrl.zazu.checked" id="zazu-checked-{{ $ctrl.zazu.id }}"
+         ng-change="$ctrl.onUpdateChecked({id: $ctrl.zazu.id, checked: $ctrl.zazu.checked})">
+  <label ng-hide="$ctrl.zazu.editing" for="zazu-checked-{{ $ctrl.zazu.id }}">{{ $ctrl.zazu.label }}</label>
+  <input ng-show="$ctrl.zazu.editing" type="text" ng-model="$ctrl.zazu.label" name="label" title="Zazu label"
+         focus="$ctrl.zazu.editing"
+         ng-keypress="$ctrl.onUpdateLabel({$event: $event, id: $ctrl.zazu.id, label: $ctrl.zazu.label})" required>
+  <span class="arrow" ng-if="$ctrl.isSelected"><</span>
+</div>

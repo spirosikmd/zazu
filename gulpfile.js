@@ -8,14 +8,14 @@ var plugins = require('gulp-load-plugins')();
 var src = {
   scripts: {
     all: './src/**/*.js',
-    zazu: './src/js/zazu.js',
-    main: './src/js/main.js'
+    zazu: './src/index.js',
+    main: './src/main.js'
   },
   scss: {
     all: './src/**/*.scss'
   },
   html: {
-    index: './src/html/index.html'
+    index: './src/index.html'
   },
   package: './package.json',
   fonts: [

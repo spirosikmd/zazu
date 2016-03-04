@@ -4,7 +4,7 @@
  * @author: Jacek Pulit <jacek.pulit@gmail.com>
  * @license: MIT License
  */
-export default function ($document, $window) {
+export function ElasticInputDirective ($document, $window) {
 
   var wrapper = angular.element('<div style="position:fixed; top:-999px; left:0;"></div>');
   angular.element($document[0].body).append(wrapper);

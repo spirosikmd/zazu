@@ -3,7 +3,7 @@
  * @param $timeout
  * @constructor
  */
-export default function FocusDirective ($timeout) {
+export function FocusDirective ($timeout) {
   return {
     link: function (scope, element, attributes) {
       scope.$watch(attributes.focus, function (value) {
