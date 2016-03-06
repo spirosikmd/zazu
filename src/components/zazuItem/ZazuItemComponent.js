@@ -1,10 +1,11 @@
 import {ZazuItemController} from './ZazuItemController';
+import templateUrl from './zazuItem.html';
 
 /**
  * ZazuItem component.
  */
 export const ZazuItemComponent = {
-  templateUrl: '../src/components/zazuItem/zazuItem.html',
+  templateUrl: templateUrl,
   controller: ZazuItemController,
   bindings: {
     zazu: '<',

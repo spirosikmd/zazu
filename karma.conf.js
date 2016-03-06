@@ -28,7 +28,7 @@ module.exports = function (config) {
     browserify: {
       configure: function browserify (bundle) {
         bundle.once('prebundle', function prebundle () {
-          bundle.transform('babelify', {presets: ['es2015']});
+          bundle.transform('babelify');
         });
       }
     },

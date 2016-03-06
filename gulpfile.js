@@ -1,11 +1,12 @@
-var gulp = require('gulp');
-var babelify = require('babelify');
-var browserify = require('browserify');
-var vinylSourceStream = require('vinyl-source-stream');
-var vinylBuffer = require('vinyl-buffer');
-var plugins = require('gulp-load-plugins')();
+const gulp = require('gulp');
+const babelify = require('babelify');
+const browserify = require('browserify');
+const vinylSourceStream = require('vinyl-source-stream');
+const vinylBuffer = require('vinyl-buffer');
+const ngHtml2Js = require('browserify-ng-html2js');
+const plugins = require('gulp-load-plugins')();
 
-var src = {
+const src = {
   scripts: {
     all: './src/**/*.js',
     zazu: './src/index.js',
@@ -24,9 +25,9 @@ var src = {
   ]
 };
 
-var dist = './dist/';
+const dist = './dist/';
 
-var out = {
+const out = {
   folder: dist,
   scripts: {
     file: 'zazu.min.js'
@@ -37,11 +38,13 @@ var out = {
 };
 
 gulp.task('scripts', () => {
-  var sources = browserify({
+  const sources = browserify({
     entries: src.scripts.zazu
   })
-    .transform(babelify.configure({
-      presets: ['es2015']
+    .transform(babelify)
+    .transform(ngHtml2Js({
+      module: 'templates',
+      requireAngular: false
     }));
 
   return sources.bundle()
