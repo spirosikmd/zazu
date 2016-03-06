@@ -3,7 +3,7 @@ const babelify = require('babelify');
 const browserify = require('browserify');
 const vinylSourceStream = require('vinyl-source-stream');
 const vinylBuffer = require('vinyl-buffer');
-const ngHtml2Js = require('browserify-ng-html2js');
+const stringify = require('stringify');
 const plugins = require('gulp-load-plugins')();
 
 const src = {
@@ -42,10 +42,12 @@ gulp.task('scripts', () => {
     entries: src.scripts.zazu
   })
     .transform(babelify)
-    .transform(ngHtml2Js({
-      module: 'templates',
-      requireAngular: false
-    }));
+    .transform(stringify, {
+      appliesTo: {
+        includeExtensions: ['.html']
+      },
+      minify: true
+    });
 
   return sources.bundle()
     .pipe(vinylSourceStream(out.scripts.file))

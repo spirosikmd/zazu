@@ -1,10 +1,10 @@
 import {ZazuController} from './ZazuController';
-import templateUrl from './zazu.html';
+import template from './zazu.html';
 
 /**
  * Zazu component.
  */
 export const ZazuComponent = {
-  templateUrl: templateUrl,
+  template: template,
   controller: ZazuController
 };

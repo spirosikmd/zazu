@@ -10,6 +10,7 @@ module.exports = function (config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'src/**/!(index).html',
       'src/**/!(main).js',
       'tests/**/*.spec.js'
     ],
@@ -20,17 +21,15 @@ module.exports = function (config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'src/**/*.js': 'browserify',
-      'tests/**/*.spec.js': 'browserify'
+      'src/**/*.html': ['browserify'],
+      'src/**/*.js': ['browserify'],
+      'tests/**/*.spec.js': ['browserify']
     },
 
     // configure browserify and babelify to use preset
     browserify: {
-      configure: function browserify (bundle) {
-        bundle.once('prebundle', function prebundle () {
-          bundle.transform('babelify');
-        });
-      }
+      debug: true,
+      transform: ['babelify', 'stringify']
     },
 
     // test results reporter to use
