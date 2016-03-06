@@ -56,10 +56,11 @@ export class ZazuService {
    * then set as selected the first one.
    */
   next () {
-    this.selected += 1;
-    if (this.selected > this.zazus.length - 1) {
+    if (this.isLastSelected()) {
       this.selected = 0;
+      return;
     }
+    this.selected += 1;
   }
 
   /**
@@ -67,12 +68,17 @@ export class ZazuService {
    * then set as selected the last one.
    */
   previous () {
-    this.selected -= 1;
-    if (this.selected < 0) {
+    if (this.isFirstSelected()) {
       this.selected = this.zazus.length - 1;
+      return;
     }
+    this.selected -= 1;
   }
 
+  /**
+   * Get the selected zazu.
+   * @returns {object} zazu The selected zazu.
+   */
   getSelected () {
     return this.zazus[this.selected];
   }
@@ -109,5 +115,21 @@ export class ZazuService {
   isEditing () {
     var selected = this.getSelected();
     return angular.isDefined(selected.editing) && selected.editing;
+  }
+
+  /**
+   * Check whether the last zazu is currently selected.
+   * @returns {boolean} True if selected index is the last zazu.
+   */
+  isLastSelected () {
+    return this.selected === this.zazus.length - 1;
+  }
+
+  /**
+   * Check whether the first zazu is currently selected.
+   * @returns {boolean} True if selected index is the first zazu.
+   */
+  isFirstSelected () {
+    return this.selected === 0;
   }
 }

@@ -190,4 +190,26 @@ describe('service: ZazuService', () => {
       expect(service.getSelected).toHaveBeenCalled();
     });
   });
+
+  describe('isLastSelected', () => {
+    it('should return false if selected is not the last zazu of array', () => {
+      expect(service.isLastSelected()).toEqual(false);
+    });
+
+    it('should return true if selected is the last zazu of array', () => {
+      service.next();
+      expect(service.isLastSelected()).toEqual(true);
+    });
+  });
+
+  describe('isFirstSelected', () => {
+    it('should return true if selected is the first zazu of array', () => {
+      expect(service.isFirstSelected()).toEqual(true);
+    });
+
+    it('should return false if selected is not the first zazu of array', () => {
+      service.next();
+      expect(service.isFirstSelected()).toEqual(false);
+    });
+  });
 });

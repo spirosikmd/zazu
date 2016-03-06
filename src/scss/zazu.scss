@@ -31,8 +31,8 @@ input[type='checkbox'] {
   border: 1px solid #fff;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
-  border-radius: 2px;
-  padding: 4px;
+  border-radius: 50%;
+  padding: 3px;
   vertical-align: middle;
   margin-top: 0;
 }
@@ -47,7 +47,7 @@ input[type='checkbox']:checked + label {
 }
 
 .label {
-  margin-left: 22px;
+  margin-left: 20px;
 }
 
 input:focus {
