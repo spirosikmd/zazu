@@ -1,8 +1,8 @@
 {
   "name": "zazu",
-  "version": "0.1.0",
-  "main": "main.js",
-  "description": "Dead simple, mac osx hotkey powered todo app",
+  "version": "1.0.0-alpha.1",
+  "main": "src/main.js",
+  "description": "Dead simple,  keyboard shortcut todo app",
   "license": "MIT",
   "repository": {
     "type": "git",

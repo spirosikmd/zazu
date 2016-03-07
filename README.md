@@ -9,3 +9,16 @@ Dead simple,  keyboard shortcut todo app. Theme inspired from
 - [Source Code Pro](http://adobe-fonts.github.io/source-code-pro/)
 
 To check the keyboard shortcuts type `?`
+
+## Contribute
+
+Install modules with `npm i` and run `npm start` script to boot the
+development environment. It starts zazu and gulp in development mode.
+
+## Package
+
+To package zazu, currently only for darwin platform, use `npm run package` script.
+
+## Test
+
+Unit test using `npm test` script.
