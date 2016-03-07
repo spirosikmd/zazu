@@ -8,22 +8,45 @@
   src: url('SourceCodePro-Regular.otf.woff') format('woff'), url('SourceCodePro-Regular.otf.woff2') format('woff2');
 }
 
+$white: rgb(255, 255, 255);
+$dark: rgb(38, 50, 56);
+$green: rgb(255, 203, 107);
+$purple: rgb(199, 146, 234);
+$font-color: rgb(109, 194, 194);
+$dark-font-color: rgb(104, 104, 104);
+
 body {
   font-family: 'Source Code Pro', sans-serif;
   font-size: 12px;
-  background-color: rgb(38, 50, 56);
-  color: rgb(109, 194, 194);
+  background-color: $dark;
+  color: $font-color;
 }
 
-.zazu-edit {
-  margin-left: -1px;
+.zazu {
+  line-height: 1.5rem;
+
+  &__label {
+    margin-left: 5px;
+  }
+
+  &__edit {
+    margin-left: 4px;
+  }
+
+  &__arrow {
+    color: $green;
+  }
+}
+
+input:focus {
+  outline: none;
 }
 
 input[type='text'] {
   background: none;
   border: none;
-  border-bottom: 1px dotted rgb(255, 203, 107);
-  color: rgb(109, 194, 194);
+  border-bottom: 1px dotted $green;
+  color: $font-color;
   font-family: 'Source Code Pro', sans-serif;
   font-size: 12px;
 }
@@ -32,7 +55,7 @@ input[type='checkbox'] {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  border: 1px solid #fff;
+  border: 1px solid $white;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 50%;
@@ -42,31 +65,16 @@ input[type='checkbox'] {
 }
 
 input[type='checkbox']:checked {
-  background-color: rgb(199, 146, 234);
+  background-color: $purple;
 }
 
 input[type='checkbox']:checked + label {
-  color: rgb(104, 104, 104);
+  color: $dark-font-color;
   text-decoration: line-through;
 }
 
-.label {
-  margin-left: 20px;
-}
-
-input:focus {
-  outline: none;
-}
-
+// Override hotkeys styling
 .cfp-hotkeys-close {
   min-width: 25px;
   min-height: 25px;
-}
-
-.arrow {
-  color: rgb(255, 203, 107);
-}
-
-.zazu {
-  line-height: 1.5rem;
 }

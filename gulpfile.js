@@ -16,6 +16,7 @@ const src = {
     all: './src/**/*.scss'
   },
   html: {
+    all: './src/**/!(index).html',
     index: './src/index.html'
   },
   package: './package.json',
@@ -87,6 +88,7 @@ gulp.task('watch', () => {
   gulp.watch(src.html.index, ['copy-index']);
   gulp.watch(src.package, ['copy-package']);
   gulp.watch(src.scripts.all, ['scripts']);
+  gulp.watch(src.html.all, ['scripts']);
   gulp.watch(src.scss.all, ['sass']);
 });
 
