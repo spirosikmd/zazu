@@ -54,6 +54,7 @@ export class ZazuController {
       return;
     }
     this.ZazuService.create(angular.copy(zazu));
+    this.setMode('create', false);
     this.refresh();
     this.reset();
   };
