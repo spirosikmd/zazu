@@ -36,6 +36,10 @@ body {
   &__arrow {
     color: $green;
   }
+
+  &__new {
+    margin-left: 17px;
+  }
 }
 
 input:focus {
