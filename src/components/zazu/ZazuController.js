@@ -1,5 +1,6 @@
 export class ZazuController {
 
+  // @ngInject
   constructor ($scope, ZazuService, hotkeys) {
     this.$scope = $scope;
     this.ZazuService = ZazuService;

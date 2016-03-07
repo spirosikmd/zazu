@@ -5,6 +5,7 @@ const vinylSourceStream = require('vinyl-source-stream');
 const vinylBuffer = require('vinyl-buffer');
 const stringify = require('stringify');
 const plugins = require('gulp-load-plugins')();
+const argv = require('yargs').argv;
 
 const src = {
   scripts: {
@@ -53,6 +54,8 @@ gulp.task('scripts', () => {
   return sources.bundle()
     .pipe(vinylSourceStream(out.scripts.file))
     .pipe(vinylBuffer())
+    .pipe(plugins.if(argv.prod, plugins.ngAnnotate()))
+    .pipe(plugins.if(argv.prod, plugins.uglify()))
     .pipe(gulp.dest(out.folder));
 });
 

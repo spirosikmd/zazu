@@ -3,6 +3,7 @@
  * @param $timeout
  * @constructor
  */
+// @ngInject
 export function FocusDirective ($timeout) {
   return {
     link: function (scope, element, attributes) {

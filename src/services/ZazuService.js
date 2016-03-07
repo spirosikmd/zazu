@@ -1,5 +1,6 @@
 export class ZazuService {
 
+  // @ngInject
   constructor (StorageService) {
     this.storage = StorageService;
 

@@ -4,6 +4,7 @@
  * @author: Jacek Pulit <jacek.pulit@gmail.com>
  * @license: MIT License
  */
+// @ngInject
 export function ElasticInputDirective ($document, $window) {
 
   var wrapper = angular.element('<div style="position:fixed; top:-999px; left:0;"></div>');
