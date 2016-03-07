@@ -10,7 +10,7 @@
   },
   "scripts": {
     "test": "./node_modules/.bin/karma start",
-    "electron": "./node_modules/.bin/electron ./dist",
+    "electron": "electron ./dist",
     "dev": "./node_modules/.bin/gulp",
     "start": "concurrently --kill-others \"npm run electron\" \"npm run dev\"",
     "package": "./node_modules/.bin/electron-packager ./dist Zazu --platform=darwin --arch=x64 --version=0.36.9 --overwrite --ignore=\"node_modules\""
