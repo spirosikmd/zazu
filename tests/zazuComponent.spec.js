@@ -85,10 +85,12 @@ describe('component: zazu', () => {
       let zazu = {label: 'label', checked: false};
       spyOn(component, 'refresh');
       spyOn(component, 'reset');
+      spyOn(component, 'setMode');
       component.create(zazu);
       expect(ZazuService.create).toHaveBeenCalledWith(zazu);
       expect(component.refresh).toHaveBeenCalled();
       expect(component.reset).toHaveBeenCalled();
+      expect(component.setMode).toHaveBeenCalledWith('create', false);
     });
   });
 
