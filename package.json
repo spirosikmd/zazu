@@ -9,11 +9,11 @@
     "url": "https://github.com/spirosikmd/zazu"
   },
   "scripts": {
-    "test": "./node_modules/.bin/karma start",
+    "test": "karma start",
     "electron": "electron ./dist",
-    "dev": "./node_modules/.bin/gulp",
+    "dev": "gulp",
     "start": "concurrently --kill-others \"npm run electron\" \"npm run dev\"",
-    "package": "./node_modules/.bin/electron-packager ./dist Zazu --platform=darwin --arch=x64 --version=0.36.9 --overwrite --ignore=\"node_modules\""
+    "package": "electron-packager ./dist Zazu --platform=darwin --arch=x64 --version=0.36.10 --overwrite --ignore=\"node_modules\""
   },
   "dependencies": {
     "angular": "^1.5.0",
@@ -28,6 +28,7 @@
     "browserify": "^13.0.0",
     "concurrently": "^2.0.0",
     "electron-packager": "^5.2.1",
+    "electron-prebuilt": "^0.36.10",
     "gulp": "^3.9.1",
     "gulp-if": "^2.0.0",
     "gulp-load-plugins": "^1.2.0",
