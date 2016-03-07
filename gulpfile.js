@@ -1,11 +1,13 @@
 const gulp = require('gulp');
 const babelify = require('babelify');
 const browserify = require('browserify');
+const watchify = require('watchify');
 const vinylSourceStream = require('vinyl-source-stream');
 const vinylBuffer = require('vinyl-buffer');
 const stringify = require('stringify');
-const plugins = require('gulp-load-plugins')();
 const argv = require('yargs').argv;
+const assign = require('lodash.assign');
+const $ = require('gulp-load-plugins')();
 
 const src = {
   scripts: {
@@ -39,30 +41,39 @@ const out = {
   }
 };
 
-gulp.task('scripts', () => {
-  const sources = browserify({
-    entries: src.scripts.zazu
-  })
-    .transform(babelify)
-    .transform(stringify, {
-      appliesTo: {
-        includeExtensions: ['.html']
-      },
-      minify: true
-    });
+const customOptions = {
+  entries: src.scripts.zazu,
+  debug: true
+};
+const options = assign({}, watchify.args, customOptions);
+const sources = watchify(browserify(options));
 
+sources.transform(babelify);
+sources.transform(stringify, {
+  appliesTo: {
+    includeExtensions: ['.html']
+  },
+  minify: true
+});
+
+gulp.task('scripts', bundle);
+sources.on('update', bundle);
+sources.on('log', $.util.log);
+
+function bundle () {
   return sources.bundle()
+    .on('error', $.util.log.bind($.util, 'Browserify Error'))
     .pipe(vinylSourceStream(out.scripts.file))
     .pipe(vinylBuffer())
-    .pipe(plugins.if(argv.prod, plugins.ngAnnotate()))
-    .pipe(plugins.if(argv.prod, plugins.uglify()))
+    .pipe($.if(argv.prod, $.ngAnnotate()))
+    .pipe($.if(argv.prod, $.uglify()))
     .pipe(gulp.dest(out.folder));
-});
+}
 
 gulp.task('sass', () => {
   return gulp.src(src.scss.all)
-    .pipe(plugins.sass().on('error', plugins.sass.logError))
-    .pipe(plugins.rename(out.scss.file))
+    .pipe($.sass().on('error', $.sass.logError))
+    .pipe($.rename(out.scss.file))
     .pipe(gulp.dest(out.folder));
 });
 

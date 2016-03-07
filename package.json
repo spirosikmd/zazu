@@ -12,7 +12,7 @@
     "test": "./node_modules/.bin/karma start",
     "electron": "./node_modules/.bin/electron ./dist",
     "dev": "./node_modules/.bin/gulp",
-    "start": "concurrently \"npm run electron\" \"npm run dev\"",
+    "start": "concurrently --kill-others \"npm run electron\" \"npm run dev\"",
     "package": "./node_modules/.bin/electron-packager ./dist Zazu --platform=darwin --arch=x64 --version=0.36.9 --overwrite"
   },
   "dependencies": {
@@ -35,11 +35,13 @@
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^2.2.0",
     "gulp-uglify": "^1.5.3",
+    "gulp-util": "^3.0.7",
     "jasmine-core": "^2.4.1",
     "karma": "^0.13.21",
     "karma-browserify": "^5.0.2",
     "karma-chrome-launcher": "^0.2.2",
     "karma-jasmine": "^0.3.7",
+    "lodash.assign": "^4.0.6",
     "stringify": "^5.0.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
