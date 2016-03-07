@@ -1,7 +1,7 @@
 {
   "name": "zazu",
   "version": "1.0.0-alpha.1",
-  "main": "src/main.js",
+  "main": "main.js",
   "description": "Dead simple,  keyboard shortcut todo app",
   "license": "MIT",
   "repository": {
