@@ -16,6 +16,7 @@ export class ZazuController {
       create: false
     };
     this.editing = null;
+    this.showOpen = false;
 
     this.refresh();
     this.reset();
@@ -107,6 +108,15 @@ export class ZazuController {
     return this.ZazuService.isSelected(index);
   }
 
+  isNotChecked () {
+    if (!this.showOpen) {
+      return;
+    }
+    return function (zazu) {
+      return zazu.checked === false;
+    };
+  }
+
   /**
    * Setup the hotkeys.
    */
@@ -180,6 +190,13 @@ export class ZazuController {
             this.ZazuService.setEditing(true);
           }
           this.refresh();
+        }
+      })
+      .add({
+        combo: 'mod+o',
+        description: 'Show only open zazus',
+        callback: (event) => {
+          this.showOpen = !this.showOpen;
         }
       });
   }
