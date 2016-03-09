@@ -38,6 +38,13 @@ describe('service: ZazuService', () => {
     expect(service).toBeDefined();
   });
 
+  it('should set the right defaults', () => {
+    expect(service.open).toEqual(false);
+    expect(service.selected).toEqual(0);
+    expect(service.zazus).toEqual(zazus);
+    expect(service.filtered).toEqual(zazus);
+  });
+
   describe('refresh', () => {
     it('should set zazus from storage', () => {
       expect(storage.get).toHaveBeenCalled();
@@ -210,6 +217,31 @@ describe('service: ZazuService', () => {
     it('should return false if selected is not the first zazu of array', () => {
       service.next();
       expect(service.isFirstSelected()).toEqual(false);
+    });
+  });
+
+  describe('isOpen', () => {
+    it('should return true if open flag is false', () => {
+      expect(service.isOpen(zazus[0])).toEqual(true);
+    });
+
+    it('should return true if open flag is true and zazu checked is false', () => {
+      service.open = true;
+      expect(service.isOpen(zazus[1])).toEqual(true);
+    });
+
+    it('should return false if open flag is true and zazu checked is false', () => {
+      service.open = true;
+      expect(service.isOpen(zazus[0])).toEqual(false);
+    });
+  });
+
+  describe('toggleOpen', () => {
+    it('should toggle open flag and reset selected index', () => {
+      spyOn(service, 'resetSelected');
+      service.toggleOpen();
+      expect(service.open).toEqual(true);
+      expect(service.resetSelected).toHaveBeenCalled();
     });
   });
 });

@@ -198,7 +198,7 @@ export class ZazuController {
       })
       .add({
         combo: 'mod+o',
-        description: 'Show only open zazus',
+        description: 'Toggle show only open zazus',
         callback: this.showOpen.bind(this)
       });
   }
