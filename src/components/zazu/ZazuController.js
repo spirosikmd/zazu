@@ -16,7 +16,6 @@ export class ZazuController {
       create: false
     };
     this.editing = null;
-    this.showOpen = false;
 
     this.refresh();
     this.reset();
@@ -108,13 +107,20 @@ export class ZazuController {
     return this.ZazuService.isSelected(index);
   }
 
-  isNotChecked () {
-    if (!this.showOpen) {
-      return;
-    }
-    return function (zazu) {
-      return zazu.checked === false;
-    };
+  /**
+   * Create new hotkey handler.
+   * Set create mode to true.
+   */
+  createNew () {
+    this.setMode('create', true);
+  }
+
+  /**
+   * Toggle the open mode of zazu service and refresh the list of zazus.
+   */
+  showOpen () {
+    this.ZazuService.toggleOpen();
+    this.refresh();
   }
 
   /**
@@ -125,9 +131,7 @@ export class ZazuController {
       .add({
         combo: 'mod+n',
         description: 'Create new zazu',
-        callback: () => {
-          this.setMode('create', true);
-        }
+        callback: this.createNew.bind(this)
       })
       .add({
         combo: 'esc',
@@ -195,9 +199,7 @@ export class ZazuController {
       .add({
         combo: 'mod+o',
         description: 'Show only open zazus',
-        callback: (event) => {
-          this.showOpen = !this.showOpen;
-        }
+        callback: this.showOpen.bind(this)
       });
   }
 }

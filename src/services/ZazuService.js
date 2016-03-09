@@ -4,8 +4,24 @@ export class ZazuService {
   constructor (StorageService) {
     this.storage = StorageService;
 
-    this.refresh();
+    this.open = false;
     this.selected = 0;
+    this.zazus = this.storage.get();
+    this.filtered = this.zazus;
+    this.refresh();
+  }
+
+  /**
+   * Determine whether a zazu is open.
+   * In case open mode is false just return.
+   * @param {object} zazu The zazu.
+   * @returns {boolean} True if open mode is false or zazu is
+   */
+  isOpen (zazu) {
+    if (!this.open) {
+      return true;
+    }
+    return zazu.checked === false;
   }
 
   /**
@@ -16,11 +32,12 @@ export class ZazuService {
   }
 
   /**
-   * Get the list of zazus.
-   * @returns {object[]} The current list of zazus.
+   * Get the filtered zazus.
+   * @returns {object[]} The current list of filtered zazus.
    */
   get () {
-    return angular.copy(this.zazus);
+    this.filtered = this.zazus.filter(this.isOpen.bind(this));
+    return angular.copy(this.filtered);
   }
 
   /**
@@ -70,7 +87,7 @@ export class ZazuService {
    */
   previous () {
     if (this.isFirstSelected()) {
-      this.selected = this.zazus.length - 1;
+      this.selected = this.filtered.length - 1;
       return;
     }
     this.selected -= 1;
@@ -81,7 +98,7 @@ export class ZazuService {
    * @returns {object} zazu The selected zazu.
    */
   getSelected () {
-    return this.zazus[this.selected];
+    return this.filtered[this.selected];
   }
 
   /**
@@ -123,7 +140,7 @@ export class ZazuService {
    * @returns {boolean} True if selected index is the last zazu.
    */
   isLastSelected () {
-    return this.selected === this.zazus.length - 1;
+    return this.selected === this.filtered.length - 1;
   }
 
   /**
@@ -132,5 +149,13 @@ export class ZazuService {
    */
   isFirstSelected () {
     return this.selected === 0;
+  }
+
+  /**
+   * Toggle the open mode and reset selected.
+   */
+  toggleOpen () {
+    this.open = !this.open;
+    this.resetSelected();
   }
 }

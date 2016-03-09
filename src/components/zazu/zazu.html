@@ -1,4 +1,4 @@
-<zazu-item ng-repeat="zazu in $ctrl.zazus | filter:$ctrl.isNotChecked() track by zazu.id"
+<zazu-item ng-repeat="zazu in $ctrl.zazus track by zazu.id"
            zazu="zazu"
            is-selected="$ctrl.isSelected($index)"
            on-update-checked="$ctrl.updateChecked(id, checked)"

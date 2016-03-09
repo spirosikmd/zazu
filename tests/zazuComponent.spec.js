@@ -23,6 +23,7 @@ describe('component: zazu', () => {
       this.isSelected = jasmine.createSpy('isSelected').and.callFake(function (index) {
         return index === 1;
       });
+      this.toggleOpen = jasmine.createSpy('toggleOpen').and.callThrough();
     });
   }));
 
@@ -45,6 +46,17 @@ describe('component: zazu', () => {
 
   it('should be defined', () => {
     expect(component).toBeDefined();
+  });
+
+  it('should set the defaults', () => {
+    expect(component.defaultZazu).toEqual({
+      label: '',
+      checked: false
+    });
+    expect(component.zazus).toEqual([{ label: 'label', checked: true }]);
+    expect(component.zazu).toEqual({ label: '', checked: false });
+    expect(component.modes.create).toEqual(false);
+    expect(component.editing).toEqual(null);
   });
 
   describe('setMode', () => {
@@ -142,6 +154,23 @@ describe('component: zazu', () => {
     it('should call ZazuService isSelected with index 0 and return false', () => {
       expect(component.isSelected(0)).toEqual(false);
       expect(ZazuService.isSelected).toHaveBeenCalledWith(0);
+    });
+  });
+
+  describe('createNew', () => {
+    it('should call setMode with "create" and true', () => {
+      spyOn(component, 'setMode');
+      component.createNew();
+      expect(component.setMode).toHaveBeenCalledWith('create', true);
+    });
+  });
+
+  describe('showOpen', () => {
+    it('should call toggleOpen of zazu service and refresh', () => {
+      spyOn(component, 'refresh');
+      component.showOpen();
+      expect(ZazuService.toggleOpen).toHaveBeenCalled();
+      expect(component.refresh).toHaveBeenCalled();
     });
   });
 });
