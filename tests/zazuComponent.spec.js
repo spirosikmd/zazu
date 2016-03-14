@@ -7,13 +7,18 @@ describe('component: zazu', () => {
   let $scope;
   let component;
   let ZazuService;
+  let zazus = [{id: 'zazu-id', label: 'label', checked: true}];
 
   beforeEach(angular.mock.module(zazuApp));
 
   beforeEach(angular.mock.module(($provide) => {
     $provide.service('ZazuService', function () {
+      this.editing = false;
       this.get = jasmine.createSpy('get').and.callFake(function () {
-        return [{label: 'label', checked: true}];
+        return zazus;
+      });
+      this.getSelected = jasmine.createSpy('getSelected').and.callFake(function () {
+        return zazus[0];
       });
       this.create = jasmine.createSpy('create').and.callThrough();
       this.update = jasmine.createSpy('update').and.callThrough();
@@ -24,6 +29,9 @@ describe('component: zazu', () => {
         return index === 1;
       });
       this.toggleOpen = jasmine.createSpy('toggleOpen').and.callThrough();
+      this.isEditing = jasmine.createSpy('isEditing').and.callFake(() => {
+        return this.editing;
+      });
     });
   }));
 
@@ -53,8 +61,8 @@ describe('component: zazu', () => {
       label: '',
       checked: false
     });
-    expect(component.zazus).toEqual([{ label: 'label', checked: true }]);
-    expect(component.zazu).toEqual({ label: '', checked: false });
+    expect(component.zazus).toEqual([{id: 'zazu-id', label: 'label', checked: true}]);
+    expect(component.zazu).toEqual({label: '', checked: false});
     expect(component.modes.create).toEqual(false);
     expect(component.editing).toEqual(null);
   });
@@ -69,7 +77,7 @@ describe('component: zazu', () => {
 
   describe('refresh', () => {
     it('should get ', () => {
-      let zazu = {label: 'label', checked: true};
+      let zazu = {id: 'zazu-id', label: 'label', checked: true};
       expect(component.zazus.length).toEqual(1);
       component.refresh();
       expect(ZazuService.get).toHaveBeenCalled();
@@ -106,11 +114,12 @@ describe('component: zazu', () => {
     });
   });
 
-  describe('updateChecked', () => {
-    it('should update the checked property of zazu with the specified id', () => {
+  describe('toggleChecked', () => {
+    it('should toggle the checked property of the selected zazu', () => {
       spyOn(component, 'refresh');
-      component.updateChecked('zazu-id', true);
-      expect(ZazuService.update).toHaveBeenCalledWith('zazu-id', 'checked', true);
+      component.toggleChecked();
+      expect(ZazuService.getSelected).toHaveBeenCalled();
+      expect(ZazuService.update).toHaveBeenCalledWith('zazu-id', 'checked', false);
       expect(component.refresh).toHaveBeenCalled();
     });
   });
@@ -170,6 +179,23 @@ describe('component: zazu', () => {
       spyOn(component, 'refresh');
       component.showOpen();
       expect(ZazuService.toggleOpen).toHaveBeenCalled();
+      expect(component.refresh).toHaveBeenCalled();
+    });
+  });
+
+  describe('edit', () => {
+    it('should call setEditing of zazu service with true if it is not in edit mode and refresh', () => {
+      spyOn(component, 'refresh');
+      component.edit();
+      expect(ZazuService.setEditing).toHaveBeenCalledWith(true);
+      expect(component.refresh).toHaveBeenCalled();
+    });
+
+    it('should call setEditing of zazu service with false if is in edit mode and refresh', () => {
+      ZazuService.editing = true;
+      spyOn(component, 'refresh');
+      component.edit();
+      expect(ZazuService.setEditing).toHaveBeenCalledWith(false);
       expect(component.refresh).toHaveBeenCalled();
     });
   });

@@ -60,12 +60,14 @@ export class ZazuController {
   };
 
   /**
-   * Update the checked attribute of zazu with the specified id.
-   * @param {string} id The id of the zazu.
-   * @param {boolean} checked Either true or false.
+   * Toggle the checked attribute of the selected zazu.
    */
-  updateChecked (id, checked) {
-    this.ZazuService.update(id, 'checked', checked);
+  toggleChecked () {
+    var selected = this.ZazuService.getSelected();
+    if (!selected) {
+      return;
+    }
+    this.ZazuService.update(selected.id, 'checked', !selected.checked);
     this.refresh();
   };
 
@@ -124,6 +126,18 @@ export class ZazuController {
   }
 
   /**
+   * Change the edit mode of selected zazu and refresh.
+   */
+  edit () {
+    if (this.ZazuService.isEditing()) {
+      this.ZazuService.setEditing(false);
+    } else {
+      this.ZazuService.setEditing(true);
+    }
+    this.refresh();
+  }
+
+  /**
    * Setup the hotkeys.
    */
   setupHotkeys () {
@@ -172,29 +186,15 @@ export class ZazuController {
         }
       })
       .add({
-        combo: 'space',
-        description: 'Change check status of zazu',
-        callback: () => {
-          var selected = this.ZazuService.getSelected();
-          if (!selected) {
-            return;
-          }
-          this.updateChecked(selected.id, !selected.checked);
-        }
+        combo: 'mod+enter',
+        description: 'Toggle check status of zazu',
+        callback: this.toggleChecked.bind(this)
       })
       .add({
-        combo: 'mod+enter',
+        combo: 'mod+shift+enter',
         description: 'Edit zazu',
         allowIn: ['INPUT'],
-        callback: (event) => {
-          event.preventDefault();
-          if (this.ZazuService.isEditing()) {
-            this.ZazuService.setEditing(false);
-          } else {
-            this.ZazuService.setEditing(true);
-          }
-          this.refresh();
-        }
+        callback: this.edit.bind(this)
       })
       .add({
         combo: 'mod+o',
