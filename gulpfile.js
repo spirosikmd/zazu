@@ -16,7 +16,10 @@ const src = {
     main: './src/main.js'
   },
   scss: {
-    all: './src/**/*.scss'
+    all: './src/**/*.scss',
+  },
+  css: {
+    hotkey: './node_modules/angular-hotkeys/build/hotkeys.min.css'
   },
   html: {
     all: './src/**/!(index).html',
@@ -97,6 +100,11 @@ gulp.task('copy-fonts', () => {
     .pipe(gulp.dest(out.folder));
 });
 
+gulp.task('copy-hotkey', () => {
+  return gulp.src(src.css.hotkey)
+    .pipe(gulp.dest(out.folder));
+});
+
 gulp.task('watch', () => {
   gulp.watch(src.scripts.main, ['copy-main']);
   gulp.watch(src.html.index, ['copy-index']);
@@ -106,4 +114,4 @@ gulp.task('watch', () => {
   gulp.watch(src.scss.all, ['sass']);
 });
 
-gulp.task('default', ['copy-main', 'copy-index', 'copy-package', 'copy-fonts', 'scripts', 'sass', 'watch']);
+gulp.task('default', ['copy-hotkey', 'copy-main', 'copy-index', 'copy-package', 'copy-fonts', 'scripts', 'sass', 'watch']);
