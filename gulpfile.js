@@ -5,7 +5,7 @@ const watchify = require('watchify');
 const vinylSourceStream = require('vinyl-source-stream');
 const vinylBuffer = require('vinyl-buffer');
 const stringify = require('stringify');
-const argv = require('yargs').argv;
+const del = require('del');
 const assign = require('lodash.assign');
 const $ = require('gulp-load-plugins')();
 
@@ -16,7 +16,7 @@ const src = {
     main: './src/main.js'
   },
   scss: {
-    all: './src/**/*.scss',
+    all: './src/**/*.scss'
   },
   css: {
     hotkey: './node_modules/angular-hotkeys/build/hotkeys.min.css'
@@ -68,16 +68,35 @@ function bundle () {
     .on('error', $.util.log.bind($.util, 'Browserify Error'))
     .pipe(vinylSourceStream(out.scripts.file))
     .pipe(vinylBuffer())
-    .pipe($.if(argv.prod, $.ngAnnotate()))
-    .pipe($.if(argv.prod, $.uglify()))
     .pipe(gulp.dest(out.folder));
 }
+
+gulp.task('scripts:prod', () => {
+  return browserify(src.scripts.zazu)
+    .transform(babelify)
+    .transform(stringify, {
+      appliesTo: {
+        includeExtensions: ['.html']
+      },
+      minify: true
+    })
+    .bundle()
+    .pipe(vinylSourceStream(out.scripts.file))
+    .pipe(vinylBuffer())
+    .pipe($.ngAnnotate())
+    .pipe($.uglify())
+    .pipe(gulp.dest(out.folder));
+});
 
 gulp.task('sass', () => {
   return gulp.src(src.scss.all)
     .pipe($.sass().on('error', $.sass.logError))
     .pipe($.rename(out.scss.file))
     .pipe(gulp.dest(out.folder));
+});
+
+gulp.task('clean', () => {
+  return del([dist + '**/*']);
 });
 
 gulp.task('copy-main', () => {
@@ -105,6 +124,14 @@ gulp.task('copy-hotkey', () => {
     .pipe(gulp.dest(out.folder));
 });
 
+gulp.task('copy', [
+  'copy-hotkey',
+  'copy-main',
+  'copy-index',
+  'copy-package',
+  'copy-fonts'
+]);
+
 gulp.task('watch', () => {
   gulp.watch(src.scripts.main, ['copy-main']);
   gulp.watch(src.html.index, ['copy-index']);
@@ -115,12 +142,15 @@ gulp.task('watch', () => {
 });
 
 gulp.task('default', [
-  'copy-hotkey',
-  'copy-main',
-  'copy-index',
-  'copy-package',
-  'copy-fonts',
+  'copy',
   'scripts',
   'sass',
   'watch'
+]);
+
+gulp.task('package', [
+  'clean',
+  'copy',
+  'scripts:prod',
+  'sass'
 ]);
