@@ -11,6 +11,7 @@ export const ZazuItemComponent = {
     zazu: '<',
     isSelected: '<',
     onUpdateChecked: '&',
-    onUpdateLabel: '&'
+    onUpdateLabel: '&',
+    onOutViewport: '&'
   }
 };

@@ -2,7 +2,8 @@
            zazu="zazu"
            is-selected="$ctrl.isSelected($index)"
            on-update-checked="$ctrl.updateChecked(id, checked)"
-           on-update-label="$ctrl.updateLabel($event, id, label)">
+           on-update-label="$ctrl.updateLabel($event, id, label)"
+           on-out-viewport="$ctrl.scroll(offset)">
 </zazu-item>
 
 <form ng-show="$ctrl.modes.create" ng-submit="$ctrl.create($ctrl.zazu)">

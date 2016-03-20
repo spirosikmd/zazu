@@ -4,7 +4,6 @@ import zazuApp from '../src/index';
 
 describe('component: zazuItem', () => {
   let $componentController;
-  let $window;
   let $scope;
   let component;
   let zazu;
@@ -13,9 +12,8 @@ describe('component: zazuItem', () => {
 
   beforeEach(angular.mock.module(zazuApp));
 
-  beforeEach(inject((_$componentController_, _$window_, _$rootScope_) => {
+  beforeEach(inject((_$componentController_, _$rootScope_) => {
     $componentController = _$componentController_;
-    $window = _$window_;
     $scope = _$rootScope_.$new();
     zazu = {id: 'zazu-id', label: 'zazu-label', checked: true};
     isSelected = true;
@@ -24,19 +22,20 @@ describe('component: zazuItem', () => {
   beforeEach(() => {
     callbacks = {
       onUpdateChecked: jasmine.createSpy('onUpdateChecked'),
-      onUpdateLabel: jasmine.createSpy('onUpdateLabel')
+      onUpdateLabel: jasmine.createSpy('onUpdateLabel'),
+      onOutViewport: jasmine.createSpy('onOutViewport')
     };
-    component = $componentController('zazuItem', {$scope: $scope, $window: $window}, {
+    component = $componentController('zazuItem', {$scope: $scope}, {
       zazu: zazu,
       isSelected: isSelected,
       onUpdateChecked: callbacks.onUpdateChecked,
-      onUpdateLabel: callbacks.onUpdateLabel
+      onUpdateLabel: callbacks.onUpdateLabel,
+      onOutViewport: callbacks.onOutViewport
     });
   });
 
   afterEach(() => {
     $componentController = null;
-    $window = null;
     $scope = null;
     component = null;
     callbacks = null;
@@ -69,18 +68,14 @@ describe('component: zazuItem', () => {
   });
 
   describe('scroll', () => {
-    beforeEach(() => {
-      spyOn($window, 'scrollTo');
-    });
-
-    it('should not call $window scrollTo if element is in viewport', () => {
+    it('should not call onOutViewport if element is in viewport', () => {
       component.scroll(true, 10);
-      expect($window.scrollTo).not.toHaveBeenCalled();
+      expect(component.onOutViewport).not.toHaveBeenCalled();
     });
 
-    it('should call $window scrollTo with offsetTop if element is not in viewport', () => {
+    it('should call onOutViewport with offset if element is not in viewport', () => {
       component.scroll(false, 10);
-      expect($window.scrollTo).toHaveBeenCalledWith(0, 10);
+      expect(component.onOutViewport).toHaveBeenCalledWith({offset: 10});
     });
   });
 });

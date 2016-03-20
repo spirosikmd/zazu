@@ -14,8 +14,8 @@ export function InViewportDirective ($parse) {
       let inViewFunc = $parse(attributes.inViewport);
 
       inViewFunc(scope, {
-        $inViewport: elementInViewport(element[0]),
-        $offset: element[0].offsetTop
+        inViewport: elementInViewport(element[0]),
+        offset: element[0].offsetTop
       });
     }
   };

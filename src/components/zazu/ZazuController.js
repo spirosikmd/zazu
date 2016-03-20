@@ -1,8 +1,9 @@
 export class ZazuController {
 
   // @ngInject
-  constructor ($scope, ZazuService, hotkeys) {
+  constructor ($scope, $window, ZazuService, hotkeys) {
     this.$scope = $scope;
+    this.$window = $window;
     this.ZazuService = ZazuService;
     this.hotkeys = hotkeys;
 
@@ -16,6 +17,10 @@ export class ZazuController {
       create: false
     };
     this.editing = null;
+    this.scrollHandlers = {
+      38: this.scrollTo.bind(this),
+      40: this.scrollBy.bind(this)
+    };
 
     this.refresh();
     this.reset();
@@ -142,6 +147,7 @@ export class ZazuController {
    * @param event
    */
   selectPrevious (event) {
+    this.lastHotkey = event.which;
     event.preventDefault();
     this.ZazuService.previous();
   }
@@ -151,8 +157,35 @@ export class ZazuController {
    * @param event
    */
   selectNext (event) {
+    this.lastHotkey = event.which;
     event.preventDefault();
     this.ZazuService.next();
+    if (this.ZazuService.isSelected(0)) {
+      this.scrollTo(0);
+    }
+  }
+
+  /**
+   * Determine scroll handler and execute it with offset.
+   * @param {number} offset
+   */
+  scroll (offset) {
+    this.scrollHandlers[this.lastHotkey](offset);
+  }
+
+  /**
+   * Scroll to offset with a 5 pixel margin as well.
+   * @param {number} offset
+   */
+  scrollTo (offset) {
+    this.$window.scrollTo(0, offset - 5);
+  }
+
+  /**
+   * Scroll by 25 pixels.
+   */
+  scrollBy () {
+    this.$window.scrollBy(0, 25);
   }
 
   /**
