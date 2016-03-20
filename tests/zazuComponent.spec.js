@@ -25,9 +25,7 @@ describe('component: zazu', () => {
       this.setEditing = jasmine.createSpy('setEditing').and.callThrough();
       this.remove = jasmine.createSpy('remove').and.callThrough();
       this.resetSelected = jasmine.createSpy('resetSelected').and.callThrough();
-      this.isSelected = jasmine.createSpy('isSelected').and.callFake(function (index) {
-        return index === 1;
-      });
+      this.isSelected = angular.noop;
       this.toggleOpen = jasmine.createSpy('toggleOpen').and.callThrough();
       this.isEditing = jasmine.createSpy('isEditing').and.callFake(() => {
         return this.editing;
@@ -158,11 +156,13 @@ describe('component: zazu', () => {
 
   describe('isSelected', () => {
     it('should call ZazuService isSelected with index 1 and return true', () => {
+      spyOn(ZazuService, 'isSelected').and.returnValue(true);
       expect(component.isSelected(1)).toEqual(true);
       expect(ZazuService.isSelected).toHaveBeenCalledWith(1);
     });
 
     it('should call ZazuService isSelected with index 0 and return false', () => {
+      spyOn(ZazuService, 'isSelected').and.returnValue(false);
       expect(component.isSelected(0)).toEqual(false);
       expect(ZazuService.isSelected).toHaveBeenCalledWith(0);
     });
@@ -203,26 +203,55 @@ describe('component: zazu', () => {
   });
 
   describe('selectPrevious', () => {
-    it('should prevent default event and call previous of zazu service', () => {
+    it('should prevent default event, call previous of zazu service, and set lastHotkey to 38', () => {
       let event = {
-        preventDefault: function () {}
+        preventDefault: function () {},
+        which: 38
       };
       spyOn(event, 'preventDefault');
       component.selectPrevious(event);
       expect(ZazuService.previous).toHaveBeenCalled();
       expect(event.preventDefault).toHaveBeenCalled();
+      expect(component.lastHotkey).toEqual(38);
     });
   });
 
   describe('selectNext', () => {
-    it('should prevent default event and call next of zazu service', () => {
-      let event = {
-        preventDefault: function () {}
+    let event;
+
+    beforeEach(() => {
+      event = {
+        preventDefault: function () {},
+        which: 40
       };
+    });
+
+    afterEach(() => {
+      event = null;
+    });
+
+    it('should prevent default event, call next of zazu service, and set lastHotkey to 40', () => {
       spyOn(event, 'preventDefault');
       component.selectNext(event);
       expect(ZazuService.next).toHaveBeenCalled();
       expect(event.preventDefault).toHaveBeenCalled();
+      expect(component.lastHotkey).toEqual(40);
+    });
+
+    it('should not call scrollTo if selected is not index 0', () => {
+      spyOn(ZazuService, 'isSelected').and.returnValue(false);
+      spyOn(component, 'scrollTo');
+      component.selectNext(event);
+      expect(ZazuService.isSelected).toHaveBeenCalledWith(0);
+      expect(component.scrollTo).not.toHaveBeenCalled();
+    });
+
+    it('should call scrollTo with 0 if selected is index 0', () => {
+      spyOn(ZazuService, 'isSelected').and.returnValue(true);
+      spyOn(component, 'scrollTo');
+      component.selectNext(event);
+      expect(ZazuService.isSelected).toHaveBeenCalledWith(0);
+      expect(component.scrollTo).toHaveBeenCalledWith(0);
     });
   });
 });
