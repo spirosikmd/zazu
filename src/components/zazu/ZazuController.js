@@ -138,6 +138,24 @@ export class ZazuController {
   }
 
   /**
+   * Select previous zazu.
+   * @param event
+   */
+  selectPrevious (event) {
+    event.preventDefault();
+    this.ZazuService.previous();
+  }
+
+  /**
+   * Select next zazu.
+   * @param event
+   */
+  selectNext (event) {
+    event.preventDefault();
+    this.ZazuService.next();
+  }
+
+  /**
    * Setup the hotkeys.
    */
   setupHotkeys () {
@@ -163,18 +181,12 @@ export class ZazuController {
       .add({
         combo: 'down',
         description: 'Select next zazu',
-        callback: (event) => {
-          event.preventDefault();
-          this.ZazuService.next();
-        }
+        callback: this.selectNext.bind(this)
       })
       .add({
         combo: 'up',
         description: 'Select previous zazu',
-        callback: (event) => {
-          event.preventDefault();
-          this.ZazuService.previous();
-        }
+        callback: this.selectPrevious.bind(this)
       })
       .add({
         combo: 'mod+backspace',

@@ -1,5 +1,5 @@
 /**
- * Execute callback with result whether element is in viewport and its bounding client rect.
+ * Execute callback with result whether element is in viewport and its offsetTop.
  * @param $parse
  * @constructor
  */
