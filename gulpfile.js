@@ -114,4 +114,13 @@ gulp.task('watch', () => {
   gulp.watch(src.scss.all, ['sass']);
 });
 
-gulp.task('default', ['copy-hotkey', 'copy-main', 'copy-index', 'copy-package', 'copy-fonts', 'scripts', 'sass', 'watch']);
+gulp.task('default', [
+  'copy-hotkey',
+  'copy-main',
+  'copy-index',
+  'copy-package',
+  'copy-fonts',
+  'scripts',
+  'sass',
+  'watch'
+]);

@@ -32,6 +32,8 @@ describe('component: zazu', () => {
       this.isEditing = jasmine.createSpy('isEditing').and.callFake(() => {
         return this.editing;
       });
+      this.previous = jasmine.createSpy('previous').and.callThrough();
+      this.next = jasmine.createSpy('next').and.callThrough();
     });
   }));
 
@@ -197,6 +199,30 @@ describe('component: zazu', () => {
       component.edit();
       expect(ZazuService.setEditing).toHaveBeenCalledWith(false);
       expect(component.refresh).toHaveBeenCalled();
+    });
+  });
+
+  describe('selectPrevious', () => {
+    it('should prevent default event and call previous of zazu service', () => {
+      let event = {
+        preventDefault: function () {}
+      };
+      spyOn(event, 'preventDefault');
+      component.selectPrevious(event);
+      expect(ZazuService.previous).toHaveBeenCalled();
+      expect(event.preventDefault).toHaveBeenCalled();
+    });
+  });
+
+  describe('selectNext', () => {
+    it('should prevent default event and call next of zazu service', () => {
+      let event = {
+        preventDefault: function () {}
+      };
+      spyOn(event, 'preventDefault');
+      component.selectNext(event);
+      expect(ZazuService.next).toHaveBeenCalled();
+      expect(event.preventDefault).toHaveBeenCalled();
     });
   });
 });
