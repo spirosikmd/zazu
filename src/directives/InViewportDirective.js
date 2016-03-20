@@ -12,7 +12,7 @@ export function InViewportDirective ($parse) {
       }
 
       let inViewFunc = $parse(attributes.inViewport);
-      console.log();
+
       inViewFunc(scope, {
         $inViewport: elementInViewport(element[0]),
         $offset: element[0].offsetTop
@@ -20,6 +20,10 @@ export function InViewportDirective ($parse) {
     }
   };
 
+  /**
+   * Determine if element is in viewport.
+   * @param {HTMLElement} el The element.
+   */
   function elementInViewport (el) {
     let top = el.offsetTop;
     let left = el.offsetLeft;
