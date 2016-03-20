@@ -161,16 +161,18 @@ export class ZazuController {
         }
       })
       .add({
-        combo: 'mod+shift+down',
+        combo: 'down',
         description: 'Select next zazu',
-        callback: () => {
+        callback: (event) => {
+          event.preventDefault();
           this.ZazuService.next();
         }
       })
       .add({
-        combo: 'mod+shift+up',
+        combo: 'up',
         description: 'Select previous zazu',
-        callback: () => {
+        callback: (event) => {
+          event.preventDefault();
           this.ZazuService.previous();
         }
       })

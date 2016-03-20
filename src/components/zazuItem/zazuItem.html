@@ -7,5 +7,5 @@
   <input ng-show="$ctrl.zazu.editing" type="text" ng-model="$ctrl.zazu.label" name="label" title="Edit zazu label"
          focus="$ctrl.zazu.editing" elastic-input class="zazu__edit"
          ng-keypress="$ctrl.onUpdateLabel({$event: $event, id: $ctrl.zazu.id, label: $ctrl.zazu.label})" required>
-  <span class="zazu__arrow" ng-if="$ctrl.isSelected">&lt;</span>
+  <span class="zazu__arrow" ng-if="$ctrl.isSelected" in-viewport="$ctrl.scroll($inViewport, $offset)">&lt;</span>
 </div>
