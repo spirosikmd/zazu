@@ -9,7 +9,7 @@
     "url": "https://github.com/spirosikmd/zazu"
   },
   "scripts": {
-    "test": "karma start",
+    "test": "gulp config --env=development && karma start",
     "electron": "electron ./dist",
     "dev": "gulp --env=development",
     "start": "concurrently --kill-others \"npm run electron\" \"npm run dev\"",
