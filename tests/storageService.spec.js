@@ -13,7 +13,7 @@ describe('service: StorageService', () => {
   beforeEach(inject((_StorageService_) => {
     zazus = [{id: 'zazu-id', label: 'label', checked: true}];
     storage = {
-      zazus: zazus,
+      'zazus.test': zazus,
       getItem: function (key) {
         return angular.toJson(this[key]);
       },
@@ -62,7 +62,7 @@ describe('service: StorageService', () => {
       ];
       service.zazus = otherZazus;
       service.save();
-      expect(storage.setItem).toHaveBeenCalledWith('zazus', angular.toJson(otherZazus));
+      expect(storage.setItem).toHaveBeenCalledWith('zazus.test', angular.toJson(otherZazus));
     });
   });
 
