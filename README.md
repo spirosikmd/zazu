@@ -10,6 +10,8 @@ Dead simple,  keyboard shortcut todo app. Theme inspired from
 
 To check the keyboard shortcuts type `?`
 
+[[https://github.com/spirosikmd/zazu/blob/master/resources/zazu.png|alt=zazu]]
+
 ## Contribute
 
 Install modules with `npm i` and run `npm start` script to boot the
