@@ -10,7 +10,7 @@ Dead simple,  keyboard shortcut todo app. Theme inspired from
 
 To check the keyboard shortcuts type `?`
 
-[[https://github.com/spirosikmd/zazu/blob/master/resources/zazu.png|alt=zazu]]
+<img src="resources/zazu.png">
 
 ## Contribute
 
