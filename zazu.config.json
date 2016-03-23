@@ -1,0 +1,8 @@
+{
+  "development": {
+    "db": "zazus.test"
+  },
+  "production": {
+    "db": "zazus"
+  }
+}

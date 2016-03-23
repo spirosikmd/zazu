@@ -35,3 +35,6 @@ dist
 
 # Electron package
 Zazu-darwin-x64
+
+# Ignore config file
+src/zazu.config.js

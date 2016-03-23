@@ -9,7 +9,9 @@ import {InViewportDirective} from './directives/InViewportDirective';
 import {ZazuComponent} from './components/zazu/ZazuComponent';
 import {ZazuItemComponent} from './components/zazuItem/ZazuItemComponent';
 
-export default angular.module('zazuApp', ['cfp.hotkeys'])
+import config from './zazu.config';
+
+export default angular.module('zazuApp', ['cfp.hotkeys', config.name])
   .service('StorageService', StorageService)
   .service('ZazuService', ZazuService)
   .component('zazu', ZazuComponent)

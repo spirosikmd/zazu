@@ -2,8 +2,10 @@ const randomstring = require('randomstring');
 
 export class StorageService {
 
-  constructor () {
+  // @ngInject
+  constructor (db) {
     this.storage = localStorage;
+    this.db = db;
 
     this.refresh();
   }
@@ -12,7 +14,7 @@ export class StorageService {
    * Refresh the list of zazus from the storage.
    */
   refresh () {
-    this.zazus = angular.fromJson(this.storage.getItem('zazus')) || [];
+    this.zazus = angular.fromJson(this.storage.getItem(this.db)) || [];
   }
 
   /**
@@ -27,7 +29,7 @@ export class StorageService {
    * Save zazus in the storage as JSON string.
    */
   save () {
-    this.storage.setItem('zazus', angular.toJson(this.zazus || []));
+    this.storage.setItem(this.db, angular.toJson(this.zazus || []));
   }
 
   /**
