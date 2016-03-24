@@ -3,6 +3,7 @@
 const electron = require('electron');
 const app = electron.app;  // Module to control application life.
 const BrowserWindow = electron.BrowserWindow;  // Module to create native browser window.
+const globalShortcut = electron.globalShortcut; // Module to define global shortcuts.
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -33,4 +34,18 @@ app.on('ready', function () {
     // when you should delete the corresponding element.
     mainWindow = null;
   });
+
+  // Register global shortcuts.
+  globalShortcut.register('cmd+ctrl+f', function () {
+    if (mainWindow.isFullScreen()) {
+      mainWindow.setFullScreen(false);
+      return;
+    }
+    mainWindow.setFullScreen(true);
+  });
+});
+
+app.on('will-quit', function () {
+  // Unregister all shortcuts.
+  globalShortcut.unregisterAll();
 });
