@@ -28,6 +28,7 @@ describe('service: StorageService', () => {
   afterEach(() => {
     service = null;
     storage = null;
+    zazus = null;
   });
 
   it('should be defined', () => {
