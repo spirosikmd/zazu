@@ -1,8 +1,9 @@
 export class ZazuService {
 
   // @ngInject
-  constructor (StorageService) {
+  constructor (StorageService, FlagService) {
     this.storage = StorageService;
+    this.flagService = FlagService;
 
     this.open = false;
     this.selected = 0;
@@ -157,5 +158,23 @@ export class ZazuService {
   toggleOpen () {
     this.open = !this.open;
     this.resetSelected();
+  }
+
+  /**
+   * If firstTime flag is undefined or false, then the application
+   * is opened for first time.
+   * @returns {boolean} True if firstTime is undefined or false.
+   */
+  isFirstTime () {
+    const firstTimeFlag = this.flagService.getFlag('firstTime');
+
+    return firstTimeFlag === undefined || firstTimeFlag === false;
+  }
+
+  /**
+   * Set the firstTime flag to true.
+   */
+  setFirstTime () {
+    this.flagService.setFlag('firstTime', true);
   }
 }

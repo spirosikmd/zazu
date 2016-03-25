@@ -25,6 +25,7 @@ export class ZazuController {
     this.refresh();
     this.reset();
     this.setupHotkeys();
+    this.isFirstTime();
   }
 
   /**
@@ -186,6 +187,19 @@ export class ZazuController {
    */
   scrollBy () {
     this.$window.scrollBy(0, 25);
+  }
+
+  /**
+   * Determine if application opened for the first time and show the
+   * hotkey cheatsheet. Set the firstTime flag to true so cheatsheet
+   * won't be shown again.
+   */
+  isFirstTime () {
+    const firstTime = this.ZazuService.isFirstTime();
+    if (firstTime) {
+      this.hotkeys.toggleCheatSheet();
+      this.ZazuService.setFirstTime();
+    }
   }
 
   /**

@@ -1,8 +1,10 @@
 {
   "development": {
-    "db": "zazus.test"
+    "db": "zazus.test",
+    "flagsKey": "zazu.flags.test"
   },
   "production": {
-    "db": "zazus"
+    "db": "zazus",
+    "flagsKey": "zazu.flags"
   }
 }
