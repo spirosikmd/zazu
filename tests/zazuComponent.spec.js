@@ -7,6 +7,7 @@ describe('component: zazu', () => {
   let $scope;
   let component;
   let ZazuService;
+  let hotkeys;
   let zazus = [{id: 'zazu-id', label: 'label', checked: true}];
 
   beforeEach(angular.mock.module(zazuApp));
@@ -26,6 +27,8 @@ describe('component: zazu', () => {
       this.remove = jasmine.createSpy('remove').and.callThrough();
       this.resetSelected = jasmine.createSpy('resetSelected').and.callThrough();
       this.isSelected = angular.noop;
+      this.isFirstTime = angular.noop;
+      this.setFirstTime = angular.noop;
       this.toggleOpen = jasmine.createSpy('toggleOpen').and.callThrough();
       this.isEditing = jasmine.createSpy('isEditing').and.callFake(() => {
         return this.editing;
@@ -33,16 +36,31 @@ describe('component: zazu', () => {
       this.previous = jasmine.createSpy('previous').and.callThrough();
       this.next = jasmine.createSpy('next').and.callThrough();
     });
+
+    $provide.service('hotkeys', function () {
+      this.toggleCheatSheet = angular.noop;
+      this.add = () => {
+        return this;
+      };
+      this.bindTo = () => {
+        return this;
+      };
+    });
   }));
 
-  beforeEach(inject((_$componentController_, _$rootScope_, _ZazuService_) => {
+  beforeEach(inject((_$componentController_, _$rootScope_, _ZazuService_, _hotkeys_) => {
     $componentController = _$componentController_;
     $scope = _$rootScope_.$new();
     ZazuService = _ZazuService_;
+    hotkeys = _hotkeys_;
   }));
 
   beforeEach(() => {
-    component = $componentController('zazu', {$scope: $scope, ZazuService: ZazuService});
+    component = $componentController('zazu', {
+      $scope: $scope,
+      ZazuService: ZazuService,
+      hotkeys: hotkeys
+    });
   });
 
   afterEach(() => {
@@ -252,6 +270,27 @@ describe('component: zazu', () => {
       component.selectNext(event);
       expect(ZazuService.isSelected).toHaveBeenCalledWith(0);
       expect(component.scrollTo).toHaveBeenCalledWith(0);
+    });
+  });
+
+  describe('isFirstTime', () => {
+    beforeEach(() => {
+      spyOn(ZazuService, 'setFirstTime');
+      spyOn(hotkeys, 'toggleCheatSheet');
+    });
+
+    it('should not toggle cheatsheet if not first time', () => {
+      spyOn(ZazuService, 'isFirstTime').and.returnValue(false);
+      component.isFirstTime();
+      expect(hotkeys.toggleCheatSheet).not.toHaveBeenCalled();
+      expect(ZazuService.setFirstTime).not.toHaveBeenCalled();
+    });
+
+    it('should toggle the cheatsheet and call ZazuService setFirstTime if first time', () => {
+      spyOn(ZazuService, 'isFirstTime').and.returnValue(true);
+      component.isFirstTime();
+      expect(hotkeys.toggleCheatSheet).toHaveBeenCalled();
+      expect(ZazuService.setFirstTime).toHaveBeenCalled();
     });
   });
 });
