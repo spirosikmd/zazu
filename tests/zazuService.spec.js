@@ -6,6 +6,7 @@ describe('service: ZazuService', () => {
   let service;
   let storage;
   let zazus;
+  let flagService;
 
   beforeEach(angular.mock.module(zazuApp));
 
@@ -18,11 +19,17 @@ describe('service: ZazuService', () => {
       this.update = jasmine.createSpy('update').and.callThrough();
       this.remove = jasmine.createSpy('remove').and.callThrough();
     });
+
+    $provide.service('FlagService', function () {
+      this.getFlag = angular.noop;
+      this.setFlag = angular.noop;
+    });
   }));
 
-  beforeEach(inject((_ZazuService_, _StorageService_) => {
+  beforeEach(inject((_ZazuService_, _StorageService_, _FlagService_) => {
     service = _ZazuService_;
     storage = _StorageService_;
+    flagService = _FlagService_;
     zazus = [
       {id: 'zazu-id', label: 'label', checked: true},
       {id: 'another-zazu-id', label: 'another label', checked: false}
@@ -242,6 +249,31 @@ describe('service: ZazuService', () => {
       service.toggleOpen();
       expect(service.open).toEqual(true);
       expect(service.resetSelected).toHaveBeenCalled();
+    });
+  });
+
+  describe('isFirstTime', () => {
+    it('should return true if firstTime flag is undefined', () => {
+      spyOn(flagService, 'getFlag').and.returnValue(undefined);
+      expect(service.isFirstTime()).toEqual(true);
+    });
+
+    it('should return true if firstTime flag is false', () => {
+      spyOn(flagService, 'getFlag').and.returnValue(false);
+      expect(service.isFirstTime()).toEqual(true);
+    });
+
+    it('should return false if firstTime flag is true', () => {
+      spyOn(flagService, 'getFlag').and.returnValue(true);
+      expect(service.isFirstTime()).toEqual(false);
+    });
+  });
+
+  describe('setFirstTime', () => {
+    it('should call FlagService setFlag with "firstTime" and true', () => {
+      spyOn(flagService, 'setFlag');
+      service.setFirstTime();
+      expect(flagService.setFlag).toHaveBeenCalledWith('firstTime', true);
     });
   });
 });
