@@ -69,13 +69,13 @@ describe('service: StorageService', () => {
 
   describe('create', () => {
     it('should generate random id, push zazu to zazus and save', () => {
-      spyOn(randomstring, 'generate').and.callFake(() => {
-        return 'random-zazu-id';
-      });
+      spyOn(randomstring, 'generate').and.returnValue('random-zazu-id');
+      spyOn(service, 'getTime').and.returnValue(1111);
       spyOn(service, 'save');
       service.create({label: 'label', checked: true});
       expect(randomstring.generate).toHaveBeenCalled();
-      expect(service.zazus).toEqual([{label: 'label', checked: true, id: 'random-zazu-id'}]);
+      expect(service.getTime).toHaveBeenCalled();
+      expect(service.zazus).toEqual([{label: 'label', checked: true, id: 'random-zazu-id', createdAt: 1111}]);
       expect(service.save).toHaveBeenCalled();
     });
   });

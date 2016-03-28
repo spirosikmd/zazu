@@ -33,13 +33,23 @@ export class StorageService {
   }
 
   /**
-   * Create a new zazu.
+   * Generate an id and created at timestamp, push new zazu to array
+   * and save to local storage.
    * @param {object} zazu The zazu.
    */
   create (zazu) {
     zazu.id = randomstring.generate();
+    zazu.createdAt = this.getTime();
     this.zazus.push(zazu);
     this.save();
+  }
+
+  /**
+   * Get the current date in milliseconds.
+   * @returns {number} The current date in milliseconds.
+   */
+  getTime () {
+    return new Date().getTime();
   }
 
   /**
