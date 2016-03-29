@@ -94,4 +94,22 @@ export class StorageService {
     }
     return -1;
   }
+
+  /**
+   * Swap the places of two subsequent zazus either ways (up/down)
+   * depending on the provided indexes, and persist the new array.
+   * @param {number} firstIndex The index of first zazu.
+   * @param {number} secondIndex The index of second zazu.
+   */
+  swap (firstIndex, secondIndex) {
+    const first = this.zazus[firstIndex];
+
+    if (!first) {
+      return;
+    }
+
+    this.zazus[firstIndex] = this.zazus[secondIndex];
+    this.zazus[secondIndex] = first;
+    this.save();
+  }
 }
