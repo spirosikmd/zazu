@@ -190,13 +190,12 @@ export class ZazuService {
 
     if (this.isLastSelected()) {
       secondIndex = 0;
-      this.selected = 0;
     } else {
       secondIndex = firstIndex + 1;
-      this.selected += 1;
     }
 
     this.swap(firstIndex, secondIndex);
+    this.next();
   }
 
   /**
@@ -209,13 +208,12 @@ export class ZazuService {
 
     if (this.isFirstSelected()) {
       secondIndex = this.filtered.length - 1;
-      this.selected = this.filtered.length - 1;
     } else {
       secondIndex = firstIndex - 1;
-      this.selected -= 1;
     }
 
     this.swap(firstIndex, secondIndex);
+    this.previous();
   }
 
   /**

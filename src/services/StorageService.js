@@ -1,4 +1,5 @@
 const randomstring = require('randomstring');
+const angular = require('angular');
 
 export class StorageService {
 
