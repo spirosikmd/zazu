@@ -12,7 +12,7 @@ module.exports = function (config) {
     files: [
       'src/**/!(index).html',
       'src/**/!(main).js',
-      'tests/**/*.spec.js'
+      'src/**/*.spec.js'
     ],
 
     // list of files to exclude
@@ -23,7 +23,7 @@ module.exports = function (config) {
     preprocessors: {
       'src/**/*.html': ['browserify'],
       'src/**/*.js': ['browserify'],
-      'tests/**/*.spec.js': ['browserify']
+      'src/**/*.spec.js': ['browserify']
     },
 
     // configure browserify and babelify to use preset

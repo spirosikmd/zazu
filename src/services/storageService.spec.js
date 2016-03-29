@@ -1,7 +1,7 @@
 require('angular-mocks');
 const randomstring = require('randomstring');
 
-import zazuApp from '../src/index';
+import zazuApp from '../index';
 
 describe('service: StorageService', () => {
   let service;

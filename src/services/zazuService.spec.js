@@ -1,6 +1,6 @@
 require('angular-mocks');
 
-import zazuApp from '../src/index';
+import zazuApp from '../index';
 
 describe('service: ZazuService', () => {
   let service;
