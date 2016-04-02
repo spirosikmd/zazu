@@ -14,13 +14,13 @@ To check the keyboard shortcuts type `?`
 
 ## Contribute
 
-Install modules with `npm i` and run `npm start` script to boot the
+Install modules with `npm i` and run `npm start` to boot
 development environment. It starts zazu and gulp in development mode.
 
 ## Package
 
-To package zazu, currently only for darwin platform, use `npm run package` script.
+To package zazu, currently only for darwin platform, use `npm run package`.
 
 ## Test
 
-Unit test using `npm test` script.
+To run tests use `npm test`.
