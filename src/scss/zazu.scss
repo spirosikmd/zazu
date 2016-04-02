@@ -1,11 +1,13 @@
 @charset "utf-8";
 
-@import './hotkeys.min.css';
+@import '../node_modules/angular-hotkeys/build/hotkeys.min.css';
 
 @font-face {
   font-family: 'Source Code Pro';
   font-weight: 500;
-  src: url('SourceCodePro-Regular.otf.woff') format('woff'), url('SourceCodePro-Regular.otf.woff2') format('woff2');
+  src: url('../node_modules/source-code-pro/WOFF/OTF/SourceCodePro-Regular.otf.woff') format('woff'),
+       url('../node_modules/source-code-pro/WOFF2/OTF/SourceCodePro-Regular.otf.woff2')
+       format('woff2');
 }
 
 $white: rgb(255, 255, 255);

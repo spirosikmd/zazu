@@ -1,6 +1,6 @@
 {
   "name": "zazu",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.2",
   "main": "main.js",
   "description": "Dead simple,  keyboard shortcut todo app",
   "license": "MIT",
@@ -9,11 +9,11 @@
     "url": "https://github.com/spirosikmd/zazu"
   },
   "scripts": {
-    "test": "gulp config --env=development && karma start",
-    "electron": "electron ./dist",
-    "dev": "gulp --env=development",
-    "start": "concurrently --kill-others \"npm run electron\" \"npm run dev\"",
-    "package": "gulp package --env=production && electron-packager ./dist Zazu --platform=darwin --arch=x64 --version=0.37.2 --overwrite --ignore=\"node_modules\""
+    "test": "scripts/test.sh",
+    "electron": "scripts/electron.sh",
+    "dev": "scripts/dev.sh",
+    "start": "scripts/start.sh",
+    "package": "scripts/package.sh"
   },
   "dependencies": {
     "angular": "^1.5.3",
@@ -30,7 +30,7 @@
     "concurrently": "^2.0.0",
     "del": "^2.2.0",
     "electron-packager": "^5.2.1",
-    "electron-prebuilt": "^0.37.2",
+    "electron-prebuilt": "^0.37.3",
     "gulp": "^3.9.1",
     "gulp-load-plugins": "^1.2.0",
     "gulp-ng-annotate": "^2.0.0",

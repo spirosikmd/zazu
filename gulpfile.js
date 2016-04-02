@@ -100,31 +100,6 @@ gulp.task('clean', () => {
   return del([dist + '**/*']);
 });
 
-gulp.task('copy-main', () => {
-  return gulp.src(src.scripts.main)
-    .pipe(gulp.dest(out.folder));
-});
-
-gulp.task('copy-index', () => {
-  return gulp.src(src.html.index)
-    .pipe(gulp.dest(out.folder));
-});
-
-gulp.task('copy-package', () => {
-  return gulp.src(src.package)
-    .pipe(gulp.dest(out.folder));
-});
-
-gulp.task('copy-fonts', () => {
-  return gulp.src(src.fonts)
-    .pipe(gulp.dest(out.folder));
-});
-
-gulp.task('copy-hotkey', () => {
-  return gulp.src(src.css.hotkey)
-    .pipe(gulp.dest(out.folder));
-});
-
 gulp.task('config', () => {
   gulp.src('zazu.config.json')
     .pipe($.ngConfig('zazu.config', {
@@ -134,18 +109,7 @@ gulp.task('config', () => {
     .pipe(gulp.dest('./src'))
 });
 
-gulp.task('copy', [
-  'copy-hotkey',
-  'copy-main',
-  'copy-index',
-  'copy-package',
-  'copy-fonts'
-]);
-
 gulp.task('watch', () => {
-  gulp.watch(src.scripts.main, ['copy-main']);
-  gulp.watch(src.html.index, ['copy-index']);
-  gulp.watch(src.package, ['copy-package']);
   gulp.watch(src.scripts.all, ['scripts']);
   gulp.watch(src.html.all, ['scripts']);
   gulp.watch(src.scss.all, ['sass']);
@@ -153,7 +117,6 @@ gulp.task('watch', () => {
 
 gulp.task('default', [
   'config',
-  'copy',
   'scripts',
   'sass',
   'watch'
@@ -162,7 +125,6 @@ gulp.task('default', [
 gulp.task('package', [
   'config',
   'clean',
-  'copy',
   'scripts:prod',
   'sass'
 ]);
