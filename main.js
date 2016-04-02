@@ -4,11 +4,12 @@ const electron = require('electron');
 const app = electron.app;  // Module to control application life.
 const BrowserWindow = electron.BrowserWindow;  // Module to create native browser window.
 const menu = require('menu');
-const localShortcut = require('electron-localshortcut');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 var mainWindow = null;
+
+var zoomFactor = 1.0;
 
 /**
  * On full screen, check if main window is focused, and if not return.
@@ -24,6 +25,25 @@ function fullScreenHandler () {
     return;
   }
   mainWindow.setFullScreen(true);
+}
+
+function reloadHandler () {
+  mainWindow.webContents.reloadIgnoringCache();
+}
+
+function actualSizeHandler () {
+  zoomFactor = 1.0;
+  mainWindow.webContents.setZoomFactor(zoomFactor);
+}
+
+function zoomInHandler () {
+  zoomFactor += 0.1;
+  mainWindow.webContents.setZoomFactor(zoomFactor);
+}
+
+function zoomOutHandler () {
+  zoomFactor -= 0.1;
+  mainWindow.webContents.setZoomFactor(zoomFactor);
 }
 
 /**
@@ -45,9 +65,6 @@ function readyHandler () {
   // Emitted when the window is closed.
   mainWindow.on('closed', closedHandler);
 
-  // Register global shortcuts.
-  localShortcut.register(mainWindow, 'Command+Ctrl+F', fullScreenHandler);
-
   // Create the Application's main menu.
   const template = getMenuTemplate();
 
@@ -62,13 +79,6 @@ function allClosedHandler () {
   if (process.platform != 'darwin') {
     app.quit();
   }
-}
-
-/**
- * Un-register all shortcuts.
- */
-function willQuitHandler () {
-  localShortcut.unregisterAll(mainWindow);
 }
 
 /**
@@ -104,6 +114,33 @@ function getMenuTemplate () {
     }, {
       label: 'Select All', accelerator: 'CmdOrCtrl+A', selector: 'selectAll:'
     }]
+  }, {
+    label: 'View',
+    submenu: [{
+      label: 'Reload',
+      accelerator: 'Command+R',
+      click: reloadHandler
+    }, {
+      type: 'separator'
+    }, {
+      label: 'Actual Size',
+      accelerator: 'Command+0',
+      click: actualSizeHandler
+    }, {
+      label: 'Zoom In',
+      accelerator: 'Command+Shift+=',
+      click: zoomInHandler
+    }, {
+      label: 'Zoom Out',
+      accelerator: 'Command+Shift+-',
+      click: zoomOutHandler
+    }, {
+      type: 'separator'
+    }, {
+      label: 'Enter Full Screen',
+      accelerator: 'Ctrl+Command+F',
+      click: fullScreenHandler
+    }]
   }];
 }
 
@@ -113,5 +150,3 @@ app.on('window-all-closed', allClosedHandler);
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 app.on('ready', readyHandler);
-
-app.on('will-quit', willQuitHandler);
