@@ -15,12 +15,19 @@ const src = {
     all: './src/**/*.js',
     index: './src/index.js'
   },
+  css: {
+    hotkey: './node_modules/angular-hotkeys/build/hotkeys.min.css'
+  },
   scss: {
     all: './src/**/*.scss'
   },
   html: {
     all: './src/**/!(index).html'
-  }
+  },
+  fonts: [
+    './node_modules/source-code-pro/WOFF/OTF/SourceCodePro-Regular.otf.woff',
+    './node_modules/source-code-pro/WOFF2/OTF/SourceCodePro-Regular.otf.woff2'
+  ]
 };
 
 const dist = './dist/';
@@ -99,6 +106,21 @@ gulp.task('config', () => {
     .pipe(gulp.dest('./src'))
 });
 
+gulp.task('copy-fonts', () => {
+  return gulp.src(src.fonts)
+    .pipe(gulp.dest(out.folder));
+});
+
+gulp.task('copy-hotkey', () => {
+  return gulp.src(src.css.hotkey)
+    .pipe(gulp.dest(out.folder));
+});
+
+gulp.task('copy', [
+  'copy-fonts',
+  'copy-hotkey'
+]);
+
 gulp.task('watch', () => {
   gulp.watch(src.scripts.all, ['scripts']);
   gulp.watch(src.html.all, ['scripts']);
@@ -107,6 +129,7 @@ gulp.task('watch', () => {
 
 gulp.task('default', [
   'config',
+  'copy',
   'scripts',
   'sass',
   'watch'
@@ -115,6 +138,7 @@ gulp.task('default', [
 gulp.task('package', [
   'config',
   'clean',
+  'copy',
   'scripts:prod',
   'sass'
 ]);
