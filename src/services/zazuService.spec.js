@@ -48,7 +48,7 @@ describe('service: ZazuService', () => {
   });
 
   it('should set the right defaults', () => {
-    expect(service.open).toEqual(false);
+    expect(service.open).toEqual(true);
     expect(service.selected).toEqual(0);
     expect(service.zazus).toEqual(zazus);
     expect(service.filtered).toEqual(zazus);
@@ -62,8 +62,10 @@ describe('service: ZazuService', () => {
   });
 
   describe('get', () => {
-    it('should return a copy of zazus', () => {
-      expect(service.get()).toEqual(zazus);
+    it('should return a copy of filtered zazus with checked false', () => {
+      const filteredZazus = service.get();
+      expect(filteredZazus[0].id).toEqual('another-zazu-id');
+      expect(filteredZazus[0].checked).toEqual(false);
     });
   });
 
@@ -232,11 +234,11 @@ describe('service: ZazuService', () => {
 
   describe('isOpen', () => {
     it('should return true if open flag is false', () => {
+      service.open = false;
       expect(service.isOpen(zazus[0])).toEqual(true);
     });
 
     it('should return true if open flag is true and zazu checked is false', () => {
-      service.open = true;
       expect(service.isOpen(zazus[1])).toEqual(true);
     });
 
@@ -250,7 +252,7 @@ describe('service: ZazuService', () => {
     it('should toggle open flag and reset selected index', () => {
       spyOn(service, 'resetSelected');
       service.toggleOpen();
-      expect(service.open).toEqual(true);
+      expect(service.open).toEqual(false);
       expect(service.resetSelected).toHaveBeenCalled();
     });
   });

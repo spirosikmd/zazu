@@ -7,7 +7,9 @@ export class ZazuService {
     this.storage = StorageService;
     this.flagService = FlagService;
 
-    this.open = false;
+    // By default show only open zazus
+    this.open = true;
+
     this.selected = 0;
     this.zazus = this.storage.get();
     this.filtered = this.zazus;
