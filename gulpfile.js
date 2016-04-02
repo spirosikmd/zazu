@@ -13,24 +13,14 @@ const $ = require('gulp-load-plugins')();
 const src = {
   scripts: {
     all: './src/**/*.js',
-    zazu: './src/index.js',
-    main: './src/main.js'
+    index: './src/index.js'
   },
   scss: {
     all: './src/**/*.scss'
   },
-  css: {
-    hotkey: './node_modules/angular-hotkeys/build/hotkeys.min.css'
-  },
   html: {
-    all: './src/**/!(index).html',
-    index: './src/index.html'
-  },
-  package: './package.json',
-  fonts: [
-    './node_modules/source-code-pro/WOFF/OTF/SourceCodePro-Regular.otf.woff',
-    './node_modules/source-code-pro/WOFF2/OTF/SourceCodePro-Regular.otf.woff2'
-  ]
+    all: './src/**/!(index).html'
+  }
 };
 
 const dist = './dist/';
@@ -46,7 +36,7 @@ const out = {
 };
 
 const customOptions = {
-  entries: src.scripts.zazu,
+  entries: src.scripts.index,
   debug: true
 };
 const options = assign({}, watchify.args, customOptions);
@@ -73,7 +63,7 @@ function bundle () {
 }
 
 gulp.task('scripts:prod', () => {
-  return browserify(src.scripts.zazu)
+  return browserify(src.scripts.index)
     .transform(babelify)
     .transform(stringify, {
       appliesTo: {
