@@ -139,27 +139,23 @@ describe('service: StorageService', () => {
   });
 
   describe('swap', () => {
-    it('should not call save if zazu with firstIndex does not exist', () => {
+    it('should not call save if zazu with firstId does not exist', () => {
       spyOn(service, 'save');
-      service.swap(2, 1);
+      service.swap('no-zazu-id', 'zazu-id');
       expect(service.save).not.toHaveBeenCalled();
     });
 
-    it('should swap zazu in firstIndex with secondIndex and call save when firstIndex < secondIndex', () => {
+    it('should not call save if zazu with secondId does not exist', () => {
       spyOn(service, 'save');
-      expect(service.zazus[0]).toEqual(zazus[0]);
-      expect(service.zazus[1]).toEqual(zazus[1]);
-      service.swap(0, 1);
-      expect(service.zazus[0]).toEqual(zazus[1]);
-      expect(service.zazus[1]).toEqual(zazus[0]);
-      expect(service.save).toHaveBeenCalled();
+      service.swap('zazu-id', 'no-zazu-id');
+      expect(service.save).not.toHaveBeenCalled();
     });
 
-    it('should swap zazu in firstIndex with secondIndex and call save when firstIndex > secondIndex', () => {
+    it('should swap zazu firstId with secondId and call save', () => {
       spyOn(service, 'save');
       expect(service.zazus[0]).toEqual(zazus[0]);
       expect(service.zazus[1]).toEqual(zazus[1]);
-      service.swap(1, 0);
+      service.swap('zazu-id', 'another-zazu-id');
       expect(service.zazus[0]).toEqual(zazus[1]);
       expect(service.zazus[1]).toEqual(zazus[0]);
       expect(service.save).toHaveBeenCalled();

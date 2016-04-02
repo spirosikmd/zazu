@@ -217,8 +217,10 @@ export class ZazuService {
   }
 
   /**
-   * Swap the places of two subsequent zazus either ways (up/down)
-   * depending on the provided indexes.
+   * Use storage to swap the places of two subsequent zazus either ways (up/down)
+   * depending on the provided indexes and refresh.
+   * We need to find the zazus on the service level, as we need to use the filtered
+   * zazus array, e.g. when only open are visible.
    * @param {number} firstIndex The index of first zazu.
    * @param {number} secondIndex The index of second zazu.
    */
@@ -227,7 +229,19 @@ export class ZazuService {
       return;
     }
 
-    this.storage.swap(firstIndex, secondIndex);
+    const first = this.filtered[firstIndex];
+
+    if (!first) {
+      return;
+    }
+
+    const second = this.filtered[secondIndex];
+
+    if (!second) {
+      return;
+    }
+
+    this.storage.swap(first.id, second.id);
 
     this.refresh();
   }

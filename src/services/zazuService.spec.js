@@ -328,10 +328,24 @@ describe('service: ZazuService', () => {
       expect(service.refresh).not.toHaveBeenCalled();
     });
 
-    it('should call storage swap with firstIndex and secondIndex and then call refresh', () => {
+    it('should not call refresh or storage swap if zazu with firstIndex does not exist', () => {
+      spyOn(service, 'refresh');
+      service.swap(100, 1);
+      expect(storage.swap).not.toHaveBeenCalled();
+      expect(service.refresh).not.toHaveBeenCalled();
+    });
+
+    it('should not call refresh or storage swap if zazu with secondIndex does not exist', () => {
+      spyOn(service, 'refresh');
+      service.swap(0, 100);
+      expect(storage.swap).not.toHaveBeenCalled();
+      expect(service.refresh).not.toHaveBeenCalled();
+    });
+
+    it('should call storage swap with firstId and secondId and then refresh', () => {
       spyOn(service, 'refresh');
       service.swap(0, 1);
-      expect(storage.swap).toHaveBeenCalledWith(0, 1);
+      expect(storage.swap).toHaveBeenCalledWith('zazu-id', 'another-zazu-id');
       expect(service.refresh).toHaveBeenCalled();
     });
   });
