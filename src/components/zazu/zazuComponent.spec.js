@@ -1,6 +1,6 @@
 require('angular-mocks');
 
-import zazuApp from '../src/index';
+import zazuApp from '../../index';
 
 describe('component: zazu', () => {
   let $componentController;
@@ -35,6 +35,8 @@ describe('component: zazu', () => {
       });
       this.previous = jasmine.createSpy('previous').and.callThrough();
       this.next = jasmine.createSpy('next').and.callThrough();
+      this.moveUp = jasmine.createSpy('moveUp').and.callThrough();
+      this.moveDown = jasmine.createSpy('moveDown').and.callThrough();
     });
 
     $provide.service('hotkeys', function () {
@@ -291,6 +293,24 @@ describe('component: zazu', () => {
       component.isFirstTime();
       expect(hotkeys.toggleCheatSheet).toHaveBeenCalled();
       expect(ZazuService.setFirstTime).toHaveBeenCalled();
+    });
+  });
+
+  describe('moveUp', () => {
+    it('should call zazu service moveUp and refresh', () => {
+      spyOn(component, 'refresh');
+      component.moveUp();
+      expect(ZazuService.moveUp).toHaveBeenCalled();
+      expect(component.refresh).toHaveBeenCalled();
+    });
+  });
+
+  describe('moveDown', () => {
+    it('should call zazu service moveDown and refresh', () => {
+      spyOn(component, 'refresh');
+      component.moveDown();
+      expect(ZazuService.moveDown).toHaveBeenCalled();
+      expect(component.refresh).toHaveBeenCalled();
     });
   });
 });

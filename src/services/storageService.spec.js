@@ -1,7 +1,7 @@
 require('angular-mocks');
 const randomstring = require('randomstring');
 
-import zazuApp from '../src/index';
+import zazuApp from '../index';
 
 describe('service: StorageService', () => {
   let service;
@@ -11,7 +11,10 @@ describe('service: StorageService', () => {
   beforeEach(angular.mock.module(zazuApp));
 
   beforeEach(inject((_StorageService_) => {
-    zazus = [{id: 'zazu-id', label: 'label', checked: true}];
+    zazus = [
+      {id: 'zazu-id', label: 'label', checked: true},
+      {id: 'another-zazu-id', label: 'another-label', checked: false}
+    ];
     storage = {
       'zazus.test': zazus,
       getItem: function (key) {
@@ -23,6 +26,7 @@ describe('service: StorageService', () => {
     };
     service = _StorageService_;
     service.storage = storage;
+    service.refresh();
   }));
 
   afterEach(() => {
@@ -37,19 +41,12 @@ describe('service: StorageService', () => {
 
   describe('refresh', () => {
     it('should refresh zazus from local storage', () => {
-      expect(service.zazus).toEqual([]);
-      service.refresh();
       expect(service.zazus).toEqual(zazus);
     });
   });
 
   describe('get', () => {
-    it('should return [] if there are no current zazus', () => {
-      expect(service.get()).toEqual([]);
-    });
-
     it('should return copy zazus', () => {
-      service.zazus = zazus;
       expect(service.get()).toEqual(zazus);
     });
   });
@@ -69,13 +66,14 @@ describe('service: StorageService', () => {
 
   describe('create', () => {
     it('should generate random id, push zazu to zazus and save', () => {
-      spyOn(randomstring, 'generate').and.callFake(() => {
-        return 'random-zazu-id';
-      });
+      spyOn(randomstring, 'generate').and.returnValue('random-zazu-id');
+      spyOn(service, 'getTime').and.returnValue(1111);
       spyOn(service, 'save');
       service.create({label: 'label', checked: true});
       expect(randomstring.generate).toHaveBeenCalled();
-      expect(service.zazus).toEqual([{label: 'label', checked: true, id: 'random-zazu-id'}]);
+      expect(service.getTime).toHaveBeenCalled();
+      expect(service.zazus.length).toEqual(3);
+      expect(service.zazus[2]).toEqual({label: 'label', checked: true, id: 'random-zazu-id', createdAt: 1111});
       expect(service.save).toHaveBeenCalled();
     });
   });
@@ -92,9 +90,10 @@ describe('service: StorageService', () => {
     it('should remove zazu with existing id and call save', () => {
       service.zazus = zazus;
       spyOn(service, 'save');
+      expect(service.zazus.length).toEqual(2);
       service.remove('zazu-id');
       expect(service.save).toHaveBeenCalled();
-      expect(service.zazus).toEqual([]);
+      expect(service.zazus.length).toEqual(1);
     });
   });
 
@@ -131,11 +130,39 @@ describe('service: StorageService', () => {
     });
 
     it('should return -1 if id does not exist', () => {
-      expect(service.find('another-zazu-id')).toEqual(-1);
+      expect(service.find('non-existing-zazu-id')).toEqual(-1);
     });
 
     it('should return index of zazu with existing id', () => {
       expect(service.find('zazu-id')).toEqual(0);
+    });
+  });
+
+  describe('swap', () => {
+    it('should not call save if zazu with firstIndex does not exist', () => {
+      spyOn(service, 'save');
+      service.swap(2, 1);
+      expect(service.save).not.toHaveBeenCalled();
+    });
+
+    it('should swap zazu in firstIndex with secondIndex and call save when firstIndex < secondIndex', () => {
+      spyOn(service, 'save');
+      expect(service.zazus[0]).toEqual(zazus[0]);
+      expect(service.zazus[1]).toEqual(zazus[1]);
+      service.swap(0, 1);
+      expect(service.zazus[0]).toEqual(zazus[1]);
+      expect(service.zazus[1]).toEqual(zazus[0]);
+      expect(service.save).toHaveBeenCalled();
+    });
+
+    it('should swap zazu in firstIndex with secondIndex and call save when firstIndex > secondIndex', () => {
+      spyOn(service, 'save');
+      expect(service.zazus[0]).toEqual(zazus[0]);
+      expect(service.zazus[1]).toEqual(zazus[1]);
+      service.swap(1, 0);
+      expect(service.zazus[0]).toEqual(zazus[1]);
+      expect(service.zazus[1]).toEqual(zazus[0]);
+      expect(service.save).toHaveBeenCalled();
     });
   });
 });

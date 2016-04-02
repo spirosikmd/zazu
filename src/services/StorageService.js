@@ -1,4 +1,5 @@
 const randomstring = require('randomstring');
+const angular = require('angular');
 
 export class StorageService {
 
@@ -33,13 +34,23 @@ export class StorageService {
   }
 
   /**
-   * Create a new zazu.
+   * Generate an id and created at timestamp, push new zazu to array
+   * and save to local storage.
    * @param {object} zazu The zazu.
    */
   create (zazu) {
     zazu.id = randomstring.generate();
+    zazu.createdAt = this.getTime();
     this.zazus.push(zazu);
     this.save();
+  }
+
+  /**
+   * Get the current date in milliseconds.
+   * @returns {number} The current date in milliseconds.
+   */
+  getTime () {
+    return new Date().getTime();
   }
 
   /**
@@ -83,5 +94,23 @@ export class StorageService {
       }
     }
     return -1;
+  }
+
+  /**
+   * Swap the places of two subsequent zazus either ways (up/down)
+   * depending on the provided indexes, and persist the new array.
+   * @param {number} firstIndex The index of first zazu.
+   * @param {number} secondIndex The index of second zazu.
+   */
+  swap (firstIndex, secondIndex) {
+    const first = this.zazus[firstIndex];
+
+    if (!first) {
+      return;
+    }
+
+    this.zazus[firstIndex] = this.zazus[secondIndex];
+    this.zazus[secondIndex] = first;
+    this.save();
   }
 }

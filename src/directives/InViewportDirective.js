@@ -1,5 +1,6 @@
 /**
- * Execute callback with result whether element is in viewport and its offsetTop.
+ * Execute callback with result whether element is in viewport
+ * and its offsetTop when elements' offsetTop changes.
  * @param $parse
  * @constructor
  */
@@ -13,10 +14,18 @@ export function InViewportDirective ($parse) {
 
       let inViewFunc = $parse(attributes.inViewport);
 
-      inViewFunc(scope, {
-        inViewport: elementInViewport(element[0]),
-        offset: element[0].offsetTop
+      const positionWatch = scope.$watch(() => {
+        return element[0].offsetTop;
+      }, (newPosition) => {
+        inViewFunc(scope, {
+          inViewport: elementInViewport(element[0]),
+          offset: newPosition
+        });
       });
+
+      scope.$on('$destroy', () => {
+        positionWatch();
+      })
     }
   };
 

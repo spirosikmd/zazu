@@ -1,3 +1,5 @@
+const angular = require('angular');
+
 export class ZazuController {
 
   // @ngInject
@@ -203,6 +205,22 @@ export class ZazuController {
   }
 
   /**
+   * Move selected zazu one position up.
+   */
+  moveUp () {
+    this.ZazuService.moveUp();
+    this.refresh();
+  }
+
+  /**
+   * Move selected zazu one position down.
+   */
+  moveDown () {
+    this.ZazuService.moveDown();
+    this.refresh();
+  }
+
+  /**
    * Setup the hotkeys.
    */
   setupHotkeys () {
@@ -261,6 +279,16 @@ export class ZazuController {
         combo: 'mod+o',
         description: 'Toggle show only open zazus',
         callback: this.showOpen.bind(this)
+      })
+      .add({
+        combo: 'mod+shift+up',
+        description: 'Move zazu one position up',
+        callback: this.moveUp.bind(this)
+      })
+      .add({
+        combo: 'mod+shift+down',
+        description: 'Move zazu one position down',
+        callback: this.moveDown.bind(this)
       });
   }
 }

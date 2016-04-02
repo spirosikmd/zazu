@@ -1,6 +1,6 @@
 require('angular-mocks');
 
-import zazuApp from '../src/index';
+import zazuApp from '../index';
 
 describe('service: ZazuService', () => {
   let service;
@@ -18,6 +18,7 @@ describe('service: ZazuService', () => {
       this.create = jasmine.createSpy('create').and.callThrough();
       this.update = jasmine.createSpy('update').and.callThrough();
       this.remove = jasmine.createSpy('remove').and.callThrough();
+      this.swap = jasmine.createSpy('swap').and.callThrough();
     });
 
     $provide.service('FlagService', function () {
@@ -32,7 +33,8 @@ describe('service: ZazuService', () => {
     flagService = _FlagService_;
     zazus = [
       {id: 'zazu-id', label: 'label', checked: true},
-      {id: 'another-zazu-id', label: 'another label', checked: false}
+      {id: 'another-zazu-id', label: 'another label', checked: false},
+      {id: 'yet-another-zazu-id', label: 'yet another label', checked: true}
     ];
   }));
 
@@ -103,7 +105,7 @@ describe('service: ZazuService', () => {
     it('should set selected to 0 if current selected is last one', () => {
       service.next();
       service.next();
-      expect(service.selected).toEqual(0);
+      expect(service.selected).toEqual(2);
     });
   });
 
@@ -111,7 +113,7 @@ describe('service: ZazuService', () => {
     it('should set selected to last one if current selected is the first', () => {
       expect(service.selected).toEqual(0);
       service.previous();
-      expect(service.selected).toEqual(1);
+      expect(service.selected).toEqual(2);
     });
 
     it('should decrease selected by 1', () => {
@@ -134,7 +136,7 @@ describe('service: ZazuService', () => {
     it('should return true if zazu in index is the selected', () => {
       expect(service.isSelected(0)).toEqual(true);
       service.previous();
-      expect(service.isSelected(1)).toEqual(true);
+      expect(service.isSelected(2)).toEqual(true);
     });
 
     it('should return false is zazu in index is not selected', () => {
@@ -212,6 +214,7 @@ describe('service: ZazuService', () => {
 
     it('should return true if selected is the last zazu of array', () => {
       service.next();
+      service.next();
       expect(service.isLastSelected()).toEqual(true);
     });
   });
@@ -274,6 +277,62 @@ describe('service: ZazuService', () => {
       spyOn(flagService, 'setFlag');
       service.setFirstTime();
       expect(flagService.setFlag).toHaveBeenCalledWith('firstTime', true);
+    });
+  });
+
+  describe('moveDown', () => {
+    it('should call swap with 0 and 1 if selected is 0 and call next', () => {
+      spyOn(service, 'swap');
+      spyOn(service, 'next');
+      service.selected = 0;
+      service.moveDown();
+      expect(service.swap).toHaveBeenCalledWith(0, 1);
+      expect(service.next).toHaveBeenCalled();
+    });
+
+    it('should call swap with 2 and 0 if selected is last one (2) and call next', () => {
+      spyOn(service, 'swap');
+      spyOn(service, 'next');
+      service.selected = 2;
+      service.moveDown();
+      expect(service.swap).toHaveBeenCalledWith(2, 0);
+      expect(service.next).toHaveBeenCalled();
+    });
+  });
+
+  describe('moveUp', () => {
+    it('should call swap with 2 and 1 if selected is 2 and call previous', () => {
+      spyOn(service, 'swap');
+      spyOn(service, 'previous');
+      service.selected = 2;
+      service.moveUp();
+      expect(service.swap).toHaveBeenCalledWith(2, 1);
+      expect(service.previous).toHaveBeenCalled();
+    });
+
+    it('should call swap with 0 and 2 if selected is first one (0) and call previous', () => {
+      spyOn(service, 'swap');
+      spyOn(service, 'previous');
+      service.selected = 0;
+      service.moveUp();
+      expect(service.swap).toHaveBeenCalledWith(0, 2);
+      expect(service.previous).toHaveBeenCalled();
+    });
+  });
+
+  describe('swap', () => {
+    it('should not call refresh or storage swap if firstIndex equals secondIndex', () => {
+      spyOn(service, 'refresh');
+      service.swap(0, 0);
+      expect(storage.swap).not.toHaveBeenCalled();
+      expect(service.refresh).not.toHaveBeenCalled();
+    });
+
+    it('should call storage swap with firstIndex and secondIndex and then call refresh', () => {
+      spyOn(service, 'refresh');
+      service.swap(0, 1);
+      expect(storage.swap).toHaveBeenCalledWith(0, 1);
+      expect(service.refresh).toHaveBeenCalled();
     });
   });
 });

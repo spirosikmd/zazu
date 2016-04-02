@@ -1,3 +1,5 @@
+const angular = require('angular');
+
 export class ZazuService {
 
   // @ngInject
@@ -176,5 +178,57 @@ export class ZazuService {
    */
   setFirstTime () {
     this.flagService.setFlag('firstTime', true);
+  }
+
+  /**
+   * Move selected zazu one position down.
+   * If selected zazu is the last one, then swap with the first zazu.
+   */
+  moveDown () {
+    const firstIndex = this.selected;
+    let secondIndex;
+
+    if (this.isLastSelected()) {
+      secondIndex = 0;
+    } else {
+      secondIndex = firstIndex + 1;
+    }
+
+    this.swap(firstIndex, secondIndex);
+    this.next();
+  }
+
+  /**
+   * Move zazu one position up.
+   * If selected zazu is the first one, then swap with last zazu.
+   */
+  moveUp () {
+    const firstIndex = this.selected;
+    let secondIndex;
+
+    if (this.isFirstSelected()) {
+      secondIndex = this.filtered.length - 1;
+    } else {
+      secondIndex = firstIndex - 1;
+    }
+
+    this.swap(firstIndex, secondIndex);
+    this.previous();
+  }
+
+  /**
+   * Swap the places of two subsequent zazus either ways (up/down)
+   * depending on the provided indexes.
+   * @param {number} firstIndex The index of first zazu.
+   * @param {number} secondIndex The index of second zazu.
+   */
+  swap (firstIndex, secondIndex) {
+    if (firstIndex === secondIndex) {
+      return;
+    }
+
+    this.storage.swap(firstIndex, secondIndex);
+
+    this.refresh();
   }
 }
