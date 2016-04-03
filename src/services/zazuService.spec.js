@@ -1,4 +1,5 @@
 require('angular-mocks');
+const angular = require('angular');
 
 import zazuApp from '../index';
 
@@ -19,6 +20,8 @@ describe('service: ZazuService', () => {
       this.update = jasmine.createSpy('update').and.callThrough();
       this.remove = jasmine.createSpy('remove').and.callThrough();
       this.swap = jasmine.createSpy('swap').and.callThrough();
+      this.unshift = angular.noop;
+      this.push = angular.noop;
     });
 
     $provide.service('FlagService', function () {
@@ -350,6 +353,38 @@ describe('service: ZazuService', () => {
       spyOn(service, 'refresh');
       service.swap(0, 1);
       expect(storage.swap).toHaveBeenCalledWith('zazu-id', 'another-zazu-id');
+      expect(service.refresh).toHaveBeenCalled();
+    });
+  });
+
+  describe('unshift', () => {
+    it('should not call storage unshift if zazu does not exist', () => {
+      spyOn(storage, 'unshift');
+      service.unshift(5);
+      expect(storage.unshift).not.toHaveBeenCalled();
+    });
+
+    it('should call storage unshift with "yet-another-zazu-id" and refresh', () => {
+      spyOn(storage, 'unshift');
+      spyOn(service, 'refresh');
+      service.unshift(2);
+      expect(storage.unshift).toHaveBeenCalledWith('yet-another-zazu-id');
+      expect(service.refresh).toHaveBeenCalled();
+    });
+  });
+
+  describe('push', () => {
+    it('should not call storage push if zazu does not exist', () => {
+      spyOn(storage, 'push');
+      service.push(5);
+      expect(storage.push).not.toHaveBeenCalled();
+    });
+
+    it('should call storage push with "zazu-id" and refresh', () => {
+      spyOn(storage, 'push');
+      spyOn(service, 'refresh');
+      service.push(0);
+      expect(storage.push).toHaveBeenCalledWith('zazu-id');
       expect(service.refresh).toHaveBeenCalled();
     });
   });

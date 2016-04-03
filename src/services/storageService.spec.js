@@ -1,5 +1,6 @@
 require('angular-mocks');
 const randomstring = require('randomstring');
+const angular = require('angular');
 
 import zazuApp from '../index';
 
@@ -13,7 +14,8 @@ describe('service: StorageService', () => {
   beforeEach(inject((_StorageService_) => {
     zazus = [
       {id: 'zazu-id', label: 'label', checked: true},
-      {id: 'another-zazu-id', label: 'another-label', checked: false}
+      {id: 'another-zazu-id', label: 'another-label', checked: false},
+      {id: 'yet-another-zazu-id', label: 'yet-another-label', checked: true}
     ];
     storage = {
       'zazus.test': zazus,
@@ -49,6 +51,11 @@ describe('service: StorageService', () => {
     it('should return copy zazus', () => {
       expect(service.get()).toEqual(zazus);
     });
+
+    it('should return empty array if copy fails', () => {
+      spyOn(angular, 'copy').and.returnValue(null);
+      expect(service.get()).toEqual([]);
+    });
   });
 
   describe('save', () => {
@@ -62,6 +69,13 @@ describe('service: StorageService', () => {
       service.save();
       expect(storage.setItem).toHaveBeenCalledWith('zazus.test', angular.toJson(otherZazus));
     });
+
+    it('should save empty array to local storage if zazus is null', () => {
+      spyOn(storage, 'setItem');
+      service.zazus = null;
+      service.save();
+      expect(storage.setItem).toHaveBeenCalledWith('zazus.test', angular.toJson([]));
+    });
   });
 
   describe('create', () => {
@@ -72,8 +86,8 @@ describe('service: StorageService', () => {
       service.create({label: 'label', checked: true});
       expect(randomstring.generate).toHaveBeenCalled();
       expect(service.getTime).toHaveBeenCalled();
-      expect(service.zazus.length).toEqual(3);
-      expect(service.zazus[2]).toEqual({label: 'label', checked: true, id: 'random-zazu-id', createdAt: 1111});
+      expect(service.zazus.length).toEqual(4);
+      expect(service.zazus[3]).toEqual({label: 'label', checked: true, id: 'random-zazu-id', createdAt: 1111});
       expect(service.save).toHaveBeenCalled();
     });
   });
@@ -90,10 +104,10 @@ describe('service: StorageService', () => {
     it('should remove zazu with existing id and call save', () => {
       service.zazus = zazus;
       spyOn(service, 'save');
-      expect(service.zazus.length).toEqual(2);
+      expect(service.zazus.length).toEqual(3);
       service.remove('zazu-id');
       expect(service.save).toHaveBeenCalled();
-      expect(service.zazus.length).toEqual(1);
+      expect(service.zazus.length).toEqual(2);
     });
   });
 
@@ -159,6 +173,48 @@ describe('service: StorageService', () => {
       expect(service.zazus[0]).toEqual(zazus[1]);
       expect(service.zazus[1]).toEqual(zazus[0]);
       expect(service.save).toHaveBeenCalled();
+    });
+  });
+
+  describe('unshift', () => {
+    it('should not call remove if zazu does not exist', () => {
+      spyOn(service, 'remove');
+      service.unshift('no-zazu-id');
+      expect(service.remove).not.toHaveBeenCalled();
+    });
+
+    it('should remove zazu from current position, unshift it, and save', () => {
+      spyOn(service, 'remove').and.callThrough();
+      spyOn(service, 'save').and.callThrough();
+      service.unshift('yet-another-zazu-id');
+      expect(service.remove).toHaveBeenCalledWith('yet-another-zazu-id');
+      expect(service.save).toHaveBeenCalled();
+      expect(service.zazus).toEqual([
+        {id: 'yet-another-zazu-id', label: 'yet-another-label', checked: true},
+        {id: 'zazu-id', label: 'label', checked: true},
+        {id: 'another-zazu-id', label: 'another-label', checked: false}
+      ])
+    });
+  });
+
+  describe('push', () => {
+    it('should not call remove if zazu does not exist', () => {
+      spyOn(service, 'remove');
+      service.push('no-zazu-id');
+      expect(service.remove).not.toHaveBeenCalled();
+    });
+
+    it('should remove zazu from current position, push it to the end, and save', () => {
+      spyOn(service, 'remove').and.callThrough();
+      spyOn(service, 'save').and.callThrough();
+      service.push('zazu-id');
+      expect(service.remove).toHaveBeenCalledWith('zazu-id');
+      expect(service.save).toHaveBeenCalled();
+      expect(service.zazus).toEqual([
+        {id: 'another-zazu-id', label: 'another-label', checked: false},
+        {id: 'yet-another-zazu-id', label: 'yet-another-label', checked: true},
+        {id: 'zazu-id', label: 'label', checked: true}
+      ])
     });
   });
 });
