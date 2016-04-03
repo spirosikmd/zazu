@@ -1,3 +1,6 @@
+const istanbul = require('browserify-istanbul');
+const isparta = require('isparta');
+
 module.exports = function (config) {
   var base = {
 
@@ -29,13 +32,26 @@ module.exports = function (config) {
     // configure browserify and babelify to use preset
     browserify: {
       debug: true,
-      transform: ['babelify', 'stringify']
+      transform: [istanbul({
+        instrumenter: isparta,
+        ignore: ['**/node_modules/**', '**/*.spec.js', '**/*.html']
+      }), 'babelify', 'stringify']
+    },
+
+    // Coverage reporter configuration
+    coverageReporter: {
+      dir: 'coverage',
+      reporters: [
+        {type: 'text-summary'},
+        {type: 'html', subdir: 'html'},
+        {type: 'lcov', subdir: './'}
+      ]
     },
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress'],
+    reporters: ['progress', 'coverage'],
 
     // web server port
     port: 9876,

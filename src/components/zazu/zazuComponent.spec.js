@@ -5,6 +5,7 @@ import zazuApp from '../../index';
 describe('component: zazu', () => {
   let $componentController;
   let $scope;
+  let $window;
   let component;
   let ZazuService;
   let hotkeys;
@@ -18,9 +19,7 @@ describe('component: zazu', () => {
       this.get = jasmine.createSpy('get').and.callFake(function () {
         return zazus;
       });
-      this.getSelected = jasmine.createSpy('getSelected').and.callFake(function () {
-        return zazus[0];
-      });
+      this.getSelected = angular.noop;
       this.create = jasmine.createSpy('create').and.callThrough();
       this.update = jasmine.createSpy('update').and.callThrough();
       this.setEditing = jasmine.createSpy('setEditing').and.callThrough();
@@ -50,9 +49,10 @@ describe('component: zazu', () => {
     });
   }));
 
-  beforeEach(inject((_$componentController_, _$rootScope_, _ZazuService_, _hotkeys_) => {
+  beforeEach(inject((_$componentController_, _$rootScope_, _ZazuService_, _hotkeys_, _$window_) => {
     $componentController = _$componentController_;
     $scope = _$rootScope_.$new();
+    $window = _$window_;
     ZazuService = _ZazuService_;
     hotkeys = _hotkeys_;
   }));
@@ -60,6 +60,7 @@ describe('component: zazu', () => {
   beforeEach(() => {
     component = $componentController('zazu', {
       $scope: $scope,
+      $window: $window,
       ZazuService: ZazuService,
       hotkeys: hotkeys
     });
@@ -68,6 +69,7 @@ describe('component: zazu', () => {
   afterEach(() => {
     $componentController = null;
     $scope = null;
+    $window = null;
     component = null;
     ZazuService = null;
   });
@@ -137,10 +139,17 @@ describe('component: zazu', () => {
   describe('toggleChecked', () => {
     it('should toggle the checked property of the selected zazu', () => {
       spyOn(component, 'refresh');
+      spyOn(ZazuService, 'getSelected').and.returnValue(zazus[0]);
       component.toggleChecked();
       expect(ZazuService.getSelected).toHaveBeenCalled();
       expect(ZazuService.update).toHaveBeenCalledWith('zazu-id', 'checked', false);
       expect(component.refresh).toHaveBeenCalled();
+    });
+
+    it('should not call update if selected is null', () => {
+      spyOn(ZazuService, 'getSelected').and.returnValue(null);
+      component.toggleChecked();
+      expect(ZazuService.update).not.toHaveBeenCalled();
     });
   });
 
@@ -311,6 +320,33 @@ describe('component: zazu', () => {
       component.moveDown();
       expect(ZazuService.moveDown).toHaveBeenCalled();
       expect(component.refresh).toHaveBeenCalled();
+    });
+  });
+
+  describe('scroll', () => {
+    it('should get scroll handler using the last hotkey used and call it with offset', () => {
+      component.scrollTo = angular.noop;
+      spyOn(component, 'scrollTo');
+      component.scrollHandlers[38] = component.scrollTo;
+      component.lastHotkey = 38;
+      component.scroll(10);
+      expect(component.scrollTo).toHaveBeenCalledWith(10);
+    });
+  });
+
+  describe('scrollTo', () => {
+    it('should call $window scrollTo with 0 and offset - 5', () => {
+      spyOn($window, 'scrollTo');
+      component.scrollTo(20);
+      expect($window.scrollTo).toHaveBeenCalledWith(0, 15);
+    });
+  });
+
+  describe('scrollBy', () => {
+    it('should call $window scrollBy with 0 nad 25', () => {
+      spyOn($window, 'scrollBy');
+      component.scrollBy();
+      expect($window.scrollBy).toHaveBeenCalledWith(0, 25);
     });
   });
 });
