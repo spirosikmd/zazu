@@ -43,8 +43,7 @@ module.exports = function (config) {
       dir: 'coverage',
       reporters: [
         {type: 'text-summary'},
-        {type: 'html', subdir: 'html'},
-        {type: 'lcov', subdir: './'}
+        {type: 'html', subdir: 'html'}
       ]
     },
 
@@ -89,6 +88,9 @@ module.exports = function (config) {
   if (process.env.TRAVIS) {
     base.browsers = ['Chrome_travis_ci'];
     base.singleRun = true;
+    base.autoWatch = false;
+    base.coverageReporter.reporters.push({type: 'lcov', subdir: './'});
+    base.reporters.push('coveralls');
   }
 
   config.set(base);
