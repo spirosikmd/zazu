@@ -1,4 +1,4 @@
-# Zazu [![Build Status](https://travis-ci.org/spirosikmd/zazu.svg?branch=master)](https://travis-ci.org/spirosikmd/zazu) [![Coverage Status](https://coveralls.io/repos/github/spirosikmd/zazu/badge.svg?branch=master)](https://coveralls.io/github/spirosikmd/zazu?branch=master)
+# Zazu [![Build Status](https://travis-ci.org/spirosikmd/zazu.svg?branch=master)](https://travis-ci.org/spirosikmd/zazu) [![Coverage Status](https://coveralls.io/repos/github/spirosikmd/zazu/badge.svg?branch=coveralls)](https://coveralls.io/github/spirosikmd/zazu?branch=coveralls)
 
 Dead simple,  keyboard shortcut todo app. Theme inspired from
 [material theme](http://equinusocio.github.io/material-theme/), and built with
