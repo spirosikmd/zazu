@@ -116,6 +116,48 @@ export class StorageService {
     const first = this.zazus[firstIndex];
     this.zazus[firstIndex] = this.zazus[secondIndex];
     this.zazus[secondIndex] = first;
+
+    this.save();
+  }
+
+  /**
+   * Put zazu with id to the beginning of current zazu array and save.
+   * @param {string} id The id of zazu.
+   */
+  unshift (id) {
+    const index = this.find(id);
+
+    if (index === -1) {
+      return;
+    }
+
+    const zazu = this.zazus[index];
+
+    this.remove(zazu.id);
+
+    this.zazus.unshift(zazu);
+
+    this.save();
+  }
+
+  /**
+   * Remove zazu with id from current place, push it to the
+   * end of current zazus array, and save.
+   * @param {string} id The id of zazu.
+   */
+  push (id) {
+    const index = this.find(id);
+
+    if (index === -1) {
+      return;
+    }
+
+    const zazu = this.zazus[index];
+
+    this.remove(zazu.id);
+
+    this.zazus.push(zazu);
+
     this.save();
   }
 }

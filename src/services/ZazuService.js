@@ -183,38 +183,36 @@ export class ZazuService {
   }
 
   /**
-   * Move selected zazu one position down.
-   * If selected zazu is the last one, then swap with the first zazu.
+   * Move selected zazu one position down and select next one.
+   * If selected zazu is the last one, then put it at the beginning.
    */
   moveDown () {
     const firstIndex = this.selected;
-    let secondIndex;
 
     if (this.isLastSelected()) {
-      secondIndex = 0;
+      this.unshift(firstIndex);
     } else {
-      secondIndex = firstIndex + 1;
+      const secondIndex = firstIndex + 1;
+      this.swap(firstIndex, secondIndex);
     }
 
-    this.swap(firstIndex, secondIndex);
     this.next();
   }
 
   /**
-   * Move zazu one position up.
-   * If selected zazu is the first one, then swap with last zazu.
+   * Move zazu one position up and select previous one.
+   * If selected zazu is the first one, then push it to the end.
    */
   moveUp () {
     const firstIndex = this.selected;
-    let secondIndex;
 
     if (this.isFirstSelected()) {
-      secondIndex = this.filtered.length - 1;
+      this.push(firstIndex);
     } else {
-      secondIndex = firstIndex - 1;
+      const secondIndex = firstIndex - 1;
+      this.swap(firstIndex, secondIndex);
     }
 
-    this.swap(firstIndex, secondIndex);
     this.previous();
   }
 
@@ -244,6 +242,38 @@ export class ZazuService {
     }
 
     this.storage.swap(first.id, second.id);
+
+    this.refresh();
+  }
+
+  /**
+   * Put zazu found in index to the beginning of current zazu array and refresh.
+   * @param {number} index The index of zazu.
+   */
+  unshift (index) {
+    const zazu = this.filtered[index];
+
+    if (!zazu) {
+      return;
+    }
+
+    this.storage.unshift(zazu.id);
+
+    this.refresh();
+  }
+
+  /**
+   * Push zazu in index to the end of current zazus array and refresh.
+   * @param {number} index The index of zazu.
+   */
+  push (index) {
+    const zazu = this.filtered[index];
+
+    if (!zazu) {
+      return;
+    }
+
+    this.storage.push(zazu.id);
 
     this.refresh();
   }

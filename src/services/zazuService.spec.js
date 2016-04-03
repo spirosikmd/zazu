@@ -108,6 +108,8 @@ describe('service: ZazuService', () => {
       service.next();
       service.next();
       expect(service.selected).toEqual(2);
+      service.next();
+      expect(service.selected).toEqual(0);
     });
   });
 
@@ -292,12 +294,12 @@ describe('service: ZazuService', () => {
       expect(service.next).toHaveBeenCalled();
     });
 
-    it('should call swap with 2 and 0 if selected is last one (2) and call next', () => {
-      spyOn(service, 'swap');
+    it('should call unshift with 2 if selected is last one and call next', () => {
+      spyOn(service, 'unshift');
       spyOn(service, 'next');
       service.selected = 2;
       service.moveDown();
-      expect(service.swap).toHaveBeenCalledWith(2, 0);
+      expect(service.unshift).toHaveBeenCalledWith(2);
       expect(service.next).toHaveBeenCalled();
     });
   });
@@ -312,12 +314,12 @@ describe('service: ZazuService', () => {
       expect(service.previous).toHaveBeenCalled();
     });
 
-    it('should call swap with 0 and 2 if selected is first one (0) and call previous', () => {
-      spyOn(service, 'swap');
+    it('should call push with 0 if selected is first one and call previous', () => {
+      spyOn(service, 'push');
       spyOn(service, 'previous');
       service.selected = 0;
       service.moveUp();
-      expect(service.swap).toHaveBeenCalledWith(0, 2);
+      expect(service.push).toHaveBeenCalledWith(0);
       expect(service.previous).toHaveBeenCalled();
     });
   });

@@ -1,4 +1,5 @@
 require('angular-mocks');
+const angular = require('angular');
 
 import zazuApp from '../../index';
 
