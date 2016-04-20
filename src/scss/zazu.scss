@@ -23,6 +23,15 @@ body {
   font-size: 12px;
 }
 
+%input {
+  background: none;
+  border: 0;
+  border-bottom: 1px dotted $green;
+  color: $font-color;
+  font-family: 'Source Code Pro', sans-serif;
+  font-size: 12px;
+}
+
 .zazu {
   line-height: 1.5rem;
   position: relative;
@@ -33,12 +42,7 @@ body {
   }
 
   &__edit {
-    background: none;
-    border: 0;
-    border-bottom: 1px dotted $green;
-    color: $font-color;
-    font-family: 'Source Code Pro', sans-serif;
-    font-size: 12px;
+    @extend %input;
     margin-left: -1px;
   }
 
@@ -53,6 +57,7 @@ body {
   }
 
   &__new {
+    @extend %input;
     margin-left: 17px;
   }
 
