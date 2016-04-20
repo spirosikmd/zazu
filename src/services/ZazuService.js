@@ -23,7 +23,7 @@ export class ZazuService {
    * @returns {boolean} True if open mode is false or zazu is
    */
   isOpen (zazu) {
-    if (!this.open) {
+    if (!this.open || zazu.temp) {
       return true;
     }
     return zazu.checked === false;
@@ -49,9 +49,16 @@ export class ZazuService {
    * Create a new zazu.
    * @param {object} zazu The zazu.
    */
-  create (zazu) {
-    this.storage.create(zazu);
-    this.refresh();
+  create (zazu, persist, current) {
+    if (persist) {
+      delete zazu.temp;
+      this.storage.create(zazu);
+      this.refresh();
+      return;
+    }
+
+    let position = current ? this.selected + 1 : this.zazus.length + 1;
+    this.zazus.splice(position, 0, zazu);
   }
 
   /**
@@ -69,9 +76,15 @@ export class ZazuService {
    * Remove zazu with the specified id.
    * @param {string} id The zazu id.
    */
-  remove (id) {
-    this.storage.remove(id);
-    this.refresh();
+  remove (id, persist, current) {
+    if (persist) {
+      this.storage.remove(id);
+      this.refresh();
+      return;
+    }
+
+    let position = current ? this.selected + 1 : this.zazus.length - 1;
+    this.zazus.splice(position, 1);
   }
 
   /**

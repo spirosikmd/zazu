@@ -61,7 +61,9 @@ export class ZazuController {
     if (zazu.label.trim().length === 0) {
       return;
     }
-    this.ZazuService.create(angular.copy(zazu));
+
+    this.ZazuService.create(angular.copy(zazu), true);
+
     this.setMode('create', false);
     this.refresh();
     this.reset();
@@ -103,7 +105,7 @@ export class ZazuController {
     if (!zazu) {
       return;
     }
-    this.ZazuService.remove(zazu.id);
+    this.ZazuService.remove(zazu.id, true);
     this.refresh();
     this.ZazuService.resetSelected();
   }
@@ -121,8 +123,12 @@ export class ZazuController {
    * Create new hotkey handler.
    * Set create mode to true.
    */
-  createNew () {
+  createNew (current) {
     this.setMode('create', true);
+    this.zazu.id = 'temp';
+    this.zazu.temp = true;
+    this.ZazuService.create(angular.copy(this.zazu), false, current);
+    this.refresh();
   }
 
   /**
@@ -228,7 +234,7 @@ export class ZazuController {
       .add({
         combo: 'mod+n',
         description: 'Create new zazu',
-        callback: this.createNew.bind(this)
+        callback: this.createNew.bind(this, false)
       })
       .add({
         combo: 'esc',
@@ -237,6 +243,7 @@ export class ZazuController {
         callback: (event) => {
           event.preventDefault();
           this.setMode('create', false);
+          this.ZazuService.remove('temp', false, false);
           if (this.ZazuService.isEditing()) {
             this.ZazuService.setEditing(false);
             this.refresh();
