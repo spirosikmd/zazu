@@ -14,6 +14,7 @@ $green: rgb(255, 203, 107);
 $purple: rgb(199, 146, 234);
 $font-color: rgb(109, 194, 194);
 $dark-font-color: rgb(104, 104, 104);
+$light-font-color: rgb(195, 206, 227);
 
 body {
   font-family: 'Source Code Pro', sans-serif;
@@ -23,22 +24,38 @@ body {
 }
 
 .zazu {
+  position: relative;
   line-height: 1.5rem;
 
-  &__label {
-    margin-left: 5px;
+  &__content {
+    display: inline-block;
+    padding-left: 15px;
   }
 
   &__edit {
-    margin-left: 4px;
+    margin-left: -1px;
   }
 
   &__arrow {
+    position: absolute;
     color: $green;
+  }
+
+  &__pointer {
+    position: absolute;
+    color: $light-font-color;
   }
 
   &__new {
     margin-left: 17px;
+  }
+
+  input[type='checkbox'] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    margin: 0;
   }
 }
 
@@ -53,19 +70,6 @@ input[type='text'] {
   color: $font-color;
   font-family: 'Source Code Pro', sans-serif;
   font-size: 12px;
-}
-
-input[type='checkbox'] {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  border: 1px solid $white;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 50%;
-  padding: 3px;
-  vertical-align: middle;
-  margin-top: 0;
 }
 
 input[type='checkbox']:checked {
