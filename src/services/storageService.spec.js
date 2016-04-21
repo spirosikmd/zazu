@@ -90,6 +90,18 @@ describe('service: StorageService', () => {
       expect(service.zazus[3]).toEqual({label: 'label', checked: true, id: 'random-zazu-id', createdAt: 1111});
       expect(service.save).toHaveBeenCalled();
     });
+
+    it('should push zazu to position if specified', () => {
+      spyOn(randomstring, 'generate').and.returnValue('random-zazu-id');
+      spyOn(service, 'getTime').and.returnValue(1111);
+      spyOn(service, 'save');
+      service.create({label: 'label', checked: true}, 2);
+      expect(randomstring.generate).toHaveBeenCalled();
+      expect(service.getTime).toHaveBeenCalled();
+      expect(service.zazus.length).toEqual(4);
+      expect(service.zazus[2]).toEqual({label: 'label', checked: true, id: 'random-zazu-id', createdAt: 1111});
+      expect(service.save).toHaveBeenCalled();
+    });
   });
 
   describe('remove', () => {

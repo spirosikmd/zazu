@@ -73,11 +73,35 @@ describe('service: ZazuService', () => {
   });
 
   describe('create', () => {
-    it('should create zazu in storage and refresh', () => {
+    it('should temporary add the zazu to array under current and not call storage create', () => {
+      let zazu = {label: 'another-label', checked: false};
+      service.create(zazu, false, true);
+      expect(service.selected).toEqual(0);
+      expect(service.zazus[1]).toEqual(zazu);
+      expect(storage.create).not.toHaveBeenCalledWith();
+    });
+
+    it('should temporary add the zazu at the end of the array and not call storage create', () => {
+      let zazu = {label: 'another-label', checked: false};
+      service.create(zazu, false, false);
+      expect(service.selected).toEqual(0);
+      expect(service.zazus[3]).toEqual(zazu);
+      expect(storage.create).not.toHaveBeenCalledWith();
+    });
+
+    it('should persist zazu in storage in position under current and refresh', () => {
+      let zazu = {label: 'another-label', checked: false, id: 'temp', temp: true};
       spyOn(service, 'refresh');
-      let zazu = [{label: 'another-label', checked: false}];
-      service.create(zazu);
-      expect(storage.create).toHaveBeenCalledWith(zazu);
+      service.create(zazu, true, true);
+      expect(storage.create).toHaveBeenCalledWith({label: 'another-label', checked: false, id: 'temp'}, 1);
+      expect(service.refresh).toHaveBeenCalled();
+    });
+
+    it('should persist zazu in storage in last position and refresh', () => {
+      let zazu = {label: 'another-label', checked: false, id: 'temp', temp: true};
+      spyOn(service, 'refresh');
+      service.create(zazu, true, false);
+      expect(storage.create).toHaveBeenCalledWith({label: 'another-label', checked: false, id: 'temp'}, 4);
       expect(service.refresh).toHaveBeenCalled();
     });
   });
@@ -94,9 +118,27 @@ describe('service: ZazuService', () => {
   describe('remove', () => {
     it('should call storage remove with id and refresh', () => {
       spyOn(service, 'refresh');
-      service.remove('zazu-id');
+      service.remove('zazu-id', true);
       expect(storage.remove).toHaveBeenCalledWith('zazu-id');
       expect(service.refresh).toHaveBeenCalled();
+    });
+
+    it('should remove from temp array under current and not call storage remove', () => {
+      service.remove('zazu-id', false, true);
+      expect(service.zazus).toEqual([
+        {id: 'zazu-id', label: 'label', checked: true},
+        {id: 'yet-another-zazu-id', label: 'yet another label', checked: true}
+      ]);
+      expect(storage.remove).not.toHaveBeenCalled();
+    });
+
+    it('should remove from temp array at the end and not call storage remove', () => {
+      service.remove('zazu-id', false, false);
+      expect(service.zazus).toEqual([
+        {id: 'zazu-id', label: 'label', checked: true},
+        {id: 'another-zazu-id', label: 'another label', checked: false}
+      ]);
+      expect(storage.remove).not.toHaveBeenCalled();
     });
   });
 
