@@ -67,7 +67,7 @@ describe('component: zazu', () => {
     });
   });
 
-  afterEach(() => {
+  afterAll(() => {
     $componentController = null;
     $scope = null;
     $window = null;
@@ -79,27 +79,41 @@ describe('component: zazu', () => {
     expect(component).toBeDefined();
   });
 
-  it('should set the defaults', () => {
-    expect(component.defaultZazu).toEqual({
-      label: '',
-      checked: false
+  describe('$onInit', () => {
+    it('should set the defaults', () => {
+      component.$onInit();
+      expect(component.defaultZazu).toEqual({
+        label: '',
+        checked: false
+      });
+      expect(component.zazus).toEqual([{id: 'zazu-id', label: 'label', checked: true}]);
+      expect(component.zazu).toEqual({label: '', checked: false});
+      expect(component.defaultModes).toEqual({
+        create: false,
+        createUnderCurrent: false
+      });
+      expect(component.modes).toEqual({
+        create: false,
+        createUnderCurrent: false
+      });
     });
-    expect(component.zazus).toEqual([{id: 'zazu-id', label: 'label', checked: true}]);
-    expect(component.zazu).toEqual({label: '', checked: false});
-    expect(component.modes.create).toEqual(false);
-    expect(component.editing).toEqual(null);
-  });
 
-  describe('setMode', () => {
-    it('should set the create mode to specified state', () => {
-      expect(component.modes.create).toEqual(false);
-      component.setMode('create', true);
-      expect(component.modes.create).toEqual(true);
+    it('should call the init methods', () => {
+      spyOn(component, 'refresh');
+      spyOn(component, 'reset');
+      spyOn(component, 'setupHotkeys');
+      spyOn(component, 'isFirstTime');
+      component.$onInit();
+      expect(component.refresh).toHaveBeenCalled();
+      expect(component.reset).toHaveBeenCalled();
+      expect(component.setupHotkeys).toHaveBeenCalled();
+      expect(component.isFirstTime).toHaveBeenCalled();
     });
   });
 
   describe('refresh', () => {
     it('should get ', () => {
+      component.$onInit();
       let zazu = {id: 'zazu-id', label: 'label', checked: true};
       expect(component.zazus.length).toEqual(1);
       component.refresh();
@@ -111,6 +125,7 @@ describe('component: zazu', () => {
 
   describe('reset', () => {
     it('should copy the default zazu to current zazu', () => {
+      component.$onInit();
       expect(component.zazu).toEqual({label: '', checked: false});
       component.zazu = {label: 'label', checked: true};
       component.reset();
@@ -120,20 +135,55 @@ describe('component: zazu', () => {
 
   describe('create', () => {
     it('should not create new zazu if label is length 0', () => {
-      component.create({label: '', checked: false});
+      component.create({label: '    ', checked: false});
       expect(ZazuService.create).not.toHaveBeenCalled();
     });
 
     it('should create new zazu', () => {
       let zazu = {label: 'label', checked: false};
+      spyOn(component, 'resetModes');
       spyOn(component, 'refresh');
       spyOn(component, 'reset');
-      spyOn(component, 'setMode');
+      spyOn(component, 'isInMode').and.returnValue(true);
       component.create(zazu);
-      expect(ZazuService.create).toHaveBeenCalledWith(zazu);
+      expect(component.isInMode).toHaveBeenCalledWith('createUnderCurrent');
+      expect(ZazuService.create).toHaveBeenCalledWith(zazu, true, true);
       expect(component.refresh).toHaveBeenCalled();
       expect(component.reset).toHaveBeenCalled();
-      expect(component.setMode).toHaveBeenCalledWith('create', false);
+      expect(component.resetModes).toHaveBeenCalledWith();
+    });
+  });
+
+  describe('isInMode', () => {
+    beforeEach(() => {
+      component.$onInit();
+    });
+
+    it('should return false if it is not in mode "create" or "createUnderCurrent"', () => {
+      expect(component.isInMode('create')).toEqual(false);
+      expect(component.isInMode('createUnderCurrent')).toEqual(false);
+    });
+
+    it('should return true if it is in mode "create" or "createUnderCurrent"', () => {
+      component.modes.create = true;
+      expect(component.isInMode('create')).toEqual(true);
+
+      component.modes.createUnderCurrent = true;
+      expect(component.isInMode('createUnderCurrent')).toEqual(true);
+    });
+  });
+
+  describe('resetModes', () => {
+    beforeEach(() => {
+      component.$onInit();
+    });
+
+    it('should set modes to default', () => {
+      component.modes.create = true;
+      component.modes.createUnderCurrent = true;
+      component.resetModes();
+      expect(component.modes.create).toEqual(false);
+      expect(component.modes.createUnderCurrent).toEqual(false);
     });
   });
 
@@ -178,7 +228,7 @@ describe('component: zazu', () => {
     it('should call remove from ZazuService, refresh, and reset selected', () => {
       spyOn(component, 'refresh');
       component.remove({id: 'zazu-id'});
-      expect(ZazuService.remove).toHaveBeenCalledWith('zazu-id');
+      expect(ZazuService.remove).toHaveBeenCalledWith('zazu-id', true);
       expect(component.refresh).toHaveBeenCalled();
       expect(ZazuService.resetSelected).toHaveBeenCalled();
     });
@@ -198,11 +248,49 @@ describe('component: zazu', () => {
     });
   });
 
+  describe('removeSelected', () => {
+    it('should get selected and call remove with it', () => {
+      spyOn(ZazuService, 'getSelected').and.returnValue(3);
+      spyOn(component, 'remove');
+      component.removeSelected();
+      expect(component.remove).toHaveBeenCalledWith(3);
+    });
+
+    it('should not call remove if selected does not exist', () => {
+      spyOn(ZazuService, 'getSelected').and.returnValue(null);
+      spyOn(component, 'remove');
+      component.removeSelected();
+      expect(component.remove).not.toHaveBeenCalled();
+    });
+  });
+
   describe('createNew', () => {
-    it('should call setMode with "create" and true', () => {
-      spyOn(component, 'setMode');
-      component.createNew();
-      expect(component.setMode).toHaveBeenCalledWith('create', true);
+    it('should set createUnderCurrent to true and call ZazuService create with zazu, false and true, and refresh', () => {
+      spyOn(component, 'refresh');
+      component.$onInit();
+      component.createNew(true);
+      expect(component.modes.createUnderCurrent).toEqual(true);
+      expect(ZazuService.create).toHaveBeenCalledWith({
+        label: '',
+        checked: false,
+        id: 'temp',
+        temp: true
+      }, false, true);
+      expect(component.refresh).toHaveBeenCalled();
+    });
+
+    it('should set create to true and call ZazuService create with zazu, false and false, and refresh', () => {
+      spyOn(component, 'refresh');
+      component.$onInit();
+      component.createNew(false);
+      expect(component.modes.create).toEqual(true);
+      expect(ZazuService.create).toHaveBeenCalledWith({
+        label: '',
+        checked: false,
+        id: 'temp',
+        temp: true
+      }, false, false);
+      expect(component.refresh).toHaveBeenCalled();
     });
   });
 
@@ -235,7 +323,7 @@ describe('component: zazu', () => {
   describe('selectPrevious', () => {
     it('should prevent default event, call previous of zazu service, and set lastHotkey to 38', () => {
       let event = {
-        preventDefault: function () {},
+        preventDefault: angular.noop,
         which: 38
       };
       spyOn(event, 'preventDefault');
@@ -251,12 +339,13 @@ describe('component: zazu', () => {
 
     beforeEach(() => {
       event = {
-        preventDefault: function () {},
+        preventDefault: function () {
+        },
         which: 40
       };
     });
 
-    afterEach(() => {
+    afterAll(() => {
       event = null;
     });
 
@@ -326,6 +415,7 @@ describe('component: zazu', () => {
 
   describe('scroll', () => {
     it('should get scroll handler using the last hotkey used and call it with offset', () => {
+      component.$onInit();
       component.scrollTo = angular.noop;
       spyOn(component, 'scrollTo');
       component.scrollHandlers[38] = component.scrollTo;
@@ -348,6 +438,52 @@ describe('component: zazu', () => {
       spyOn($window, 'scrollBy');
       component.scrollBy();
       expect($window.scrollBy).toHaveBeenCalledWith(0, 25);
+    });
+  });
+
+  describe('cancel', () => {
+    let event;
+
+    beforeEach(() => {
+      component.$onInit();
+      event = {
+        preventDefault: angular.noop,
+        which: 38
+      };
+    });
+
+    afterAll(() => {
+      event = null;
+    });
+
+    it('should prevent default event', () => {
+      spyOn(event, 'preventDefault');
+      component.$onInit();
+      component.cancel(event);
+    });
+
+    it('should call ZazuService remove with "temp", false, true if in createUnderCurrent mode and reset modes', () => {
+      component.modes.createUnderCurrent = true;
+      spyOn(component, 'resetModes');
+      component.cancel(event);
+      expect(ZazuService.remove).toHaveBeenCalledWith('temp', false, true);
+      expect(component.resetModes).toHaveBeenCalled();
+    });
+
+    it('should call ZazuService remove with "temp", false, false if in create mode and reset modes', () => {
+      component.modes.create = true;
+      spyOn(component, 'resetModes');
+      component.cancel(event);
+      expect(ZazuService.remove).toHaveBeenCalledWith('temp', false, false);
+      expect(component.resetModes).toHaveBeenCalled();
+    });
+
+    it('should set ZazuService editing to false if editing and call refresh', () => {
+      ZazuService.editing = true;
+      spyOn(component, 'refresh');
+      component.cancel(event);
+      expect(ZazuService.setEditing).toHaveBeenCalledWith(false);
+      expect(component.refresh).toHaveBeenCalled();
     });
   });
 });

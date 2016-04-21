@@ -121,6 +121,17 @@ export class ZazuController {
   }
 
   /**
+   * Remove the selected zazu.
+   */
+  removeSelected () {
+    var selected = this.ZazuService.getSelected();
+    if (!selected) {
+      return;
+    }
+    this.remove(selected);
+  }
+
+  /**
    * Determine if zazu with specified index is selected.
    * @param {number} index The index of zazu in the list.
    * @returns {boolean} True if zazu with specified index is selected.
@@ -296,13 +307,7 @@ export class ZazuController {
       .add({
         combo: 'mod+backspace',
         description: 'Remove zazu',
-        callback: () => {
-          var selected = this.ZazuService.getSelected();
-          if (!selected) {
-            return;
-          }
-          this.remove(selected);
-        }
+        callback: this.removeSelected.bind(this)
       })
       .add({
         combo: 'mod+enter',
