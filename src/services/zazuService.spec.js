@@ -104,6 +104,12 @@ describe('service: ZazuService', () => {
       expect(storage.create).toHaveBeenCalledWith({label: 'another-label', checked: false, id: 'temp'}, 4);
       expect(service.refresh).toHaveBeenCalled();
     });
+
+    it('should leave zazus array as is if selected is not found', () => {
+      spyOn(service, 'getSelectedIndex').and.returnValue(-1);
+      service.create({}, true, false);
+      expect(service.zazus).toEqual(zazus);
+    });
   });
 
   describe('update', () => {
@@ -139,6 +145,12 @@ describe('service: ZazuService', () => {
         {id: 'another-zazu-id', label: 'another label', checked: false}
       ]);
       expect(storage.remove).not.toHaveBeenCalled();
+    });
+
+    it('should leave zazus array as is if selected is not found', () => {
+      spyOn(service, 'getSelectedIndex').and.returnValue(-1);
+      service.remove('temp', false, false);
+      expect(service.zazus).toEqual(zazus);
     });
   });
 
@@ -428,6 +440,25 @@ describe('service: ZazuService', () => {
       service.push(0);
       expect(storage.push).toHaveBeenCalledWith('zazu-id');
       expect(service.refresh).toHaveBeenCalled();
+    });
+  });
+
+  describe('getSelectedIndex', () => {
+    it('should call find with selected id', () => {
+      service.selected = 1;
+      spyOn(service, 'find');
+      service.getSelectedIndex();
+      expect(service.find).toHaveBeenCalledWith('another-zazu-id');
+    });
+  });
+
+  describe('find', () => {
+    it('should return -1 if zazu with id does not exist', () => {
+      expect(service.find('non-existing-zazu-id')).toEqual(-1);
+    });
+
+    it('should return index of zazu with existing id', () => {
+      expect(service.find('yet-another-zazu-id')).toEqual(2);
     });
   });
 });

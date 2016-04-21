@@ -52,7 +52,14 @@ export class ZazuService {
    * @param {boolean} current Whether we are in create under current mode.
    */
   create (zazu, persist, current) {
-    let position = current ? this.selected + 1 : this.zazus.length + 1;
+    // need to find another way to find position as filtered could mess results
+    let selectedIndex = this.getSelectedIndex();
+
+    if (selectedIndex === -1) {
+      return;
+    }
+
+    let position = current ? selectedIndex + 1 : this.zazus.length + 1;
 
     if (!persist) {
       this.zazus.splice(position, 0, zazu);
@@ -92,7 +99,13 @@ export class ZazuService {
       return;
     }
 
-    let position = current ? this.selected + 1 : this.zazus.length - 1;
+    let selectedIndex = this.getSelectedIndex();
+
+    if (selectedIndex === -1) {
+      return;
+    }
+
+    let position = current ? selectedIndex + 1 : this.zazus.length - 1;
     this.zazus.splice(position, 1);
   }
 
@@ -298,5 +311,29 @@ export class ZazuService {
     this.storage.push(zazu.id);
 
     this.refresh();
+  }
+
+  /**
+   * Find zazu index with id.
+   * @param {string} id The zazu id.
+   * @returns {number} The index of zazu in the list, -1 if it doesn't exist.
+   */
+  find (id) {
+    for (var index = 0; index < this.zazus.length; index++) {
+      var current = this.zazus[index];
+      if (current.id === id) {
+        return index;
+      }
+    }
+    return -1;
+  }
+
+  /**
+   * Get index of selected zazu.
+   * @returns {number} The index of selected zazu.
+   */
+  getSelectedIndex () {
+    let selected = this.getSelected();
+    return this.find(selected.id);
   }
 }
