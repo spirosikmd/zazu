@@ -8,17 +8,20 @@ export class ZazuController {
     this.$window = $window;
     this.ZazuService = ZazuService;
     this.hotkeys = hotkeys;
+  }
 
+  $onInit () {
     this.defaultZazu = {
       label: '',
       checked: false
     };
     this.zazus = [];
     this.zazu = null;
-    this.modes = {
-      create: false
+    this.defaultModes = {
+      create: false,
+      createUnderCurrent: false
     };
-    this.editing = null;
+    this.modes = angular.copy(this.defaultModes);
     this.scrollHandlers = {
       38: this.scrollTo.bind(this),
       40: this.scrollBy.bind(this)
@@ -29,15 +32,6 @@ export class ZazuController {
     this.setupHotkeys();
     this.isFirstTime();
   }
-
-  /**
-   * Set the app mode to the specified state.
-   * @param {string} mode The mode.
-   * @param {boolean} state The state.
-   */
-  setMode (mode, state) {
-    this.modes[mode] = state;
-  };
 
   /**
    * Refresh the zazu list.
@@ -62,12 +56,28 @@ export class ZazuController {
       return;
     }
 
-    this.ZazuService.create(angular.copy(zazu), true);
+    this.ZazuService.create(angular.copy(zazu), true, this.isInMode('createUnderCurrent'));
+    this.resetModes();
 
-    this.setMode('create', false);
     this.refresh();
     this.reset();
   };
+
+  /**
+   * Check if is in provided mode.
+   * @param {string} mode
+   * @returns {boolean}
+   */
+  isInMode (mode) {
+    return this.modes[mode];
+  }
+
+  /**
+   * Reset the modes.
+   */
+  resetModes () {
+    this.modes = angular.copy(this.defaultModes);
+  }
 
   /**
    * Toggle the checked attribute of the selected zazu.
@@ -124,10 +134,14 @@ export class ZazuController {
    * Set create mode to true.
    */
   createNew (current) {
-    this.setMode('create', true);
+    let mode = current ? 'createUnderCurrent' : 'create';
+    this.modes[mode] = true;
+
     this.zazu.id = 'temp';
     this.zazu.temp = true;
+
     this.ZazuService.create(angular.copy(this.zazu), false, current);
+
     this.refresh();
   }
 
@@ -153,7 +167,7 @@ export class ZazuController {
 
   /**
    * Select previous zazu.
-   * @param event
+   * @param {KeyboardEvent} event
    */
   selectPrevious (event) {
     this.lastHotkey = event.which;
@@ -163,7 +177,7 @@ export class ZazuController {
 
   /**
    * Select next zazu.
-   * @param event
+   * @param {KeyboardEvent} event
    */
   selectNext (event) {
     this.lastHotkey = event.which;
@@ -227,6 +241,28 @@ export class ZazuController {
   }
 
   /**
+   * Cancel either editing or creating new zazu.
+   * @param {KeyboardEvent} event
+   */
+  cancel (event) {
+    event.preventDefault();
+
+    // In create new mode
+    let underCurrentMode = this.isInMode('createUnderCurrent');
+    if (this.isInMode('create') || underCurrentMode) {
+      this.ZazuService.remove('temp', false, underCurrentMode);
+      this.resetModes();
+    }
+
+    // In edit mode
+    if (this.ZazuService.isEditing()) {
+      this.ZazuService.setEditing(false);
+    }
+
+    this.refresh();
+  }
+
+  /**
    * Setup the hotkeys.
    */
   setupHotkeys () {
@@ -237,18 +273,15 @@ export class ZazuController {
         callback: this.createNew.bind(this, false)
       })
       .add({
+        combo: 'mod+shift+n',
+        description: 'Create new zazu under current position',
+        callback: this.createNew.bind(this, true)
+      })
+      .add({
         combo: 'esc',
         description: 'Cancel edit or create new zazu',
         allowIn: ['INPUT'],
-        callback: (event) => {
-          event.preventDefault();
-          this.setMode('create', false);
-          this.ZazuService.remove('temp', false, false);
-          if (this.ZazuService.isEditing()) {
-            this.ZazuService.setEditing(false);
-            this.refresh();
-          }
-        }
+        callback: this.cancel.bind(this)
       })
       .add({
         combo: 'down',

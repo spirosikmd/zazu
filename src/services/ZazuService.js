@@ -48,17 +48,24 @@ export class ZazuService {
   /**
    * Create a new zazu.
    * @param {object} zazu The zazu.
+   * @param {boolean} persist Whether to persist the changes to storage.
+   * @param {boolean} current Whether we are in create under current mode.
    */
   create (zazu, persist, current) {
-    if (persist) {
-      delete zazu.temp;
-      this.storage.create(zazu);
-      this.refresh();
+    let position = current ? this.selected + 1 : this.zazus.length + 1;
+
+    if (!persist) {
+      this.zazus.splice(position, 0, zazu);
       return;
     }
 
-    let position = current ? this.selected + 1 : this.zazus.length + 1;
-    this.zazus.splice(position, 0, zazu);
+    // We don't want to persist the temp boolean
+    if ('temp' in zazu) {
+      delete zazu.temp;
+    }
+
+    this.storage.create(zazu, position);
+    this.refresh();
   }
 
   /**
@@ -75,6 +82,8 @@ export class ZazuService {
   /**
    * Remove zazu with the specified id.
    * @param {string} id The zazu id.
+   * @param {boolean} persist Whether to persist the changes to storage.
+   * @param {boolean} current Whether we are in create under current mode.
    */
   remove (id, persist, current) {
     if (persist) {

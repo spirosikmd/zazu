@@ -6,8 +6,8 @@
              on-update-label="$ctrl.updateLabel($event, id, label)"
              on-out-viewport="$ctrl.scroll(offset)">
   </zazu-item>
-  <form ng-if="$ctrl.modes.create && zazu.temp" ng-submit="$ctrl.create($ctrl.zazu)">
+  <form ng-if="zazu.temp" ng-submit="$ctrl.create($ctrl.zazu)">
     <input type="text" ng-model="$ctrl.zazu.label" name="label" id="label" title="Zazu label" required
-           focus="$ctrl.modes.create" class="zazu__new" elastic-input elastic-input-min-width="100px">
+           focus="zazu.temp" class="zazu__new" elastic-input elastic-input-min-width="100px">
   </form>
 </div>

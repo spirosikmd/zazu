@@ -37,11 +37,18 @@ export class StorageService {
    * Generate an id and created at timestamp, push new zazu to array
    * and save to local storage.
    * @param {object} zazu The zazu.
+   * @param {number} position The position to create the new zazu.
    */
-  create (zazu) {
+  create (zazu, position) {
     zazu.id = randomstring.generate();
     zazu.createdAt = this.getTime();
-    this.zazus.push(zazu);
+
+    if (position) {
+      this.zazus.splice(position, 0, zazu);
+    } else{
+      this.zazus.push(zazu);
+    }
+
     this.save();
   }
 
