@@ -14,7 +14,6 @@ $green: rgb(255, 203, 107);
 $purple: rgb(199, 146, 234);
 $font-color: rgb(109, 194, 194);
 $dark-font-color: rgb(104, 104, 104);
-$light-font-color: rgb(195, 206, 227);
 
 body {
   background-color: $dark;
@@ -52,7 +51,7 @@ body {
   }
 
   &__pointer {
-    color: $light-font-color;
+    color: $dark-font-color;
     position: absolute;
   }
 
