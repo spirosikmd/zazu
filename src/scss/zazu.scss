@@ -29,6 +29,10 @@ body {
   color: $font-color;
   font-family: 'Source Code Pro', sans-serif;
   font-size: 12px;
+
+  &:focus {
+    outline: none;
+  }
 }
 
 .zazu {
@@ -73,10 +77,6 @@ body {
       text-decoration: line-through;
     }
   }
-}
-
-input:focus {
-  outline: none;
 }
 
 // Override hotkeys styling
