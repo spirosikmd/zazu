@@ -1,7 +1,7 @@
 'use strict';
 
 const electron = require('electron');
-const app = electron.app;  // Module to control application life.
+const App = electron.app;  // Module to control application life.
 const BrowserWindow = electron.BrowserWindow;  // Module to create native browser window.
 const Menu = electron.Menu;
 
@@ -77,7 +77,7 @@ function readyHandler () {
  */
 function allClosedHandler () {
   if (process.platform != 'darwin') {
-    app.quit();
+    App.quit();
   }
 }
 
@@ -94,7 +94,7 @@ function getMenuTemplate () {
       type: 'separator'
     }, {
       label: 'Quit', accelerator: 'Command+Q', click: function () {
-        app.quit();
+        App.quit();
       }
     }]
   }, {
@@ -145,8 +145,8 @@ function getMenuTemplate () {
 }
 
 // Quit when all windows are closed.
-app.on('window-all-closed', allClosedHandler);
+App.on('window-all-closed', allClosedHandler);
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
-app.on('ready', readyHandler);
+App.on('ready', readyHandler);
