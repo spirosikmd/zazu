@@ -3,7 +3,7 @@
 const electron = require('electron');
 const app = electron.app;  // Module to control application life.
 const BrowserWindow = electron.BrowserWindow;  // Module to create native browser window.
-const menu = require('menu');
+const Menu = electron.Menu;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -68,7 +68,7 @@ function readyHandler () {
   // Create the Application's main menu.
   const template = getMenuTemplate();
 
-  menu.setApplicationMenu(menu.buildFromTemplate(template));
+  Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 }
 
 /**

@@ -30,7 +30,7 @@
     "concurrently": "^2.0.0",
     "del": "^2.2.0",
     "electron-packager": "^5.2.1",
-    "electron-prebuilt": "^0.37.3",
+    "electron-prebuilt": "^1.0.1",
     "gulp": "^3.9.1",
     "gulp-load-plugins": "^1.2.0",
     "gulp-ng-annotate": "^2.0.0",
