@@ -132,7 +132,7 @@ function getMenuTemplate () {
       click: zoomInHandler
     }, {
       label: 'Zoom Out',
-      accelerator: 'Command+Shift+-',
+      accelerator: 'Command+-',
       click: zoomOutHandler
     }, {
       type: 'separator'
