@@ -1,6 +1,8 @@
 export class FlagService {
   storage: Storage;
-  flags: {[flag: string]: boolean};
+  flags: {
+    firstTime: boolean
+  };
 
   // @ngInject
   constructor (private flagsKey: string) {

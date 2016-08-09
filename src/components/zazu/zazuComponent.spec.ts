@@ -1,22 +1,27 @@
+import {ZazuService} from '../../services/ZazuService';
+import zazuApp from '../../index';
+import {Zazu} from '../../models/Zazu';
 require('angular-mocks');
 const angular = require('angular');
 
-import zazuApp from '../../index';
-
 describe('component: zazu', () => {
-  let $componentController;
-  let $scope;
-  let $window;
+  let $componentController: angular.IComponentControllerService;
+  let $scope: angular.IScope;
+  let $window: angular.IWindowService;
   let component;
-  let ZazuService;
-  let hotkeys;
-  let zazus = [{id: 'zazu-id', label: 'label', checked: true}];
+  let ZazuService: ZazuService;
+  let hotkeys: angular.hotkeys.HotkeysProvider;
+  let zazus: Zazu[];
 
   beforeEach(angular.mock.module(zazuApp));
 
   beforeEach(angular.mock.module(($provide) => {
+    const zazu = new Zazu();
+    zazu.id = 'zazu-id';
+    zazu.label = 'label';
+    zazu.checked = true;
+    zazus = [zazu];
     $provide.service('ZazuService', function () {
-      this.editing = false;
       this.get = jasmine.createSpy('get').and.callFake(function () {
         return zazus;
       });
@@ -30,9 +35,6 @@ describe('component: zazu', () => {
       this.isFirstTime = angular.noop;
       this.setFirstTime = angular.noop;
       this.toggleOpen = jasmine.createSpy('toggleOpen').and.callThrough();
-      this.isEditing = jasmine.createSpy('isEditing').and.callFake(() => {
-        return this.editing;
-      });
       this.previous = jasmine.createSpy('previous').and.callThrough();
       this.next = jasmine.createSpy('next').and.callThrough();
       this.moveUp = jasmine.createSpy('moveUp').and.callThrough();
@@ -86,7 +88,7 @@ describe('component: zazu', () => {
         label: '',
         checked: false
       });
-      expect(component.zazus).toEqual([{id: 'zazu-id', label: 'label', checked: true}]);
+      expect(component.zazus).toEqual([new Zazu({id: 'zazu-id', label: 'label', checked: true})]);
       expect(component.zazu).toEqual({label: '', checked: false});
       expect(component.defaultModes).toEqual({
         create: false,
@@ -114,7 +116,7 @@ describe('component: zazu', () => {
   describe('refresh', () => {
     it('should get ', () => {
       component.$onInit();
-      let zazu = {id: 'zazu-id', label: 'label', checked: true};
+      let zazu = new Zazu({id: 'zazu-id', label: 'label', checked: true});
       expect(component.zazus.length).toEqual(1);
       component.refresh();
       expect(ZazuService.get).toHaveBeenCalled();
@@ -206,13 +208,13 @@ describe('component: zazu', () => {
 
   describe('updateLabel', () => {
     it('should not update label if key code is not 13', () => {
-      component.updateLabel({which: 15}, 'zazu-id', 'label');
+      component.updateLabel({which: 15} as KeyboardEvent, 'zazu-id', 'label');
       expect(ZazuService.update).not.toHaveBeenCalled();
     });
 
     it('should update label if key code is 13 and set editing mode to false', () => {
       spyOn(component, 'refresh');
-      component.updateLabel({which: 13}, 'zazu-id', 'zazu-label');
+      component.updateLabel({which: 13} as KeyboardEvent, 'zazu-id', 'zazu-label');
       expect(ZazuService.update).toHaveBeenCalledWith('zazu-id', 'label', 'zazu-label');
       expect(ZazuService.setEditing).toHaveBeenCalledWith(false);
       expect(component.refresh).toHaveBeenCalled();
@@ -312,8 +314,8 @@ describe('component: zazu', () => {
     });
 
     it('should call setEditing of zazu service with false if is in edit mode and refresh', () => {
-      ZazuService.editing = true;
       spyOn(component, 'refresh');
+      spyOn(ZazuService, 'isEditing').and.returnValue(true);
       component.edit();
       expect(ZazuService.setEditing).toHaveBeenCalledWith(false);
       expect(component.refresh).toHaveBeenCalled();
@@ -325,7 +327,7 @@ describe('component: zazu', () => {
       let event = {
         preventDefault: angular.noop,
         which: 38
-      };
+      } as KeyboardEvent;
       spyOn(event, 'preventDefault');
       component.selectPrevious(event);
       expect(ZazuService.previous).toHaveBeenCalled();
@@ -479,7 +481,6 @@ describe('component: zazu', () => {
     });
 
     it('should set ZazuService editing to false if editing and call refresh', () => {
-      ZazuService.editing = true;
       spyOn(component, 'refresh');
       component.cancel(event);
       expect(ZazuService.setEditing).toHaveBeenCalledWith(false);

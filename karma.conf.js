@@ -14,8 +14,8 @@ module.exports = function (config) {
     // list of files / patterns to load in the browser
     files: [
       'src/**/!(index).html',
-      'src/**/!(main).js',
-      'src/**/*.spec.js'
+      'src/**/!(main).ts',
+      'src/**/*.spec.ts'
     ],
 
     // list of files to exclude
@@ -25,8 +25,8 @@ module.exports = function (config) {
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
       'src/**/*.html': ['browserify'],
-      'src/**/*.js': ['browserify'],
-      'src/**/*.spec.js': ['browserify']
+      'src/**/*.ts': ['browserify'],
+      'src/**/*.spec.ts': ['browserify']
     },
 
     // configure browserify and babelify to use preset
@@ -34,8 +34,9 @@ module.exports = function (config) {
       debug: true,
       transform: [istanbul({
         instrumenter: isparta,
-        ignore: ['**/node_modules/**', '**/*.spec.js', '**/*.html']
-      }), 'babelify', 'stringify']
+        ignore: ['**/node_modules/**', '**/*.spec.ts', '**/*.html']
+      }), 'stringify'],
+      plugin: ['tsify']
     },
 
     // Coverage reporter configuration

@@ -1,11 +1,13 @@
+import {FlagService} from './FlagService';
+import zazuApp from '../index';
 require('angular-mocks');
 
-import zazuApp from '../index';
-
 describe('service: FlagService', () => {
-  let service;
-  let storage;
-  let flags;
+  let service: FlagService;
+  let storage: Storage;
+  let flags: {
+    firstTime: boolean;
+  };
 
   beforeEach(angular.mock.module(zazuApp));
 
@@ -21,12 +23,12 @@ describe('service: FlagService', () => {
       setItem: function (key, data) {
         this[key] = data;
       }
-    };
+    } as Storage;
     service = _FlagService_;
     service.storage = storage;
   }));
 
-  afterEach(() => {
+  afterAll(() => {
     service = null;
     storage = null;
     flags = null;

@@ -1,21 +1,22 @@
+import {StorageService} from './StorageService';
+import zazuApp from '../index';
+import {Zazu} from '../models/Zazu';
 require('angular-mocks');
 const randomstring = require('randomstring');
 const angular = require('angular');
 
-import zazuApp from '../index';
-
 describe('service: StorageService', () => {
-  let service;
-  let storage;
-  let zazus;
+  let service: StorageService;
+  let storage: Storage;
+  let zazus: Zazu[];
 
   beforeEach(angular.mock.module(zazuApp));
 
   beforeEach(inject((_StorageService_) => {
     zazus = [
-      {id: 'zazu-id', label: 'label', checked: true},
-      {id: 'another-zazu-id', label: 'another-label', checked: false},
-      {id: 'yet-another-zazu-id', label: 'yet-another-label', checked: true}
+      new Zazu({id: 'zazu-id', label: 'label', checked: true}),
+      new Zazu({id: 'another-zazu-id', label: 'another-label', checked: false}),
+      new Zazu({id: 'yet-another-zazu-id', label: 'yet-another-label', checked: true})
     ];
     storage = {
       'zazus.test': zazus,
@@ -25,13 +26,13 @@ describe('service: StorageService', () => {
       setItem: function (key, data) {
         this[key] = data;
       }
-    };
+    } as Storage;
     service = _StorageService_;
     service.storage = storage;
     service.refresh();
   }));
 
-  afterEach(() => {
+  afterAll(() => {
     service = null;
     storage = null;
     zazus = null;
@@ -81,11 +82,11 @@ describe('service: StorageService', () => {
   describe('create', () => {
     it('should generate random id, push zazu to zazus and save', () => {
       spyOn(randomstring, 'generate').and.returnValue('random-zazu-id');
-      spyOn(service, 'getTime').and.returnValue(1111);
+      spyOn(StorageService, 'getTime').and.returnValue(1111);
       spyOn(service, 'save');
-      service.create({label: 'label', checked: true});
+      service.create({label: 'label', checked: true} as Zazu, 0);
       expect(randomstring.generate).toHaveBeenCalled();
-      expect(service.getTime).toHaveBeenCalled();
+      expect(StorageService.getTime).toHaveBeenCalled();
       expect(service.zazus.length).toEqual(4);
       expect(service.zazus[3]).toEqual({label: 'label', checked: true, id: 'random-zazu-id', createdAt: 1111});
       expect(service.save).toHaveBeenCalled();
@@ -93,11 +94,11 @@ describe('service: StorageService', () => {
 
     it('should push zazu to position if specified', () => {
       spyOn(randomstring, 'generate').and.returnValue('random-zazu-id');
-      spyOn(service, 'getTime').and.returnValue(1111);
+      spyOn(StorageService, 'getTime').and.returnValue(1111);
       spyOn(service, 'save');
-      service.create({label: 'label', checked: true}, 2);
+      service.create(new Zazu({label: 'label', checked: true}), 2);
       expect(randomstring.generate).toHaveBeenCalled();
-      expect(service.getTime).toHaveBeenCalled();
+      expect(StorageService.getTime).toHaveBeenCalled();
       expect(service.zazus.length).toEqual(4);
       expect(service.zazus[2]).toEqual({label: 'label', checked: true, id: 'random-zazu-id', createdAt: 1111});
       expect(service.save).toHaveBeenCalled();

@@ -1,13 +1,16 @@
+import {ZazuService} from './ZazuService';
+import zazuApp from '../index';
+import {Zazu} from '../models/Zazu';
+import {FlagService} from './FlagService';
+import {StorageService} from './StorageService';
 require('angular-mocks');
 const angular = require('angular');
 
-import zazuApp from '../index';
-
 describe('service: ZazuService', () => {
-  let service;
-  let storage;
-  let zazus;
-  let flagService;
+  let service: ZazuService;
+  let storage: StorageService;
+  let zazus: Zazu[];
+  let flagService: FlagService;
 
   beforeEach(angular.mock.module(zazuApp));
 
@@ -35,9 +38,9 @@ describe('service: ZazuService', () => {
     storage = _StorageService_;
     flagService = _FlagService_;
     zazus = [
-      {id: 'zazu-id', label: 'label', checked: true},
-      {id: 'another-zazu-id', label: 'another label', checked: false},
-      {id: 'yet-another-zazu-id', label: 'yet another label', checked: true}
+      new Zazu({id: 'zazu-id', label: 'label', checked: true}),
+      new Zazu({id: 'another-zazu-id', label: 'another label', checked: false}),
+      new Zazu({id: 'yet-another-zazu-id', label: 'yet another label', checked: true})
     ];
   }));
 
@@ -74,7 +77,7 @@ describe('service: ZazuService', () => {
 
   describe('create', () => {
     it('should temporary add the zazu to array under current and not call storage create', () => {
-      let zazu = {label: 'another-label', checked: false};
+      let zazu = new Zazu({label: 'another-label', checked: false});
       service.create(zazu, false, true);
       expect(service.selected).toEqual(0);
       expect(service.zazus[1]).toEqual(zazu);
@@ -82,7 +85,7 @@ describe('service: ZazuService', () => {
     });
 
     it('should temporary add the zazu at the end of the array and not call storage create', () => {
-      let zazu = {label: 'another-label', checked: false};
+      let zazu = new Zazu({label: 'another-label', checked: false});
       service.create(zazu, false, false);
       expect(service.selected).toEqual(0);
       expect(service.zazus[3]).toEqual(zazu);
@@ -90,7 +93,7 @@ describe('service: ZazuService', () => {
     });
 
     it('should persist zazu in storage in position under current and refresh', () => {
-      let zazu = {label: 'another-label', checked: false, id: 'temp', temp: true};
+      let zazu = new Zazu({label: 'another-label', checked: false, id: 'temp', temp: true});
       spyOn(service, 'refresh');
       service.create(zazu, true, true);
       expect(storage.create).toHaveBeenCalledWith({label: 'another-label', checked: false, id: 'temp'}, 1);
@@ -98,7 +101,7 @@ describe('service: ZazuService', () => {
     });
 
     it('should persist zazu in storage in last position and refresh', () => {
-      let zazu = {label: 'another-label', checked: false, id: 'temp', temp: true};
+      let zazu = new Zazu({label: 'another-label', checked: false, id: 'temp', temp: true});
       spyOn(service, 'refresh');
       service.create(zazu, true, false);
       expect(storage.create).toHaveBeenCalledWith({label: 'another-label', checked: false, id: 'temp'}, 4);
@@ -107,7 +110,7 @@ describe('service: ZazuService', () => {
 
     it('should leave zazus array as is if selected is not found', () => {
       spyOn(service, 'getSelectedIndex').and.returnValue(-1);
-      service.create({}, true, false);
+      service.create(new Zazu(), true, false);
       expect(service.zazus).toEqual(zazus);
     });
   });

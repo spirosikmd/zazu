@@ -1,21 +1,28 @@
+import {Zazu} from '../../models/Zazu';
+import zazuApp from '../../index';
 require('angular-mocks');
 
-import zazuApp from '../../index';
-
 describe('component: zazuItem', () => {
-  let $componentController;
-  let $scope;
+  let $componentController: angular.IComponentControllerService;
+  let $scope: angular.IScope;
   let component;
-  let zazu;
-  let isSelected;
-  let callbacks;
+  let zazu: Zazu;
+  let isSelected: boolean;
+  let callbacks: {
+    onUpdateChecked: jasmine.Spy;
+    onUpdateLabel: jasmine.Spy;
+    onOutViewport: jasmine.Spy;
+  };
 
   beforeEach(angular.mock.module(zazuApp));
 
   beforeEach(inject((_$componentController_, _$rootScope_) => {
     $componentController = _$componentController_;
     $scope = _$rootScope_.$new();
-    zazu = {id: 'zazu-id', label: 'zazu-label', checked: true};
+    zazu = new Zazu();
+    zazu.id = 'zazu-id';
+    zazu.label = 'zazu-label';
+    zazu.checked = true;
     isSelected = true;
   }));
 
@@ -34,7 +41,7 @@ describe('component: zazuItem', () => {
     });
   });
 
-  afterEach(() => {
+  afterAll(() => {
     $componentController = null;
     $scope = null;
     component = null;

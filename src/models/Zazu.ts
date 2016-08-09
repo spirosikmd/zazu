@@ -1,3 +1,5 @@
+const assign = require('lodash.assign');
+
 export class Zazu {
   id: string;
   label: string;
@@ -6,4 +8,8 @@ export class Zazu {
   // TODO: these two we don't want to persist them
   temp: boolean;
   editing: boolean;
+
+  constructor (data = {}) {
+    assign(this, data);
+  }
 }
