@@ -1,10 +1,11 @@
 import {ZazuItemController} from './ZazuItemController';
-import template from './zazuItem.html';
+
+const template = require('./zazuItem.html');
 
 /**
  * ZazuItem component.
  */
-export const ZazuItemComponent = {
+export const ZazuItemComponent: angular.IComponentOptions = {
   template: template,
   controller: ZazuItemController,
   bindings: {

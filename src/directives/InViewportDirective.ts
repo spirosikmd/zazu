@@ -1,3 +1,7 @@
+interface IInViewportDirectiveAttributes extends angular.IAttributes {
+  inViewport: string;
+}
+
 /**
  * Execute callback with result whether element is in viewport
  * and its offsetTop when elements' offsetTop changes.
@@ -5,9 +9,11 @@
  * @constructor
  */
 // @ngInject
-export function InViewportDirective ($parse) {
+export function InViewportDirective ($parse: angular.IParseService) {
   return {
-    link: function (scope, element, attributes) {
+    link: function (
+      scope: angular.IScope, element: angular.IAugmentedJQuery, attributes: IInViewportDirectiveAttributes
+    ) {
       if (!attributes.inViewport) {
         return;
       }
@@ -33,14 +39,14 @@ export function InViewportDirective ($parse) {
    * Determine if element is in viewport.
    * @param {HTMLElement} el The element.
    */
-  function elementInViewport (el) {
+  function elementInViewport (el: HTMLElement) {
     let top = el.offsetTop;
     let left = el.offsetLeft;
     let width = el.offsetWidth;
     let height = el.offsetHeight;
 
     while (el.offsetParent) {
-      el = el.offsetParent;
+      el = el.offsetParent as HTMLElement;
       top += el.offsetTop;
       left += el.offsetLeft;
     }

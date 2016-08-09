@@ -1,9 +1,10 @@
 export class FlagService {
+  storage: Storage;
+  flags: {[flag: string]: boolean};
 
   // @ngInject
-  constructor (flagsKey) {
+  constructor (private flagsKey: string) {
     this.storage = localStorage;
-    this.flagsKey = flagsKey;
 
     this.refresh();
   }
@@ -20,16 +21,16 @@ export class FlagService {
    * @param {string} flag The flag.
    * @returns {boolean} The flag state.
    */
-  getFlag (flag) {
+  getFlag (flag: string): boolean {
     return this.flags[flag];
   }
 
   /**
    * Set a new state for the specified flag.
    * @param {string} flag The flag to change the state of.
-   * @param {boolean} state The new state of the flag. 
+   * @param {boolean} state The new state of the flag.
    */
-  setFlag (flag, state) {
+  setFlag (flag: string, state: boolean) {
     this.flags[flag] = state;
     this.storage.setItem(this.flagsKey, angular.toJson(this.flags || {}));
   }

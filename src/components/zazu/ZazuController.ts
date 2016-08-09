@@ -1,13 +1,33 @@
+import {ZazuService} from '../../services/ZazuService';
+import {Zazu} from '../../models/Zazu';
+
 const angular = require('angular');
 
 export class ZazuController {
+  defaultZazu: {
+    label: string;
+    checked: boolean
+  };
+  zazus: any[];
+  zazu: any;
+  defaultModes: {
+    create: boolean;
+    createUnderCurrent: boolean;
+  };
+  modes: {
+    create: boolean;
+    createUnderCurrent: boolean;
+  };
+  scrollHandlers: {[handler: number]: Function};
+  lastHotkey: number;
 
   // @ngInject
-  constructor ($scope, $window, ZazuService, hotkeys) {
-    this.$scope = $scope;
-    this.$window = $window;
-    this.ZazuService = ZazuService;
-    this.hotkeys = hotkeys;
+  constructor (
+    private $scope: angular.IScope,
+    private $window: angular.IWindowService,
+    private ZazuService: ZazuService,
+    private hotkeys
+  ) {
   }
 
   $onInit () {
@@ -49,9 +69,9 @@ export class ZazuController {
 
   /**
    * Create new zazu.
-   * @param zazu The zazu to create.
+   * @param {Zazu} zazu The zazu to create.
    */
-  create (zazu) {
+  create (zazu: Zazu) {
     if (zazu.label.trim().length === 0) {
       return;
     }
@@ -68,7 +88,7 @@ export class ZazuController {
    * @param {string} mode
    * @returns {boolean}
    */
-  isInMode (mode) {
+  isInMode (mode: string): boolean {
     return this.modes[mode];
   }
 
@@ -94,11 +114,11 @@ export class ZazuController {
   /**
    * Update the label attribute of zazu with the specified id in case key press is "enter",
    * and set editing mode to false.
-   * @param $event The ng-keypress event
+   * @param {KeyboardEvent} $event The ng-keypress event
    * @param {string} id The zazu id.
    * @param {string} label The zazu label.
    */
-  updateLabel ($event, id, label) {
+  updateLabel ($event: KeyboardEvent, id: string, label: string) {
     if ($event.which !== 13) {
       return;
     }
@@ -109,9 +129,9 @@ export class ZazuController {
 
   /**
    * Remove the specified zazu and refresh the list.
-   * @param zazu The zazu to remove.
+   * @param {Zazu} zazu The zazu to remove.
    */
-  remove (zazu) {
+  remove (zazu: Zazu) {
     if (!zazu) {
       return;
     }
@@ -136,15 +156,16 @@ export class ZazuController {
    * @param {number} index The index of zazu in the list.
    * @returns {boolean} True if zazu with specified index is selected.
    */
-  isSelected (index) {
+  isSelected (index: number): boolean {
     return this.ZazuService.isSelected(index);
   }
 
   /**
    * Create new hotkey handler.
    * Set create mode to true.
+   * @param {boolean} current
    */
-  createNew (current) {
+  createNew (current: boolean) {
     let mode = current ? 'createUnderCurrent' : 'create';
     this.modes[mode] = true;
 
@@ -180,7 +201,7 @@ export class ZazuController {
    * Select previous zazu.
    * @param {KeyboardEvent} event
    */
-  selectPrevious (event) {
+  selectPrevious (event: KeyboardEvent) {
     this.lastHotkey = event.which;
     event.preventDefault();
     this.ZazuService.previous();
@@ -190,7 +211,7 @@ export class ZazuController {
    * Select next zazu.
    * @param {KeyboardEvent} event
    */
-  selectNext (event) {
+  selectNext (event: KeyboardEvent) {
     this.lastHotkey = event.which;
     event.preventDefault();
     this.ZazuService.next();
@@ -203,7 +224,7 @@ export class ZazuController {
    * Determine scroll handler and execute it with offset.
    * @param {number} offset
    */
-  scroll (offset) {
+  scroll (offset: number) {
     this.scrollHandlers[this.lastHotkey](offset);
   }
 
@@ -211,7 +232,7 @@ export class ZazuController {
    * Scroll to offset with a 5 pixel margin as well.
    * @param {number} offset
    */
-  scrollTo (offset) {
+  scrollTo (offset: number) {
     this.$window.scrollTo(0, offset - 5);
   }
 
@@ -255,7 +276,7 @@ export class ZazuController {
    * Cancel either editing or creating new zazu.
    * @param {KeyboardEvent} event
    */
-  cancel (event) {
+  cancel (event: KeyboardEvent) {
     event.preventDefault();
 
     // In create new mode

@@ -1,12 +1,22 @@
+import {Zazu} from '../models/Zazu';
 const randomstring = require('randomstring');
 const angular = require('angular');
 
 export class StorageService {
+  storage: Storage;
+  zazus: any[];
+
+  /**
+   * Get the current date in milliseconds.
+   * @returns {number} The current date in milliseconds.
+   */
+  static getTime (): number {
+    return new Date().getTime();
+  }
 
   // @ngInject
-  constructor (db) {
+  constructor (private db: string) {
     this.storage = localStorage;
-    this.db = db;
 
     this.refresh();
   }
@@ -20,9 +30,9 @@ export class StorageService {
 
   /**
    * Get the list of zazus.
-   * @returns {object[]} The current list of zazus.
+   * @returns {Zazu[]} The current list of zazus.
    */
-  get () {
+  get (): Zazu[] {
     return angular.copy(this.zazus) || [];
   }
 
@@ -36,16 +46,16 @@ export class StorageService {
   /**
    * Generate an id and created at timestamp, push new zazu to array
    * and save to local storage.
-   * @param {object} zazu The zazu.
+   * @param {Zazu} zazu The zazu.
    * @param {number} position The position to create the new zazu.
    */
-  create (zazu, position) {
+  create (zazu: Zazu, position: number) {
     zazu.id = randomstring.generate();
-    zazu.createdAt = this.getTime();
+    zazu.createdAt = StorageService.getTime();
 
     if (position) {
       this.zazus.splice(position, 0, zazu);
-    } else{
+    } else {
       this.zazus.push(zazu);
     }
 
@@ -53,18 +63,10 @@ export class StorageService {
   }
 
   /**
-   * Get the current date in milliseconds.
-   * @returns {number} The current date in milliseconds.
-   */
-  getTime () {
-    return new Date().getTime();
-  }
-
-  /**
    * Remove zazu with the specified id.
    * @param {string} id The zazu id.
    */
-  remove (id) {
+  remove (id: string) {
     var index = this.find(id);
     if (index === -1) {
       return;
@@ -79,7 +81,7 @@ export class StorageService {
    * @param {string} prop The property of zazu object to update.
    * @param {string|boolean} value The new value.
    */
-  update (id, prop, value) {
+  update (id: string, prop: string, value: string|boolean) {
     var index = this.find(id);
     if (index === -1) {
       return;
@@ -93,7 +95,7 @@ export class StorageService {
    * @param {string} id The zazu id.
    * @returns {number} The index of zazu in the list, -1 if it doesn't exist.
    */
-  find (id) {
+  find (id: string): number {
     for (var index = 0; index < this.zazus.length; index++) {
       var current = this.zazus[index];
       if (current.id === id) {
@@ -109,7 +111,7 @@ export class StorageService {
    * @param {string} firstId The id of first zazu.
    * @param {string} secondId The id of second zazu.
    */
-  swap (firstId, secondId) {
+  swap (firstId: string, secondId: string) {
     const firstIndex = this.find(firstId);
     if (firstIndex === -1) {
       return;
@@ -131,7 +133,7 @@ export class StorageService {
    * Put zazu with id to the beginning of current zazu array and save.
    * @param {string} id The id of zazu.
    */
-  unshift (id) {
+  unshift (id: string) {
     const index = this.find(id);
 
     if (index === -1) {
@@ -152,7 +154,7 @@ export class StorageService {
    * end of current zazus array, and save.
    * @param {string} id The id of zazu.
    */
-  push (id) {
+  push (id: string) {
     const index = this.find(id);
 
     if (index === -1) {

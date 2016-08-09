@@ -1,6 +1,3 @@
-import angular from 'angular';
-import hotkeys from 'angular-hotkeys';
-
 import {StorageService} from './services/StorageService';
 import {ZazuService} from './services/ZazuService';
 import {FlagService} from './services/FlagService';
@@ -10,6 +7,9 @@ import {InViewportDirective} from './directives/InViewportDirective';
 import {ZazuComponent} from './components/zazu/ZazuComponent';
 import {ZazuItemComponent} from './components/zazuItem/ZazuItemComponent';
 import config from './zazu.config';
+
+const angular = require('angular');
+const hotkeys = require('angular-hotkeys');
 
 export default angular.module('zazuApp', ['cfp.hotkeys', config.name])
   .service('StorageService', StorageService)

@@ -1,5 +1,5 @@
 const gulp = require('gulp');
-const babelify = require('babelify');
+const tsify = require('tsify');
 const browserify = require('browserify');
 const watchify = require('watchify');
 const vinylSourceStream = require('vinyl-source-stream');
@@ -12,8 +12,8 @@ const $ = require('gulp-load-plugins')();
 
 const src = {
   scripts: {
-    all: './src/**/*.js',
-    index: './src/index.js'
+    all: './src/**/*.ts',
+    index: './src/index.ts'
   },
   css: {
     hotkey: './node_modules/angular-hotkeys/build/hotkeys.min.css'
@@ -49,7 +49,7 @@ const customOptions = {
 const options = assign({}, watchify.args, customOptions);
 const sources = watchify(browserify(options));
 
-sources.transform(babelify);
+sources.plugin(tsify);
 sources.transform(stringify, {
   appliesTo: {
     includeExtensions: ['.html']
@@ -71,7 +71,7 @@ function bundle () {
 
 gulp.task('scripts:prod', () => {
   return browserify(src.scripts.index)
-    .transform(babelify)
+    .plugin(tsify)
     .transform(stringify, {
       appliesTo: {
         includeExtensions: ['.html']

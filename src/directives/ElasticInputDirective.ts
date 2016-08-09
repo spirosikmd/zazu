@@ -1,3 +1,12 @@
+interface IElasticInputDirectiveAttributes extends angular.IAttributes {
+  ngTrim: string;
+  placeholder: string;
+  elasticInputMinWidth: string;
+  elasticInputMaxWidth: string;
+  elasticInputWidthDelta: string;
+  ngModel: string;
+}
+
 /**
  * angular-elastic-input
  * A directive for AngularJS which automatically resize the width of input field according to the content, while typing.
@@ -5,12 +14,14 @@
  * @license: MIT License
  */
 // @ngInject
-export function ElasticInputDirective ($document, $window) {
+export function ElasticInputDirective ($document: angular.IDocumentService, $window: angular.IWindowService) {
 
   var wrapper = angular.element('<div style="position:fixed; top:-999px; left:0;"></div>');
   angular.element($document[0].body).append(wrapper);
 
-  function setMirrorStyle (mirror, element, attributes) {
+  function setMirrorStyle (
+    mirror: JQuery, element: angular.IAugmentedJQuery, attributes: IElasticInputDirectiveAttributes
+  ) {
     var style = $window.getComputedStyle(element[0]);
     var defaultMaxWidth = style.maxWidth === 'none' ? element.parent().prop('clientWidth') : style.maxWidth;
     element.css('minWidth', attributes.elasticInputMinWidth || style.minWidth);
@@ -38,7 +49,7 @@ export function ElasticInputDirective ($document, $window) {
 
   return {
     restrict: 'A',
-    link: function postLink (scope, element, attributes) {
+    link: function postLink (scope: angular.IScope, element: angular.IAugmentedJQuery, attributes: IElasticInputDirectiveAttributes) {
 
       // Disable trimming inputs by default
       attributes.$set('ngTrim', attributes.ngTrim === 'true' ? 'true' : 'false');

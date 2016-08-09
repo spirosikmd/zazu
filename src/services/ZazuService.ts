@@ -1,6 +1,16 @@
+import {FlagService} from './FlagService';
+import {StorageService} from './StorageService';
+import {Zazu} from '../models/Zazu';
+
 const angular = require('angular');
 
 export class ZazuService {
+  storage: StorageService;
+  flagService: FlagService;
+  open: boolean;
+  selected: number;
+  zazus: Zazu[];
+  filtered: Zazu[];
 
   // @ngInject
   constructor (StorageService, FlagService) {
@@ -19,10 +29,10 @@ export class ZazuService {
   /**
    * Determine whether a zazu is open.
    * In case open mode is false just return.
-   * @param {object} zazu The zazu.
+   * @param {Zazu} zazu The zazu.
    * @returns {boolean} True if open mode is false or zazu is
    */
-  isOpen (zazu) {
+  isOpen (zazu: Zazu): boolean {
     if (!this.open || zazu.temp) {
       return true;
     }
@@ -38,20 +48,20 @@ export class ZazuService {
 
   /**
    * Get the filtered zazus.
-   * @returns {object[]} The current list of filtered zazus.
+   * @returns {Zazu[]} The current list of filtered zazus.
    */
-  get () {
+  get (): Zazu[] {
     this.filtered = this.zazus.filter(this.isOpen.bind(this));
     return angular.copy(this.filtered);
   }
 
   /**
    * Create a new zazu.
-   * @param {object} zazu The zazu.
+   * @param {Zazu} zazu The zazu.
    * @param {boolean} persist Whether to persist the changes to storage.
    * @param {boolean} current Whether we are in create under current mode.
    */
-  create (zazu, persist, current) {
+  create (zazu: Zazu, persist: boolean, current: boolean) {
     // need to find another way to find position as filtered could mess results
     let selectedIndex = this.getSelectedIndex();
 
@@ -81,7 +91,7 @@ export class ZazuService {
    * @param {string} prop The property of zazu object to update.
    * @param {string|boolean} value The new value.
    */
-  update (id, prop, value) {
+  update (id: string, prop: string, value: string|boolean) {
     this.storage.update(id, prop, value);
     this.refresh();
   }
@@ -92,7 +102,7 @@ export class ZazuService {
    * @param {boolean} persist Whether to persist the changes to storage.
    * @param {boolean} current Whether we are in create under current mode.
    */
-  remove (id, persist, current) {
+  remove (id: string, persist: boolean, current?: boolean) {
     if (persist) {
       this.storage.remove(id);
       this.refresh();
@@ -135,9 +145,9 @@ export class ZazuService {
 
   /**
    * Get the selected zazu.
-   * @returns {object} zazu The selected zazu.
+   * @returns {Zazu} zazu The selected zazu.
    */
-  getSelected () {
+  getSelected (): Zazu {
     return this.filtered[this.selected];
   }
 
@@ -146,7 +156,7 @@ export class ZazuService {
    * @param {number} index The index of zazu in the list.
    * @returns {boolean} True if zazu with specified index is selected.
    */
-  isSelected (index) {
+  isSelected (index: number): boolean {
     return this.selected === index;
   }
 
@@ -161,7 +171,7 @@ export class ZazuService {
    * Set editing mode of selected zazu to the specified flag.
    * @param {boolean} flag
    */
-  setEditing (flag) {
+  setEditing (flag: boolean) {
     var selected = this.getSelected();
     selected.editing = flag;
   }
@@ -170,7 +180,7 @@ export class ZazuService {
    * Whether the selected zazu is in edit mode.
    * @returns {boolean} True in case selected zazu is in edit mode.
    */
-  isEditing () {
+  isEditing (): boolean {
     var selected = this.getSelected();
     return angular.isDefined(selected.editing) && selected.editing;
   }
@@ -179,7 +189,7 @@ export class ZazuService {
    * Check whether the last zazu is currently selected.
    * @returns {boolean} True if selected index is the last zazu.
    */
-  isLastSelected () {
+  isLastSelected (): boolean {
     return this.selected === this.filtered.length - 1;
   }
 
@@ -187,7 +197,7 @@ export class ZazuService {
    * Check whether the first zazu is currently selected.
    * @returns {boolean} True if selected index is the first zazu.
    */
-  isFirstSelected () {
+  isFirstSelected (): boolean {
     return this.selected === 0;
   }
 
@@ -204,7 +214,7 @@ export class ZazuService {
    * is opened for first time.
    * @returns {boolean} True if firstTime is undefined or false.
    */
-  isFirstTime () {
+  isFirstTime (): boolean {
     const firstTimeFlag = this.flagService.getFlag('firstTime');
 
     return firstTimeFlag === undefined || firstTimeFlag === false;
@@ -259,7 +269,7 @@ export class ZazuService {
    * @param {number} firstIndex The index of first zazu.
    * @param {number} secondIndex The index of second zazu.
    */
-  swap (firstIndex, secondIndex) {
+  swap (firstIndex: number, secondIndex: number) {
     if (firstIndex === secondIndex) {
       return;
     }
@@ -285,7 +295,7 @@ export class ZazuService {
    * Put zazu found in index to the beginning of current zazu array and refresh.
    * @param {number} index The index of zazu.
    */
-  unshift (index) {
+  unshift (index: number) {
     const zazu = this.filtered[index];
 
     if (!zazu) {
@@ -301,7 +311,7 @@ export class ZazuService {
    * Push zazu in index to the end of current zazus array and refresh.
    * @param {number} index The index of zazu.
    */
-  push (index) {
+  push (index: number) {
     const zazu = this.filtered[index];
 
     if (!zazu) {
@@ -318,7 +328,7 @@ export class ZazuService {
    * @param {string} id The zazu id.
    * @returns {number} The index of zazu in the list, -1 if it doesn't exist.
    */
-  find (id) {
+  find (id: string): number {
     for (var index = 0; index < this.zazus.length; index++) {
       var current = this.zazus[index];
       if (current.id === id) {
@@ -332,7 +342,7 @@ export class ZazuService {
    * Get index of selected zazu.
    * @returns {number} The index of selected zazu.
    */
-  getSelectedIndex () {
+  getSelectedIndex (): number {
     let selected = this.getSelected();
     return this.find(selected.id);
   }
