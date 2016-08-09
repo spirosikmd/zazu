@@ -14,7 +14,8 @@
     "dev": "scripts/dev.sh",
     "start": "scripts/start.sh",
     "package": "scripts/package.sh",
-    "typings": "typings"
+    "typings": "scripts/typings.sh",
+    "postinstall": "scripts/postinstall.sh"
   },
   "dependencies": {
     "angular": "^1.5.8",
