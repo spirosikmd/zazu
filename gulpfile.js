@@ -70,7 +70,8 @@ function bundle () {
 }
 
 gulp.task('scripts:prod', () => {
-  return browserify(src.scripts.index)
+  return browserify()
+    .add(src.scripts.index)
     .plugin(tsify)
     .transform(stringify, {
       appliesTo: {
@@ -103,6 +104,7 @@ gulp.task('config', () => {
       environment: argv.env,
       wrap: 'export default <%= module %>'
     }))
+    .pipe($.rename('zazu.config.ts'))
     .pipe(gulp.dest('./src'))
 });
 
