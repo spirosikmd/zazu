@@ -57,7 +57,7 @@ sources.transform(stringify, {
   minify: true
 });
 
-gulp.task('scripts', bundle);
+gulp.task('scripts', ['config'], bundle);
 sources.on('update', bundle);
 sources.on('log', $.util.log);
 
@@ -69,7 +69,7 @@ function bundle () {
     .pipe(gulp.dest(out.folder));
 }
 
-gulp.task('scripts:prod', () => {
+gulp.task('scripts:prod', ['config'], () => {
   return browserify()
     .add(src.scripts.index)
     .plugin(tsify)
