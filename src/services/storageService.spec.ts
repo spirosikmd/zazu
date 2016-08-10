@@ -7,7 +7,7 @@ const angular = require('angular');
 
 describe('service: StorageService', () => {
   let service: StorageService;
-  let storage: Storage;
+  let storage;
   let zazus: Zazu[];
 
   beforeEach(angular.mock.module(zazuApp));
@@ -26,7 +26,7 @@ describe('service: StorageService', () => {
       setItem: function (key, data) {
         this[key] = data;
       }
-    } as Storage;
+    };
     service = _StorageService_;
     service.storage = storage;
     service.refresh();
@@ -63,8 +63,8 @@ describe('service: StorageService', () => {
     it('should save current zazus to local storage', () => {
       spyOn(storage, 'setItem');
       let otherZazus = [
-        {id: 'zazu-id-1', label: 'label-1', checked: true},
-        {id: 'zazu-id-2', label: 'label-2', checked: false}
+        new Zazu({id: 'zazu-id-1', label: 'label-1', checked: true}),
+        new Zazu({id: 'zazu-id-2', label: 'label-2', checked: false})
       ];
       service.zazus = otherZazus;
       service.save();
@@ -100,7 +100,7 @@ describe('service: StorageService', () => {
       expect(randomstring.generate).toHaveBeenCalled();
       expect(StorageService.getTime).toHaveBeenCalled();
       expect(service.zazus.length).toEqual(4);
-      expect(service.zazus[2]).toEqual({label: 'label', checked: true, id: 'random-zazu-id', createdAt: 1111});
+      expect(service.zazus[2]).toEqual(new Zazu({label: 'label', checked: true, id: 'random-zazu-id', createdAt: 1111}));
       expect(service.save).toHaveBeenCalled();
     });
   });
@@ -203,9 +203,9 @@ describe('service: StorageService', () => {
       expect(service.remove).toHaveBeenCalledWith('yet-another-zazu-id');
       expect(service.save).toHaveBeenCalled();
       expect(service.zazus).toEqual([
-        {id: 'yet-another-zazu-id', label: 'yet-another-label', checked: true},
-        {id: 'zazu-id', label: 'label', checked: true},
-        {id: 'another-zazu-id', label: 'another-label', checked: false}
+        new Zazu({id: 'yet-another-zazu-id', label: 'yet-another-label', checked: true}),
+        new Zazu({id: 'zazu-id', label: 'label', checked: true}),
+        new Zazu({id: 'another-zazu-id', label: 'another-label', checked: false})
       ])
     });
   });
@@ -224,9 +224,9 @@ describe('service: StorageService', () => {
       expect(service.remove).toHaveBeenCalledWith('zazu-id');
       expect(service.save).toHaveBeenCalled();
       expect(service.zazus).toEqual([
-        {id: 'another-zazu-id', label: 'another-label', checked: false},
-        {id: 'yet-another-zazu-id', label: 'yet-another-label', checked: true},
-        {id: 'zazu-id', label: 'label', checked: true}
+        new Zazu({id: 'another-zazu-id', label: 'another-label', checked: false}),
+        new Zazu({id: 'yet-another-zazu-id', label: 'yet-another-label', checked: true}),
+        new Zazu({id: 'zazu-id', label: 'label', checked: true})
       ])
     });
   });

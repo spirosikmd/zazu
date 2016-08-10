@@ -12,4 +12,13 @@ export class Zazu {
   constructor (data = {}) {
     assign(this, data);
   }
+
+  toJSON () {
+    return {
+      id: this.id,
+      label: this.label,
+      createdAt: this.createdAt,
+      checked: this.checked
+    };
+  }
 }

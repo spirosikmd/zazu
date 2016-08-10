@@ -96,7 +96,12 @@ describe('service: ZazuService', () => {
       let zazu = new Zazu({label: 'another-label', checked: false, id: 'temp', temp: true});
       spyOn(service, 'refresh');
       service.create(zazu, true, true);
-      expect(storage.create).toHaveBeenCalledWith({label: 'another-label', checked: false, id: 'temp'}, 1);
+      expect(storage.create).toHaveBeenCalledWith(new Zazu({
+        label: 'another-label',
+        checked: false,
+        id: 'temp',
+        temp: false
+      }), 1);
       expect(service.refresh).toHaveBeenCalled();
     });
 
@@ -104,7 +109,12 @@ describe('service: ZazuService', () => {
       let zazu = new Zazu({label: 'another-label', checked: false, id: 'temp', temp: true});
       spyOn(service, 'refresh');
       service.create(zazu, true, false);
-      expect(storage.create).toHaveBeenCalledWith({label: 'another-label', checked: false, id: 'temp'}, 4);
+      expect(storage.create).toHaveBeenCalledWith(new Zazu({
+        label: 'another-label',
+        checked: false,
+        id: 'temp',
+        temp: false
+      }), 4);
       expect(service.refresh).toHaveBeenCalled();
     });
 
@@ -135,8 +145,8 @@ describe('service: ZazuService', () => {
     it('should remove from temp array under current and not call storage remove', () => {
       service.remove('zazu-id', false, true);
       expect(service.zazus).toEqual([
-        {id: 'zazu-id', label: 'label', checked: true},
-        {id: 'yet-another-zazu-id', label: 'yet another label', checked: true}
+        new Zazu({id: 'zazu-id', label: 'label', checked: true}),
+        new Zazu({id: 'yet-another-zazu-id', label: 'yet another label', checked: true})
       ]);
       expect(storage.remove).not.toHaveBeenCalled();
     });
@@ -144,8 +154,8 @@ describe('service: ZazuService', () => {
     it('should remove from temp array at the end and not call storage remove', () => {
       service.remove('zazu-id', false, false);
       expect(service.zazus).toEqual([
-        {id: 'zazu-id', label: 'label', checked: true},
-        {id: 'another-zazu-id', label: 'another label', checked: false}
+        new Zazu({id: 'zazu-id', label: 'label', checked: true}),
+        new Zazu({id: 'another-zazu-id', label: 'another label', checked: false})
       ]);
       expect(storage.remove).not.toHaveBeenCalled();
     });

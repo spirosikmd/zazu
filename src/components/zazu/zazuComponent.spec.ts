@@ -5,7 +5,7 @@ require('angular-mocks');
 const angular = require('angular');
 
 describe('component: zazu', () => {
-  let $componentController: angular.IComponentControllerService;
+  let $componentController;
   let $scope: angular.IScope;
   let $window: angular.IWindowService;
   let component;
@@ -32,6 +32,7 @@ describe('component: zazu', () => {
       this.remove = jasmine.createSpy('remove').and.callThrough();
       this.resetSelected = jasmine.createSpy('resetSelected').and.callThrough();
       this.isSelected = angular.noop;
+      this.isEditing = angular.noop;
       this.isFirstTime = angular.noop;
       this.setFirstTime = angular.noop;
       this.toggleOpen = jasmine.createSpy('toggleOpen').and.callThrough();
@@ -84,12 +85,12 @@ describe('component: zazu', () => {
   describe('$onInit', () => {
     it('should set the defaults', () => {
       component.$onInit();
-      expect(component.defaultZazu).toEqual({
+      expect(component.defaultZazu).toEqual(new Zazu({
         label: '',
         checked: false
-      });
+      }));
       expect(component.zazus).toEqual([new Zazu({id: 'zazu-id', label: 'label', checked: true})]);
-      expect(component.zazu).toEqual({label: '', checked: false});
+      expect(component.zazu).toEqual(new Zazu({label: '', checked: false}));
       expect(component.defaultModes).toEqual({
         create: false,
         createUnderCurrent: false
@@ -128,10 +129,10 @@ describe('component: zazu', () => {
   describe('reset', () => {
     it('should copy the default zazu to current zazu', () => {
       component.$onInit();
-      expect(component.zazu).toEqual({label: '', checked: false});
-      component.zazu = {label: 'label', checked: true};
+      expect(component.zazu).toEqual(new Zazu({label: '', checked: false}));
+      component.zazu = new Zazu({label: 'label', checked: true});
       component.reset();
-      expect(component.zazu).toEqual({label: '', checked: false});
+      expect(component.zazu).toEqual(new Zazu({label: '', checked: false}));
     });
   });
 
@@ -272,12 +273,12 @@ describe('component: zazu', () => {
       component.$onInit();
       component.createNew(true);
       expect(component.modes.createUnderCurrent).toEqual(true);
-      expect(ZazuService.create).toHaveBeenCalledWith({
+      expect(ZazuService.create).toHaveBeenCalledWith(new Zazu({
         label: '',
         checked: false,
         id: 'temp',
         temp: true
-      }, false, true);
+      }), false, true);
       expect(component.refresh).toHaveBeenCalled();
     });
 
@@ -286,12 +287,12 @@ describe('component: zazu', () => {
       component.$onInit();
       component.createNew(false);
       expect(component.modes.create).toEqual(true);
-      expect(ZazuService.create).toHaveBeenCalledWith({
+      expect(ZazuService.create).toHaveBeenCalledWith(new Zazu({
         label: '',
         checked: false,
         id: 'temp',
         temp: true
-      }, false, false);
+      }), false, false);
       expect(component.refresh).toHaveBeenCalled();
     });
   });
@@ -482,6 +483,7 @@ describe('component: zazu', () => {
 
     it('should set ZazuService editing to false if editing and call refresh', () => {
       spyOn(component, 'refresh');
+      spyOn(ZazuService, 'isEditing').and.returnValue(true);
       component.cancel(event);
       expect(ZazuService.setEditing).toHaveBeenCalledWith(false);
       expect(component.refresh).toHaveBeenCalled();

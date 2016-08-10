@@ -14,7 +14,7 @@
     "dev": "scripts/dev.sh",
     "start": "scripts/start.sh",
     "package": "scripts/package.sh",
-    "typings": "scripts/typings.sh",
+    "typings": "typings",
     "postinstall": "scripts/postinstall.sh"
   },
   "dependencies": {

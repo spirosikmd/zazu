@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-typings install
+npm run typings install

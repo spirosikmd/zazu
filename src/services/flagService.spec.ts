@@ -4,7 +4,7 @@ require('angular-mocks');
 
 describe('service: FlagService', () => {
   let service: FlagService;
-  let storage: Storage;
+  let storage;
   let flags: {
     firstTime: boolean;
   };
@@ -23,7 +23,7 @@ describe('service: FlagService', () => {
       setItem: function (key, data) {
         this[key] = data;
       }
-    } as Storage;
+    };
     service = _FlagService_;
     service.storage = storage;
   }));

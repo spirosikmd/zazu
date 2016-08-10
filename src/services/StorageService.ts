@@ -1,10 +1,11 @@
 import {Zazu} from '../models/Zazu';
+
 const randomstring = require('randomstring');
 const angular = require('angular');
 
 export class StorageService {
   storage: Storage;
-  zazus: any[];
+  zazus: Zazu[];
 
   /**
    * Get the current date in milliseconds.
@@ -25,7 +26,12 @@ export class StorageService {
    * Refresh the list of zazus from the storage.
    */
   refresh () {
-    this.zazus = angular.fromJson(this.storage.getItem(this.db)) || [];
+    const data = angular.fromJson(this.storage.getItem(this.db));
+
+    this.zazus = [];
+    angular.forEach(data, (zazuData) => {
+      this.zazus.push(new Zazu(zazuData));
+    });
   }
 
   /**
@@ -47,9 +53,9 @@ export class StorageService {
    * Generate an id and created at timestamp, push new zazu to array
    * and save to local storage.
    * @param {Zazu} zazu The zazu.
-   * @param {number} position The position to create the new zazu.
+   * @param {number=} position The position to create the new zazu.
    */
-  create (zazu: Zazu, position: number) {
+  create (zazu: Zazu, position?: number) {
     zazu.id = randomstring.generate();
     zazu.createdAt = StorageService.getTime();
 

@@ -31,10 +31,10 @@ export class ZazuController {
   }
 
   $onInit () {
-    this.defaultZazu = {
+    this.defaultZazu = new Zazu({
       label: '',
       checked: false
-    };
+    });
     this.zazus = [];
     this.zazu = null;
     this.defaultModes = {

@@ -76,10 +76,8 @@ export class ZazuService {
       return;
     }
 
-    // We don't want to persist the temp boolean
-    if ('temp' in zazu) {
-      delete zazu.temp;
-    }
+    // When we want to persist, zazu is not considered temporary anymore.
+    zazu.temp = false;
 
     this.storage.create(zazu, position);
     this.refresh();
