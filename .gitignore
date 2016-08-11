@@ -36,9 +36,8 @@ dist
 # Electron package
 Zazu-darwin-x64
 
-# Ignore config file
-src/zazu.config.ts
-src/zazu.config.js
+# Ignore env config file
+env.ts
 
 # Typings
 typings

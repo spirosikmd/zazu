@@ -7,7 +7,6 @@ const vinylBuffer = require('vinyl-buffer');
 const stringify = require('stringify');
 const del = require('del');
 const assign = require('lodash.assign');
-const argv = require('yargs').argv;
 const $ = require('gulp-load-plugins')();
 
 const src = {
@@ -98,16 +97,6 @@ gulp.task('clean', () => {
   return del([dist + '**/*']);
 });
 
-gulp.task('config', () => {
-  gulp.src('zazu.config.json')
-    .pipe($.ngConfig('zazu.config', {
-      environment: argv.env,
-      wrap: 'export default <%= module %>'
-    }))
-    .pipe($.rename('zazu.config.ts'))
-    .pipe(gulp.dest('./src'))
-});
-
 gulp.task('copy-fonts', () => {
   return gulp.src(src.fonts)
     .pipe(gulp.dest(out.folder));
@@ -130,7 +119,6 @@ gulp.task('watch', () => {
 });
 
 gulp.task('default', [
-  'config',
   'copy',
   'scripts',
   'sass',
@@ -138,7 +126,6 @@ gulp.task('default', [
 ]);
 
 gulp.task('package', [
-  'config',
   'clean',
   'copy',
   'scripts:prod',

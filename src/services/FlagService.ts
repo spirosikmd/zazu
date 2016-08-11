@@ -1,11 +1,17 @@
+import {Injectable} from '@angular/core';
+import {ConfigService} from './config.service';
+
+@Injectable()
 export class FlagService {
   storage: Storage;
+  flagsKey: string;
   flags: {
     firstTime: boolean
   };
 
   // @ngInject
-  constructor (private flagsKey: string) {
+  constructor (ConfigService: ConfigService) {
+    this.flagsKey = ConfigService.get('flagsKey');
     this.storage = localStorage;
 
     this.refresh();

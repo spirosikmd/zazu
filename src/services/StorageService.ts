@@ -1,10 +1,14 @@
 import {Zazu} from '../models/Zazu';
+import {Injectable} from '@angular/core';
+import {ConfigService} from './config.service';
 
 const randomstring = require('randomstring');
 const angular = require('angular');
 
+@Injectable()
 export class StorageService {
   storage: Storage;
+  db: string;
   zazus: Zazu[];
 
   /**
@@ -16,8 +20,9 @@ export class StorageService {
   }
 
   // @ngInject
-  constructor (private db: string) {
+  constructor (ConfigService: ConfigService) {
     this.storage = localStorage;
+    this.db = ConfigService.get('db');
 
     this.refresh();
   }

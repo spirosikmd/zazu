@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
 
-gulp config --env=development && karma start
+echo "process.env.ENV = 'development';" > ./src/env.ts
+
+karma start

@@ -5,23 +5,21 @@ import {Zazu} from '../models/Zazu';
 const angular = require('angular');
 
 export class ZazuService {
-  storage: StorageService;
-  flagService: FlagService;
   open: boolean;
   selected: number;
   zazus: Zazu[];
   filtered: Zazu[];
 
   // @ngInject
-  constructor (StorageService, FlagService) {
-    this.storage = StorageService;
-    this.flagService = FlagService;
-
+  constructor (
+    private StorageService: StorageService,
+    private FlagService: FlagService
+  ) {
     // By default show only open zazus
     this.open = true;
 
     this.selected = 0;
-    this.zazus = this.storage.get();
+    this.zazus = this.StorageService.get();
     this.filtered = this.zazus;
     this.refresh();
   }
@@ -43,7 +41,7 @@ export class ZazuService {
    * Refresh the list of zazus.
    */
   refresh () {
-    this.zazus = this.storage.get();
+    this.zazus = this.StorageService.get();
   }
 
   /**
@@ -79,7 +77,7 @@ export class ZazuService {
     // When we want to persist, zazu is not considered temporary anymore.
     zazu.temp = false;
 
-    this.storage.create(zazu, position);
+    this.StorageService.create(zazu, position);
     this.refresh();
   }
 
@@ -90,7 +88,7 @@ export class ZazuService {
    * @param {string|boolean} value The new value.
    */
   update (id: string, prop: string, value: string|boolean) {
-    this.storage.update(id, prop, value);
+    this.StorageService.update(id, prop, value);
     this.refresh();
   }
 
@@ -102,7 +100,7 @@ export class ZazuService {
    */
   remove (id: string, persist: boolean, current?: boolean) {
     if (persist) {
-      this.storage.remove(id);
+      this.StorageService.remove(id);
       this.refresh();
       return;
     }
@@ -213,7 +211,7 @@ export class ZazuService {
    * @returns {boolean} True if firstTime is undefined or false.
    */
   isFirstTime (): boolean {
-    const firstTimeFlag = this.flagService.getFlag('firstTime');
+    const firstTimeFlag = this.FlagService.getFlag('firstTime');
 
     return firstTimeFlag === undefined || firstTimeFlag === false;
   }
@@ -222,7 +220,7 @@ export class ZazuService {
    * Set the firstTime flag to true.
    */
   setFirstTime () {
-    this.flagService.setFlag('firstTime', true);
+    this.FlagService.setFlag('firstTime', true);
   }
 
   /**
@@ -284,7 +282,7 @@ export class ZazuService {
       return;
     }
 
-    this.storage.swap(first.id, second.id);
+    this.StorageService.swap(first.id, second.id);
 
     this.refresh();
   }
@@ -300,7 +298,7 @@ export class ZazuService {
       return;
     }
 
-    this.storage.unshift(zazu.id);
+    this.StorageService.unshift(zazu.id);
 
     this.refresh();
   }
@@ -316,7 +314,7 @@ export class ZazuService {
       return;
     }
 
-    this.storage.push(zazu.id);
+    this.StorageService.push(zazu.id);
 
     this.refresh();
   }

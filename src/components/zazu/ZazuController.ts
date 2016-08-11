@@ -26,7 +26,7 @@ export class ZazuController {
     private $scope: angular.IScope,
     private $window: angular.IWindowService,
     private ZazuService: ZazuService,
-    private hotkeys
+    private hotkeys: angular.hotkeys.HotkeysProvider
   ) {
   }
 
