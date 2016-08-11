@@ -1,5 +1,6 @@
 {
   "globalDependencies": {
+    "core-js": "registry:dt/core-js#0.0.0+20160602141332",
     "angular": "registry:dt/angular#1.5.0+20160802155123",
     "angular-hotkeys": "registry:dt/angular-hotkeys#0.0.0+20160317120654",
     "angular-mocks": "registry:dt/angular-mocks#1.5.0+20160608104721",

@@ -1,3 +1,8 @@
+require('./polyfill');
+require('./vendor');
+
+import {UpgradeAdapter} from '@angular/upgrade';
+import {enableProdMode} from '@angular/core';
 import {StorageService} from './services/StorageService';
 import {ZazuService} from './services/ZazuService';
 import {FlagService} from './services/FlagService';
@@ -7,9 +12,6 @@ import {InViewportDirective} from './directives/InViewportDirective';
 import {ZazuComponent} from './components/zazu/ZazuComponent';
 import {ZazuItemComponent} from './components/zazuItem/ZazuItemComponent';
 import config from './zazu.config';
-
-const angular = require('angular');
-const hotkeys = require('angular-hotkeys');
 
 export default angular.module('zazuApp', ['cfp.hotkeys', config.name])
   .service('StorageService', StorageService)
@@ -21,3 +23,10 @@ export default angular.module('zazuApp', ['cfp.hotkeys', config.name])
   .directive('elasticInput', ElasticInputDirective)
   .directive('inViewport', InViewportDirective)
   .name;
+
+if (process.env.ENV === 'production') {
+  enableProdMode();
+}
+
+let upgradeAdapter = new UpgradeAdapter();
+upgradeAdapter.bootstrap(document.documentElement, ['zazuApp']);
