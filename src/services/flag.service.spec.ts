@@ -1,4 +1,4 @@
-import {FlagService} from './FlagService';
+import {FlagService} from './flag.service';
 import {ConfigService} from './config.service';
 require('angular-mocks');
 

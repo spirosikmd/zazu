@@ -1,4 +1,4 @@
-import {StorageService} from './StorageService';
+import {StorageService} from './storage.service';
 import {Zazu} from '../models/Zazu';
 import {ConfigService} from './config.service';
 require('angular-mocks');

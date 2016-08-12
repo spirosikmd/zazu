@@ -1,52 +1,42 @@
-import {ZazuService} from './ZazuService';
-import zazuApp from '../index';
+import {ZazuService} from './zazu.service';
 import {Zazu} from '../models/Zazu';
-import {FlagService} from './FlagService';
-import {StorageService} from './StorageService';
+import {FlagService} from './flag.service';
+import {StorageService} from './storage.service';
+import {ConfigService} from './config.service';
 require('angular-mocks');
 const angular = require('angular');
 
 describe('service: ZazuService', () => {
   let service: ZazuService;
-  let storage: StorageService;
+  let storageService: StorageService;
   let zazus: Zazu[];
+  let configService: ConfigService;
   let flagService: FlagService;
 
-  beforeEach(angular.mock.module(zazuApp));
-
-  beforeEach(angular.mock.module(($provide) => {
-    $provide.service('StorageService', function () {
-      this.get = jasmine.createSpy('get').and.callFake(() => {
-        return zazus;
-      });
-      this.create = jasmine.createSpy('create').and.callThrough();
-      this.update = jasmine.createSpy('update').and.callThrough();
-      this.remove = jasmine.createSpy('remove').and.callThrough();
-      this.swap = jasmine.createSpy('swap').and.callThrough();
-      this.unshift = angular.noop;
-      this.push = angular.noop;
+  beforeEach(() => {
+    configService = new ConfigService();
+    storageService = new StorageService(configService);
+    spyOn(storageService, 'get').and.callFake(() => {
+      return zazus;
     });
+    spyOn(storageService, 'create');
+    spyOn(storageService, 'update');
+    spyOn(storageService, 'remove');
+    spyOn(storageService, 'swap');
 
-    $provide.service('FlagService', function () {
-      this.getFlag = angular.noop;
-      this.setFlag = angular.noop;
-    });
-  }));
+    flagService = new FlagService(configService);
 
-  beforeEach(inject((_ZazuService_, _StorageService_, _FlagService_) => {
-    service = _ZazuService_;
-    storage = _StorageService_;
-    flagService = _FlagService_;
+    service = new ZazuService(storageService, flagService);
     zazus = [
       new Zazu({id: 'zazu-id', label: 'label', checked: true}),
       new Zazu({id: 'another-zazu-id', label: 'another label', checked: false}),
       new Zazu({id: 'yet-another-zazu-id', label: 'yet another label', checked: true})
     ];
-  }));
+  });
 
   afterEach(() => {
     service = null;
-    storage = null;
+    storageService = null;
   });
 
   it('should be defined', () => {
@@ -62,7 +52,7 @@ describe('service: ZazuService', () => {
 
   describe('refresh', () => {
     it('should set zazus from storage', () => {
-      expect(storage.get).toHaveBeenCalled();
+      expect(storageService.get).toHaveBeenCalled();
       expect(service.zazus).toEqual(zazus);
     });
   });
@@ -81,7 +71,7 @@ describe('service: ZazuService', () => {
       service.create(zazu, false, true);
       expect(service.selected).toEqual(0);
       expect(service.zazus[1]).toEqual(zazu);
-      expect(storage.create).not.toHaveBeenCalledWith();
+      expect(storageService.create).not.toHaveBeenCalledWith();
     });
 
     it('should temporary add the zazu at the end of the array and not call storage create', () => {
@@ -89,14 +79,14 @@ describe('service: ZazuService', () => {
       service.create(zazu, false, false);
       expect(service.selected).toEqual(0);
       expect(service.zazus[3]).toEqual(zazu);
-      expect(storage.create).not.toHaveBeenCalledWith();
+      expect(storageService.create).not.toHaveBeenCalledWith();
     });
 
     it('should persist zazu in storage in position under current and refresh', () => {
       let zazu = new Zazu({label: 'another-label', checked: false, id: 'temp', temp: true});
       spyOn(service, 'refresh');
       service.create(zazu, true, true);
-      expect(storage.create).toHaveBeenCalledWith(new Zazu({
+      expect(storageService.create).toHaveBeenCalledWith(new Zazu({
         label: 'another-label',
         checked: false,
         id: 'temp',
@@ -109,7 +99,7 @@ describe('service: ZazuService', () => {
       let zazu = new Zazu({label: 'another-label', checked: false, id: 'temp', temp: true});
       spyOn(service, 'refresh');
       service.create(zazu, true, false);
-      expect(storage.create).toHaveBeenCalledWith(new Zazu({
+      expect(storageService.create).toHaveBeenCalledWith(new Zazu({
         label: 'another-label',
         checked: false,
         id: 'temp',
@@ -129,7 +119,7 @@ describe('service: ZazuService', () => {
     it('should update zazu with id in storage and refresh', () => {
       spyOn(service, 'refresh');
       service.update('zazu-id', 'checked', true);
-      expect(storage.update).toHaveBeenCalledWith('zazu-id', 'checked', true);
+      expect(storageService.update).toHaveBeenCalledWith('zazu-id', 'checked', true);
       expect(service.refresh).toHaveBeenCalled();
     });
   });
@@ -138,7 +128,7 @@ describe('service: ZazuService', () => {
     it('should call storage remove with id and refresh', () => {
       spyOn(service, 'refresh');
       service.remove('zazu-id', true);
-      expect(storage.remove).toHaveBeenCalledWith('zazu-id');
+      expect(storageService.remove).toHaveBeenCalledWith('zazu-id');
       expect(service.refresh).toHaveBeenCalled();
     });
 
@@ -148,7 +138,7 @@ describe('service: ZazuService', () => {
         new Zazu({id: 'zazu-id', label: 'label', checked: true}),
         new Zazu({id: 'yet-another-zazu-id', label: 'yet another label', checked: true})
       ]);
-      expect(storage.remove).not.toHaveBeenCalled();
+      expect(storageService.remove).not.toHaveBeenCalled();
     });
 
     it('should remove from temp array at the end and not call storage remove', () => {
@@ -157,7 +147,7 @@ describe('service: ZazuService', () => {
         new Zazu({id: 'zazu-id', label: 'label', checked: true}),
         new Zazu({id: 'another-zazu-id', label: 'another label', checked: false})
       ]);
-      expect(storage.remove).not.toHaveBeenCalled();
+      expect(storageService.remove).not.toHaveBeenCalled();
     });
 
     it('should leave zazus array as is if selected is not found', () => {
@@ -398,60 +388,60 @@ describe('service: ZazuService', () => {
     it('should not call refresh or storage swap if firstIndex equals secondIndex', () => {
       spyOn(service, 'refresh');
       service.swap(0, 0);
-      expect(storage.swap).not.toHaveBeenCalled();
+      expect(storageService.swap).not.toHaveBeenCalled();
       expect(service.refresh).not.toHaveBeenCalled();
     });
 
     it('should not call refresh or storage swap if zazu with firstIndex does not exist', () => {
       spyOn(service, 'refresh');
       service.swap(100, 1);
-      expect(storage.swap).not.toHaveBeenCalled();
+      expect(storageService.swap).not.toHaveBeenCalled();
       expect(service.refresh).not.toHaveBeenCalled();
     });
 
     it('should not call refresh or storage swap if zazu with secondIndex does not exist', () => {
       spyOn(service, 'refresh');
       service.swap(0, 100);
-      expect(storage.swap).not.toHaveBeenCalled();
+      expect(storageService.swap).not.toHaveBeenCalled();
       expect(service.refresh).not.toHaveBeenCalled();
     });
 
     it('should call storage swap with firstId and secondId and then refresh', () => {
       spyOn(service, 'refresh');
       service.swap(0, 1);
-      expect(storage.swap).toHaveBeenCalledWith('zazu-id', 'another-zazu-id');
+      expect(storageService.swap).toHaveBeenCalledWith('zazu-id', 'another-zazu-id');
       expect(service.refresh).toHaveBeenCalled();
     });
   });
 
   describe('unshift', () => {
     it('should not call storage unshift if zazu does not exist', () => {
-      spyOn(storage, 'unshift');
+      spyOn(storageService, 'unshift');
       service.unshift(5);
-      expect(storage.unshift).not.toHaveBeenCalled();
+      expect(storageService.unshift).not.toHaveBeenCalled();
     });
 
     it('should call storage unshift with "yet-another-zazu-id" and refresh', () => {
-      spyOn(storage, 'unshift');
+      spyOn(storageService, 'unshift');
       spyOn(service, 'refresh');
       service.unshift(2);
-      expect(storage.unshift).toHaveBeenCalledWith('yet-another-zazu-id');
+      expect(storageService.unshift).toHaveBeenCalledWith('yet-another-zazu-id');
       expect(service.refresh).toHaveBeenCalled();
     });
   });
 
   describe('push', () => {
     it('should not call storage push if zazu does not exist', () => {
-      spyOn(storage, 'push');
+      spyOn(storageService, 'push');
       service.push(5);
-      expect(storage.push).not.toHaveBeenCalled();
+      expect(storageService.push).not.toHaveBeenCalled();
     });
 
     it('should call storage push with "zazu-id" and refresh', () => {
-      spyOn(storage, 'push');
+      spyOn(storageService, 'push');
       spyOn(service, 'refresh');
       service.push(0);
-      expect(storage.push).toHaveBeenCalledWith('zazu-id');
+      expect(storageService.push).toHaveBeenCalledWith('zazu-id');
       expect(service.refresh).toHaveBeenCalled();
     });
   });

@@ -3,9 +3,9 @@ require('./vendor');
 require('./env');
 
 import {UpgradeAdapter} from '@angular/upgrade';
-import {StorageService} from './services/StorageService';
-import {ZazuService} from './services/ZazuService';
-import {FlagService} from './services/FlagService';
+import {StorageService} from './services/storage.service';
+import {ZazuService} from './services/zazu.service';
+import {FlagService} from './services/flag.service';
 import {ConfigService} from './services/config.service';
 import {FocusDirective} from './directives/FocusDirective';
 import {ElasticInputDirective} from './directives/ElasticInputDirective';
@@ -18,11 +18,12 @@ let upgradeAdapter = new UpgradeAdapter();
 upgradeAdapter.addProvider(ConfigService);
 upgradeAdapter.addProvider(StorageService);
 upgradeAdapter.addProvider(FlagService);
+upgradeAdapter.addProvider(ZazuService);
 
 export default angular.module('zazuApp', ['cfp.hotkeys'])
   .factory('ConfigService', upgradeAdapter.downgradeNg2Provider(ConfigService))
   .factory('StorageService', upgradeAdapter.downgradeNg2Provider(StorageService))
-  .service('ZazuService', ZazuService)
+  .factory('ZazuService', upgradeAdapter.downgradeNg2Provider(ZazuService))
   .factory('FlagService', upgradeAdapter.downgradeNg2Provider(FlagService))
   .component('zazu', ZazuComponent)
   .component('zazuItem', ZazuItemComponent)

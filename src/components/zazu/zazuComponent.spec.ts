@@ -1,4 +1,4 @@
-import {ZazuService} from '../../services/ZazuService';
+import {ZazuService} from '../../services/zazu.service';
 import zazuApp from '../../index';
 import {Zazu} from '../../models/Zazu';
 require('angular-mocks');

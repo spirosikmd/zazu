@@ -1,9 +1,11 @@
-import {FlagService} from './FlagService';
-import {StorageService} from './StorageService';
+import {FlagService} from './flag.service';
+import {StorageService} from './storage.service';
 import {Zazu} from '../models/Zazu';
+import {Injectable} from '@angular/core';
 
 const angular = require('angular');
 
+@Injectable()
 export class ZazuService {
   open: boolean;
   selected: number;

@@ -1,4 +1,4 @@
-import {ZazuService} from '../../services/ZazuService';
+import {ZazuService} from '../../services/zazu.service';
 import {Zazu} from '../../models/Zazu';
 
 const angular = require('angular');
