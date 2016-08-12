@@ -1,5 +1,5 @@
 import {FlagService} from './FlagService';
-import zazuApp from '../index';
+import {ConfigService} from './config.service';
 require('angular-mocks');
 
 describe('service: FlagService', () => {
@@ -8,10 +8,9 @@ describe('service: FlagService', () => {
   let flags: {
     firstTime: boolean;
   };
+  let configService: ConfigService;
 
-  beforeEach(angular.mock.module(zazuApp));
-
-  beforeEach(inject((_FlagService_) => {
+  beforeEach(() => {
     flags = {
       firstTime: false
     };
@@ -24,9 +23,10 @@ describe('service: FlagService', () => {
         this[key] = data;
       }
     };
-    service = _FlagService_;
+    configService = new ConfigService();
+    service = new FlagService(configService);
     service.storage = storage;
-  }));
+  });
 
   afterAll(() => {
     service = null;

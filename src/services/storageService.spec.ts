@@ -1,6 +1,6 @@
 import {StorageService} from './StorageService';
-import zazuApp from '../index';
 import {Zazu} from '../models/Zazu';
+import {ConfigService} from './config.service';
 require('angular-mocks');
 const randomstring = require('randomstring');
 const angular = require('angular');
@@ -9,10 +9,9 @@ describe('service: StorageService', () => {
   let service: StorageService;
   let storage;
   let zazus: Zazu[];
+  let configService: ConfigService;
 
-  beforeEach(angular.mock.module(zazuApp));
-
-  beforeEach(inject((_StorageService_) => {
+  beforeEach(() => {
     zazus = [
       new Zazu({id: 'zazu-id', label: 'label', checked: true}),
       new Zazu({id: 'another-zazu-id', label: 'another-label', checked: false}),
@@ -27,10 +26,11 @@ describe('service: StorageService', () => {
         this[key] = data;
       }
     };
-    service = _StorageService_;
+    configService = new ConfigService();
+    service = new StorageService(configService);
     service.storage = storage;
     service.refresh();
-  }));
+  });
 
   afterAll(() => {
     service = null;
@@ -100,7 +100,12 @@ describe('service: StorageService', () => {
       expect(randomstring.generate).toHaveBeenCalled();
       expect(StorageService.getTime).toHaveBeenCalled();
       expect(service.zazus.length).toEqual(4);
-      expect(service.zazus[2]).toEqual(new Zazu({label: 'label', checked: true, id: 'random-zazu-id', createdAt: 1111}));
+      expect(service.zazus[2]).toEqual(new Zazu({
+        label: 'label',
+        checked: true,
+        id: 'random-zazu-id',
+        createdAt: 1111
+      }));
       expect(service.save).toHaveBeenCalled();
     });
   });
