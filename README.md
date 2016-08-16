@@ -17,10 +17,10 @@ To check the keyboard shortcuts type `?`
 Install modules with `npm i` and run `npm start` to boot
 development environment. It starts zazu and gulp in development mode.
 
-## Package
-
-To package zazu, currently only for darwin platform, use `npm run package`.
-
 ## Test
 
 To run tests use `npm test`.
+
+## Package
+
+To package zazu, currently only for darwin platform, use `npm run package`.
