@@ -38,6 +38,3 @@ Zazu-darwin-x64
 
 # Ignore env config file
 env.ts
-
-# Typings
-typings

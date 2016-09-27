@@ -1,7 +1,7 @@
-<div *ngFor="let zazu of zazus">
+<div *ngFor="let zazu of zazus, let index = index">
     <zazu-item *ngIf="!zazu.temp"
                [zazu]="zazu"
-               [isSelected]="isSelected($index)"
+               [isSelected]="isSelected(index)"
                (onUpdateChecked)="updateChecked(id, checked)"
                (onUpdateLabel)="updateLabel($event, id, label)"
                (onOutViewport)="scroll(offset)">

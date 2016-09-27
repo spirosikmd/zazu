@@ -8,6 +8,3 @@ import '@angular/router';
 
 // RxJS
 import 'rxjs';
-
-require('angular');
-require('angular-hotkeys');

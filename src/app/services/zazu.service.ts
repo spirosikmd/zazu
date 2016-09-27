@@ -1,9 +1,9 @@
 import {FlagService} from './flag.service';
 import {StorageService} from './storage.service';
-import {Zazu} from '../models/Zazu';
+import {Zazu} from '../models/zazu.model';
 import {Injectable} from '@angular/core';
 
-const angular = require('angular');
+const _clone = require('lodash/clone');
 
 @Injectable()
 export class ZazuService {
@@ -52,7 +52,7 @@ export class ZazuService {
    */
   get (): Zazu[] {
     this.filtered = this.zazus.filter(this.isOpen.bind(this));
-    return angular.copy(this.filtered);
+    return _clone(this.filtered);
   }
 
   /**
@@ -180,7 +180,7 @@ export class ZazuService {
    */
   isEditing (): boolean {
     var selected = this.getSelected();
-    return angular.isDefined(selected.editing) && selected.editing;
+    return !!selected.editing;
   }
 
   /**

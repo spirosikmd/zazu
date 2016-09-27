@@ -1,5 +1,5 @@
 import {ZazuService} from './zazu.service';
-import {Zazu} from '../models/Zazu';
+import {Zazu} from '../models/zazu.model';
 import {FlagService} from './flag.service';
 import {StorageService} from './storage.service';
 import {ConfigService} from './config.service';

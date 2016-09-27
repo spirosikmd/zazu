@@ -1,9 +1,10 @@
-import {Zazu} from '../models/Zazu';
+import {Zazu} from '../models/zazu.model';
 import {Injectable} from '@angular/core';
 import {ConfigService} from './config.service';
 
 const randomstring = require('randomstring');
-const angular = require('angular');
+const _forEach = require('lodash/forEach');
+const _clone = require('lodash/clone');
 
 @Injectable()
 export class StorageService {
@@ -31,10 +32,10 @@ export class StorageService {
    * Refresh the list of zazus from the storage.
    */
   refresh () {
-    const data = angular.fromJson(this.storage.getItem(this.db));
+    const data = JSON.parse(this.storage.getItem(this.db));
 
     this.zazus = [];
-    angular.forEach(data, (zazuData) => {
+    _forEach(data, (zazuData) => {
       this.zazus.push(new Zazu(zazuData));
     });
   }
@@ -44,14 +45,14 @@ export class StorageService {
    * @returns {Zazu[]} The current list of zazus.
    */
   get (): Zazu[] {
-    return angular.copy(this.zazus) || [];
+    return _clone(this.zazus) || [];
   }
 
   /**
    * Save zazus in the storage as JSON string.
    */
   save () {
-    this.storage.setItem(this.db, angular.toJson(this.zazus || []));
+    this.storage.setItem(this.db, JSON.stringify(this.zazus || []));
   }
 
   /**

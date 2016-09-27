@@ -1,4 +1,4 @@
-import {Zazu} from '../../models/Zazu';
+import {Zazu} from '../../models/zazu.model';
 import zazuApp from '../../app.component';
 require('angular-mocks');
 

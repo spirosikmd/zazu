@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ZazuService} from '../../services/zazu.service';
-import {Zazu} from '../../models/Zazu';
+import {Zazu} from '../../models/zazu.model';
+import {HotkeysService} from 'angular2-hotkeys/src/services/hotkeys.service';
+import {Hotkey} from 'angular2-hotkeys/src/models/hotkey.model';
 
 @Component({
   selector: 'zazu',
@@ -24,12 +26,9 @@ export class ZazuComponent implements OnInit {
   scrollHandlers: {[handler: number]: Function};
   lastHotkey: number;
 
-  // @ngInject
   constructor (
     private ZazuService: ZazuService,
-    // private $scope,
-    // private $window,
-    // private hotkeys
+    private hotkeysService: HotkeysService
   ) {
   }
 
@@ -160,6 +159,7 @@ export class ZazuComponent implements OnInit {
    * @returns {boolean} True if zazu with specified index is selected.
    */
   isSelected (index: number): boolean {
+    console.log(index);
     return this.ZazuService.isSelected(index);
   }
 
@@ -301,63 +301,16 @@ export class ZazuComponent implements OnInit {
    * Setup the hotkeys.
    */
   setupHotkeys () {
-    // this.hotkeys.bindTo(this.$scope)
-    //   .add({
-    //     combo: 'mod+n',
-    //     description: 'Create new zazu',
-    //     callback: this.createNew.bind(this, false)
-    //   })
-    //   .add({
-    //     combo: 'mod+shift+n',
-    //     description: 'Create new zazu under current position',
-    //     callback: this.createNew.bind(this, true)
-    //   })
-    //   .add({
-    //     combo: 'esc',
-    //     description: 'Cancel edit or create new zazu',
-    //     allowIn: ['INPUT'],
-    //     callback: this.cancel.bind(this)
-    //   })
-    //   .add({
-    //     combo: 'down',
-    //     description: 'Select next zazu',
-    //     callback: this.selectNext.bind(this)
-    //   })
-    //   .add({
-    //     combo: 'up',
-    //     description: 'Select previous zazu',
-    //     callback: this.selectPrevious.bind(this)
-    //   })
-    //   .add({
-    //     combo: 'mod+backspace',
-    //     description: 'Remove zazu',
-    //     callback: this.removeSelected.bind(this)
-    //   })
-    //   .add({
-    //     combo: 'mod+enter',
-    //     description: 'Toggle check status of zazu',
-    //     callback: this.toggleChecked.bind(this)
-    //   })
-    //   .add({
-    //     combo: 'mod+shift+enter',
-    //     description: 'Edit zazu',
-    //     allowIn: ['INPUT'],
-    //     callback: this.edit.bind(this)
-    //   })
-    //   .add({
-    //     combo: 'mod+o',
-    //     description: 'Toggle show only open zazus',
-    //     callback: this.showOpen.bind(this)
-    //   })
-    //   .add({
-    //     combo: 'mod+shift+up',
-    //     description: 'Move zazu one position up',
-    //     callback: this.moveUp.bind(this)
-    //   })
-    //   .add({
-    //     combo: 'mod+shift+down',
-    //     description: 'Move zazu one position down',
-    //     callback: this.moveDown.bind(this)
-    //   });
+    this.hotkeysService.add(new Hotkey('mod+n', this.createNew.bind(this, false)));
+    this.hotkeysService.add(new Hotkey('mod+shift+n', this.createNew.bind(this, true)));
+    this.hotkeysService.add(new Hotkey('esc', this.cancel.bind(this)));
+    this.hotkeysService.add(new Hotkey('down', this.selectNext.bind(this)));
+    this.hotkeysService.add(new Hotkey('up', this.selectPrevious.bind(this)));
+    this.hotkeysService.add(new Hotkey('mod+backspace', this.removeSelected.bind(this)));
+    this.hotkeysService.add(new Hotkey('mod+enter', this.toggleChecked.bind(this)));
+    this.hotkeysService.add(new Hotkey('mod+shift+enter', this.edit.bind(this)));
+    this.hotkeysService.add(new Hotkey('mod+o', this.showOpen.bind(this)));
+    this.hotkeysService.add(new Hotkey('mod+shift+up', this.moveUp.bind(this)));
+    this.hotkeysService.add(new Hotkey('mod+shift+down', this.moveDown.bind(this)));
   }
 }

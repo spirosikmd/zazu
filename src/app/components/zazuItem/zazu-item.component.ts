@@ -1,9 +1,9 @@
-import {Zazu} from '../../models/Zazu';
+import {Zazu} from '../../models/zazu.model';
 import {Input, Output, EventEmitter, Component} from '@angular/core';
 
 @Component({
   selector: 'zazu-item',
-  templateUrl: './zazuItem.html'
+  templateUrl: './zazu-item.html'
 })
 export class ZazuItemComponent {
   @Input() zazu: Zazu;

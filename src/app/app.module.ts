@@ -1,18 +1,20 @@
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
+import {FormsModule} from '@angular/forms';
+import {HotkeyModule} from 'angular2-hotkeys';
 import {ConfigService} from './services/config.service';
 import {StorageService} from './services/storage.service';
 import {FlagService} from './services/flag.service';
 import {ZazuService} from './services/zazu.service';
-import {ZazuItemComponent} from './components/zazuItem/ZazuItemComponent';
-import {FormsModule} from '@angular/forms';
+import {ZazuItemComponent} from './components/zazuItem/zazu-item.component';
 import {AppComponent} from './app.component';
-import {ZazuComponent} from './components/zazu/ZazuComponent';
+import {ZazuComponent} from './components/zazu/zazu.component';
 
 @NgModule({
   imports: [
     BrowserModule,
-    FormsModule
+    FormsModule,
+    HotkeyModule.forRoot()
   ],
   declarations: [
     AppComponent,

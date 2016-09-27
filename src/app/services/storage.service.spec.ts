@@ -1,5 +1,5 @@
 import {StorageService} from './storage.service';
-import {Zazu} from '../models/Zazu';
+import {Zazu} from '../models/zazu.model';
 import {ConfigService} from './config.service';
 require('angular-mocks');
 const randomstring = require('randomstring');
