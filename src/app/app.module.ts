@@ -9,6 +9,7 @@ import {ZazuService} from './services/zazu.service';
 import {ZazuItemComponent} from './components/zazuItem/zazu-item.component';
 import {AppComponent} from './app.component';
 import {ZazuComponent} from './components/zazu/zazu.component';
+import {FocusDirective} from './directives/focus.directive';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import {ZazuComponent} from './components/zazu/zazu.component';
   declarations: [
     AppComponent,
     ZazuComponent,
-    ZazuItemComponent
+    ZazuItemComponent,
+    FocusDirective
   ],
   providers: [
     ConfigService,

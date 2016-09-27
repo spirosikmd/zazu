@@ -3,14 +3,13 @@
     <span class="zazu__arrow" *ngIf="isSelected">&gt;</span>
     <span class="zazu__pointer" *ngIf="!isSelected && !zazu.checked">&#8226;</span>
     <div class="zazu__content">
-        <input type="checkbox" [(ngModel)]="zazu.checked" id="zazu-checked-{{ zazu.id }}"
-               (change)="checkedUpdated({id: zazu.id, checked: zazu.checked})" class="zazu__check">
+        <input type="checkbox" [(ngModel)]="zazu.checked" id="{{getZazuItemForAttribute(zazu)}}" class="zazu__check">
         <label *ngIf="!zazu.editing" [attr.for]="getZazuItemForAttribute(zazu)" class="zazu__label">
             {{ zazu.label }}
         </label>
         <input *ngIf="zazu.editing" type="text" [(ngModel)]="zazu.label" name="label" title="Edit zazu label"
-               class="zazu__edit" (keypress)="labelUpdated({$event: $event, id: zazu.id, label: zazu.label})"
-               required>
-        <!-- focus="zazu.editing" elastic-input  -->
+               class="zazu__edit" (keypress)="updateLabel(zazu, $event.keyCode)"
+               [focus]="zazu.editing" required>
+        <!-- elastic-input -->
     </div>
 </div>

@@ -8,8 +8,8 @@ import {Input, Output, EventEmitter, Component} from '@angular/core';
 export class ZazuItemComponent {
   @Input() zazu: Zazu;
   @Input() isSelected: boolean;
-  @Output() onUpdateChecked = new EventEmitter<void>();
-  @Output() onUpdateLabel = new EventEmitter<void>();
+  @Output() onUpdateChecked = new EventEmitter<{id: string, checked: boolean}>();
+  @Output() onUpdateLabel = new EventEmitter<{id: string, label: string, keyCode: number}>();
   @Output() onOutViewport = new EventEmitter<number>();
 
   /**
@@ -24,7 +24,11 @@ export class ZazuItemComponent {
     this.onOutViewport.emit(offset);
   }
 
-  getZazuItemForAttribute (zazu: Zazu): string {
+  private updateLabel (zazu: Zazu, keyCode: number) {
+    this.onUpdateLabel.emit({id: zazu.id, label: zazu.label, keyCode: keyCode});
+  }
+
+  private getZazuItemForAttribute (zazu: Zazu): string {
     return `zazu-checked-${zazu.id}`;
   }
 }

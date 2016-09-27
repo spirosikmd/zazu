@@ -116,15 +116,12 @@ export class ZazuComponent implements OnInit {
   /**
    * Update the label attribute of zazu with the specified id in case key press is "enter",
    * and set editing mode to false.
-   * @param {KeyboardEvent} $event The ng-keypress event
-   * @param {string} id The zazu id.
-   * @param {string} label The zazu label.
    */
-  updateLabel ($event: KeyboardEvent, id: string, label: string) {
-    if ($event.which !== 13) {
+  updateLabel ($event: {id: string, label: string, keyCode: number}) {
+    if ($event.keyCode !== 13) {
       return;
     }
-    this.ZazuService.update(id, 'label', label);
+    this.ZazuService.update($event.id, 'label', $event.label);
     this.ZazuService.setEditing(false);
     this.refresh();
   }
@@ -159,7 +156,6 @@ export class ZazuComponent implements OnInit {
    * @returns {boolean} True if zazu with specified index is selected.
    */
   isSelected (index: number): boolean {
-    console.log(index);
     return this.ZazuService.isSelected(index);
   }
 
