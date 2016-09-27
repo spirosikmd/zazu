@@ -34,7 +34,4 @@ node_modules
 dist
 
 # Electron package
-Zazu-darwin-x64
-
-# Ignore env config file
-env.ts
+out

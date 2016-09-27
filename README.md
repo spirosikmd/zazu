@@ -3,8 +3,9 @@
 Dead simple,  keyboard shortcut todo app. Theme inspired from
 [material theme](http://equinusocio.github.io/material-theme/), and built with
 
-- [AngularJS](https://angularjs.org/)
-- [Angular Hotkeys](http://chieffancypants.github.io/angular-hotkeys/)
+- [AngularJS 2](https://angularjs.io/)
+- [Angular2 Hotkeys](https://github.com/brtnshrdr/angular2-hotkeys)
+- [TypeScript 2](https://www.typescriptlang.org/)
 - [Electron](http://electron.atom.io/)
 - [Source Code Pro](http://adobe-fonts.github.io/source-code-pro/)
 
@@ -14,8 +15,7 @@ To check the keyboard shortcuts type `?`
 
 ## Contribute
 
-Install modules with `npm i` and run `npm start` to boot
-development environment. It starts zazu and gulp in development mode.
+Install modules with `npm i` and run `npm start` to boot development environment.
 
 ## Test
 
@@ -23,4 +23,4 @@ To run tests use `npm test`.
 
 ## Package
 
-To package zazu, currently only for darwin platform, use `npm run package`.
+To package zazu, currently only for darwin platform, use `npm run deploy`.
