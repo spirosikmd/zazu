@@ -1,5 +1,5 @@
 import {Zazu} from '../../models/Zazu';
-import zazuApp from '../../index';
+import zazuApp from '../../app.component';
 require('angular-mocks');
 
 describe('component: zazuItem', () => {

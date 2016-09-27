@@ -1,5 +1,5 @@
 import {ZazuService} from '../../services/zazu.service';
-import zazuApp from '../../index';
+import zazuApp from '../../app.component';
 import {Zazu} from '../../models/Zazu';
 require('angular-mocks');
 const angular = require('angular');

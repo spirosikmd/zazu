@@ -21,7 +21,7 @@ export class FlagService {
    * Refresh the flags from local storage.
    */
   refresh () {
-    this.flags = angular.fromJson(this.storage.getItem(this.flagsKey)) || {};
+    this.flags = JSON.parse(this.storage.getItem(this.flagsKey)) || {};
   }
 
   /**
@@ -40,6 +40,6 @@ export class FlagService {
    */
   setFlag (flag: string, state: boolean) {
     this.flags[flag] = state;
-    this.storage.setItem(this.flagsKey, angular.toJson(this.flags || {}));
+    this.storage.setItem(this.flagsKey, JSON.stringify(this.flags || {}));
   }
 }

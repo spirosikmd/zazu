@@ -46,6 +46,10 @@ function zoomOutHandler () {
   mainWindow.webContents.setZoomFactor(zoomFactor);
 }
 
+function toggleDevTools () {
+  mainWindow.toggleDevTools();
+}
+
 /**
  * On close dereference the window object, usually you would store windows
  * in an array if your app supports multi windows, this is the time
@@ -120,6 +124,10 @@ function getMenuTemplate () {
       label: 'Reload',
       accelerator: 'Command+R',
       click: reloadHandler
+    }, {
+      label: 'Toggle Developer Tools',
+      accelerator: 'Command+Alt+I',
+      click: toggleDevTools
     }, {
       type: 'separator'
     }, {

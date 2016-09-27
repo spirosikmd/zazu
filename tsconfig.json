@@ -10,6 +10,16 @@
     "noImplicitAny": false,
     "suppressImplicitAnyIndexErrors": true
   },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "types": [
+    "node",
+    "jasmine",
+    "core-js",
+    "randomstring",
+    "angular-hotkeys"
+  ],
   "exclude": [
     "node_modules"
   ]

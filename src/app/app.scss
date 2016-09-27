@@ -1,12 +1,7 @@
 @charset "utf-8";
 
-@import 'hotkeys.min.css';
-
-@font-face {
-  font-family: 'Source Code Pro';
-  font-weight: 500;
-  src: url('SourceCodePro-Regular.otf.woff') format('woff'), url('SourceCodePro-Regular.otf.woff2') format('woff2');
-}
+@import '~angular-hotkeys/build/hotkeys.min.css';
+@import '~source-code-pro/source-code-pro.css';
 
 $white: rgb(255, 255, 255);
 $dark: rgb(38, 50, 56);

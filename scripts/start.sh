@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-concurrently "npm run electron" "npm run dev"
+concurrently --kill-others "npm run electron" "npm run dev"

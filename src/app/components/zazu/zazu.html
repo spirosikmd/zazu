@@ -1,0 +1,14 @@
+<div *ngFor="let zazu of zazus">
+    <zazu-item *ngIf="!zazu.temp"
+               [zazu]="zazu"
+               [isSelected]="isSelected($index)"
+               (onUpdateChecked)="updateChecked(id, checked)"
+               (onUpdateLabel)="updateLabel($event, id, label)"
+               (onOutViewport)="scroll(offset)">
+    </zazu-item>
+    <form *ngIf="zazu.temp" (submit)="create(zazu)">
+        <input type="text" [(ngModel)]="zazu.label" name="label" id="label" title="Zazu label" required
+               class="zazu__new">
+    </form>
+    <!-- focus="zazu.temp"  elastic-input elastic-input-min-width="100px" -->
+</div>

@@ -1,9 +1,12 @@
+import {Component, OnInit} from '@angular/core';
 import {ZazuService} from '../../services/zazu.service';
 import {Zazu} from '../../models/Zazu';
 
-const angular = require('angular');
-
-export class ZazuController {
+@Component({
+  selector: 'zazu',
+  templateUrl: './zazu.html'
+})
+export class ZazuComponent implements OnInit {
   defaultZazu: {
     label: string;
     checked: boolean
@@ -23,14 +26,14 @@ export class ZazuController {
 
   // @ngInject
   constructor (
-    private $scope: angular.IScope,
-    private $window: angular.IWindowService,
     private ZazuService: ZazuService,
-    private hotkeys: angular.hotkeys.HotkeysProvider
+    // private $scope,
+    // private $window,
+    // private hotkeys
   ) {
   }
 
-  $onInit () {
+  ngOnInit (): void {
     this.defaultZazu = new Zazu({
       label: '',
       checked: false
@@ -41,7 +44,7 @@ export class ZazuController {
       create: false,
       createUnderCurrent: false
     };
-    this.modes = angular.copy(this.defaultModes);
+    this.modes = Object.assign({}, this.defaultModes);
     this.scrollHandlers = {
       38: this.scrollTo.bind(this),
       40: this.scrollBy.bind(this)
@@ -64,7 +67,7 @@ export class ZazuController {
    * Reset the new model zazu to default.
    */
   reset () {
-    this.zazu = angular.copy(this.defaultZazu);
+    this.zazu = Object.assign({}, this.defaultZazu);
   };
 
   /**
@@ -76,7 +79,7 @@ export class ZazuController {
       return;
     }
 
-    this.ZazuService.create(angular.copy(zazu), true, this.isInMode('createUnderCurrent'));
+    this.ZazuService.create(Object.assign({}, zazu), true, this.isInMode('createUnderCurrent'));
     this.resetModes();
 
     this.refresh();
@@ -96,7 +99,7 @@ export class ZazuController {
    * Reset the modes.
    */
   resetModes () {
-    this.modes = angular.copy(this.defaultModes);
+    this.modes = Object.assign({}, this.defaultModes);
   }
 
   /**
@@ -172,7 +175,7 @@ export class ZazuController {
     this.zazu.id = 'temp';
     this.zazu.temp = true;
 
-    this.ZazuService.create(angular.copy(this.zazu), false, current);
+    this.ZazuService.create(Object.assign({}, this.zazu), false, current);
 
     this.refresh();
   }
@@ -233,14 +236,14 @@ export class ZazuController {
    * @param {number} offset
    */
   scrollTo (offset: number) {
-    this.$window.scrollTo(0, offset - 5);
+    // this.$window.scrollTo(0, offset - 5);
   }
 
   /**
    * Scroll by 25 pixels.
    */
   scrollBy () {
-    this.$window.scrollBy(0, 25);
+    // this.$window.scrollBy(0, 25);
   }
 
   /**
@@ -251,7 +254,7 @@ export class ZazuController {
   isFirstTime () {
     const firstTime = this.ZazuService.isFirstTime();
     if (firstTime) {
-      this.hotkeys.toggleCheatSheet();
+      // this.hotkeys.toggleCheatSheet();
       this.ZazuService.setFirstTime();
     }
   }
@@ -298,63 +301,63 @@ export class ZazuController {
    * Setup the hotkeys.
    */
   setupHotkeys () {
-    this.hotkeys.bindTo(this.$scope)
-      .add({
-        combo: 'mod+n',
-        description: 'Create new zazu',
-        callback: this.createNew.bind(this, false)
-      })
-      .add({
-        combo: 'mod+shift+n',
-        description: 'Create new zazu under current position',
-        callback: this.createNew.bind(this, true)
-      })
-      .add({
-        combo: 'esc',
-        description: 'Cancel edit or create new zazu',
-        allowIn: ['INPUT'],
-        callback: this.cancel.bind(this)
-      })
-      .add({
-        combo: 'down',
-        description: 'Select next zazu',
-        callback: this.selectNext.bind(this)
-      })
-      .add({
-        combo: 'up',
-        description: 'Select previous zazu',
-        callback: this.selectPrevious.bind(this)
-      })
-      .add({
-        combo: 'mod+backspace',
-        description: 'Remove zazu',
-        callback: this.removeSelected.bind(this)
-      })
-      .add({
-        combo: 'mod+enter',
-        description: 'Toggle check status of zazu',
-        callback: this.toggleChecked.bind(this)
-      })
-      .add({
-        combo: 'mod+shift+enter',
-        description: 'Edit zazu',
-        allowIn: ['INPUT'],
-        callback: this.edit.bind(this)
-      })
-      .add({
-        combo: 'mod+o',
-        description: 'Toggle show only open zazus',
-        callback: this.showOpen.bind(this)
-      })
-      .add({
-        combo: 'mod+shift+up',
-        description: 'Move zazu one position up',
-        callback: this.moveUp.bind(this)
-      })
-      .add({
-        combo: 'mod+shift+down',
-        description: 'Move zazu one position down',
-        callback: this.moveDown.bind(this)
-      });
+    // this.hotkeys.bindTo(this.$scope)
+    //   .add({
+    //     combo: 'mod+n',
+    //     description: 'Create new zazu',
+    //     callback: this.createNew.bind(this, false)
+    //   })
+    //   .add({
+    //     combo: 'mod+shift+n',
+    //     description: 'Create new zazu under current position',
+    //     callback: this.createNew.bind(this, true)
+    //   })
+    //   .add({
+    //     combo: 'esc',
+    //     description: 'Cancel edit or create new zazu',
+    //     allowIn: ['INPUT'],
+    //     callback: this.cancel.bind(this)
+    //   })
+    //   .add({
+    //     combo: 'down',
+    //     description: 'Select next zazu',
+    //     callback: this.selectNext.bind(this)
+    //   })
+    //   .add({
+    //     combo: 'up',
+    //     description: 'Select previous zazu',
+    //     callback: this.selectPrevious.bind(this)
+    //   })
+    //   .add({
+    //     combo: 'mod+backspace',
+    //     description: 'Remove zazu',
+    //     callback: this.removeSelected.bind(this)
+    //   })
+    //   .add({
+    //     combo: 'mod+enter',
+    //     description: 'Toggle check status of zazu',
+    //     callback: this.toggleChecked.bind(this)
+    //   })
+    //   .add({
+    //     combo: 'mod+shift+enter',
+    //     description: 'Edit zazu',
+    //     allowIn: ['INPUT'],
+    //     callback: this.edit.bind(this)
+    //   })
+    //   .add({
+    //     combo: 'mod+o',
+    //     description: 'Toggle show only open zazus',
+    //     callback: this.showOpen.bind(this)
+    //   })
+    //   .add({
+    //     combo: 'mod+shift+up',
+    //     description: 'Move zazu one position up',
+    //     callback: this.moveUp.bind(this)
+    //   })
+    //   .add({
+    //     combo: 'mod+shift+down',
+    //     description: 'Move zazu one position down',
+    //     callback: this.moveDown.bind(this)
+    //   });
   }
 }
