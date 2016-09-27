@@ -1,6 +1,5 @@
 <div class="zazu">
-    <!-- in-viewport="scroll(inViewport, offset)" -->
-    <span class="zazu__arrow" *ngIf="isSelected">&gt;</span>
+    <span class="zazu__arrow" *ngIf="isSelected" (inViewport)="scroll($event)">&gt;</span>
     <span class="zazu__pointer" *ngIf="!isSelected && !zazu.checked">&#8226;</span>
     <div class="zazu__content">
         <input type="checkbox" [(ngModel)]="zazu.checked" id="{{getZazuItemForAttribute(zazu)}}" class="zazu__check">

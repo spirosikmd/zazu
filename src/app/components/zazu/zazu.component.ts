@@ -232,14 +232,14 @@ export class ZazuComponent implements OnInit {
    * @param {number} offset
    */
   scrollTo (offset: number) {
-    // this.$window.scrollTo(0, offset - 5);
+    window.scrollTo(0, offset - 5);
   }
 
   /**
    * Scroll by 25 pixels.
    */
   scrollBy () {
-    // this.$window.scrollBy(0, 25);
+    window.scrollBy(0, 25);
   }
 
   /**

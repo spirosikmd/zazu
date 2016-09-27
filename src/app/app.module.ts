@@ -10,6 +10,7 @@ import {ZazuItemComponent} from './components/zazuItem/zazu-item.component';
 import {AppComponent} from './app.component';
 import {ZazuComponent} from './components/zazu/zazu.component';
 import {FocusDirective} from './directives/focus.directive';
+import {InViewportDirective} from './directives/in-viewport.directive';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import {FocusDirective} from './directives/focus.directive';
     AppComponent,
     ZazuComponent,
     ZazuItemComponent,
-    FocusDirective
+    FocusDirective,
+    InViewportDirective
   ],
   providers: [
     ConfigService,

@@ -1,5 +1,6 @@
 import {Zazu} from '../../models/zazu.model';
 import {Input, Output, EventEmitter, Component} from '@angular/core';
+import {InViewportData} from '../../directives/in-viewport.directive';
 
 @Component({
   selector: 'zazu-item',
@@ -8,20 +9,17 @@ import {Input, Output, EventEmitter, Component} from '@angular/core';
 export class ZazuItemComponent {
   @Input() zazu: Zazu;
   @Input() isSelected: boolean;
-  @Output() onUpdateChecked = new EventEmitter<{id: string, checked: boolean}>();
   @Output() onUpdateLabel = new EventEmitter<{id: string, label: string, keyCode: number}>();
   @Output() onOutViewport = new EventEmitter<number>();
 
   /**
    * If element is not in viewport then scroll to its offsetTop.
-   * @param {boolean} inViewport True if element is in viewport, false otherwise.
-   * @param {number} offset The offsetTop of element.
    */
-  scroll (inViewport: boolean, offset: number) {
-    if (inViewport) {
+  scroll (data: InViewportData) {
+    if (data.inViewport) {
       return;
     }
-    this.onOutViewport.emit(offset);
+    this.onOutViewport.emit(data.offset);
   }
 
   private updateLabel (zazu: Zazu, keyCode: number) {
