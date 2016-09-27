@@ -1,7 +1,4 @@
 import {Component} from '@angular/core';
-
-require('./../env');
-
 import './app.scss';
 
 @Component({
