@@ -1,8 +1,23 @@
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {By} from '@angular/platform-browser';
+import {DebugElement} from '@angular/core';
 import {Zazu} from '../../models/zazu.model';
-import zazuApp from '../../app.component';
-require('angular-mocks');
+import {ZazuItemComponent} from './zazu-item.component';
 
-describe('component: zazuItem', () => {
+let comp: ZazuItemComponent;
+let fixture: ComponentFixture<ZazuItemComponent>;
+
+describe('ZazuItemComponent', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [ZazuItemComponent], // declare the test component
+    });
+
+    fixture = TestBed.createComponent(ZazuItemComponent);
+
+    comp = fixture.componentInstance; // BannerComponent test instance
+  });
+
   let $componentController: angular.IComponentControllerService;
   let $scope: angular.IScope;
   let component;

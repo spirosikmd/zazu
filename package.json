@@ -8,12 +8,19 @@
     "type": "git",
     "url": "https://github.com/spirosikmd/zazu"
   },
+  "author": {
+    "name": "Spyros Ioakeimidis",
+    "email": "spyrosikmd@gmail.com",
+    "url": "http://spyros.io"
+  },
   "scripts": {
-    "test": "scripts/test.sh",
-    "electron": "scripts/electron.sh",
-    "dev": "scripts/dev.sh",
+    "test": "karma start",
     "start": "export ENV=development && concurrently --kill-others \"webpack-dev-server --inline --progress --port 8080\" \"electron .\"",
-    "package": "scripts/package.sh"
+    "clean": "rimraf dist",
+    "build": "webpack --config config/webpack.prod.js --progress --profile --bail",
+    "copy": "cp package.json main.js dist && cp -r node_modules dist/node_modules",
+    "package": "electron-packager dist Zazu --platform=darwin --arch=x64 --version=1.4.1 --overwrite --prune=true --out=out --ignore\"node_modules\"",
+    "deploy": "npm test && npm run clean && npm run build && npm run copy && npm run package"
   },
   "dependencies": {
     "@angular/common": "^2.0.1",
@@ -28,6 +35,7 @@
     "angular2-hotkeys": "^0.3.1",
     "core-js": "^2.4.1",
     "randomstring": "^1.1.5",
+    "reflect-metadata": "^0.1.8",
     "rxjs": "^5.0.0-beta.12",
     "source-code-pro": "git://github.com/adobe-fonts/source-code-pro.git#release",
     "zone.js": "^0.6.25"
@@ -57,6 +65,8 @@
     "karma-coverage": "^1.1.1",
     "karma-coveralls": "^1.1.2",
     "karma-jasmine": "^1.0.2",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-webpack": "^1.8.0",
     "lodash.assign": "^4.1.0",
     "node-sass": "^3.10.0",
     "null-loader": "^0.1.1",

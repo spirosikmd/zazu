@@ -24,14 +24,35 @@ module.exports = function (config) {
       noInfo: true
     },
 
-    reporters: ['progress'],
+    // Coverage reporter configuration
+    coverageReporter: {
+      dir: 'coverage',
+      reporters: [
+        {type: 'text-summary'},
+        {type: 'html', subdir: 'html'}
+      ]
+    },
+
+    reporters: ['progress', 'coverage'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: false,
-    browsers: ['PhantomJS'],
-    singleRun: true
+    browsers: ['Chrome'],
+    singleRun: true,
+    customLaunchers: {
+      Chrome_travis_ci: {
+        base: 'Chrome',
+        flags: ['--no-sandbox']
+      }
+    }
   };
+
+  if (process.env.TRAVIS) {
+    _config.browsers = ['Chrome_travis_ci'];
+    _config.coverageReporter.reporters.push({type: 'lcov', subdir: './'});
+    _config.reporters.push('coveralls');
+  }
 
   config.set(_config);
 };
