@@ -8,7 +8,6 @@
         </label>
         <input *ngIf="zazu.editing" type="text" [(ngModel)]="zazu.label" name="label" title="Edit zazu label"
                class="zazu__edit" (keypress)="updateLabel(zazu, $event.keyCode)"
-               [focus]="zazu.editing" required>
-        <!-- elastic-input -->
+               [focus]="zazu.editing" required elastic-input>
     </div>
 </div>

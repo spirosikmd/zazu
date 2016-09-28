@@ -7,7 +7,6 @@
     </zazu-item>
     <form *ngIf="zazu.temp" (submit)="create(zazu)">
         <input type="text" [(ngModel)]="zazu.label" name="label" id="label" title="Zazu label" required
-               [focus]="zazu.temp" class="zazu__new">
+               [focus]="zazu.temp" class="zazu__new" elastic-input>
     </form>
-    <!-- elastic-input elastic-input-min-width="100px" -->
 </div>

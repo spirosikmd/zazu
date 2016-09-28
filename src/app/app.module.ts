@@ -11,6 +11,7 @@ import {AppComponent} from './app.component';
 import {ZazuComponent} from './components/zazu/zazu.component';
 import {FocusDirective} from './directives/focus.directive';
 import {InViewportDirective} from './directives/in-viewport.directive';
+import {ElasticInput} from './directives/elastic-input.directive';
 
 @NgModule({
   imports: [
@@ -23,7 +24,8 @@ import {InViewportDirective} from './directives/in-viewport.directive';
     ZazuComponent,
     ZazuItemComponent,
     FocusDirective,
-    InViewportDirective
+    InViewportDirective,
+    ElasticInput
   ],
   providers: [
     ConfigService,
