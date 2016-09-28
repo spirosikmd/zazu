@@ -1,0 +1,6 @@
+{
+  "name": "Zazu",
+  "tagline": "Dead simple,  keyboard shortcut todo app",
+  "body": "[![Build Status](https://travis-ci.org/spirosikmd/zazu.svg?branch=master)](https://travis-ci.org/spirosikmd/zazu) [![Coverage Status](https://coveralls.io/repos/github/spirosikmd/zazu/badge.svg?branch=master)](https://coveralls.io/github/spirosikmd/zazu?branch=master)\r\n\r\nDead simple,  keyboard shortcut todo app. Theme inspired from\r\n[material theme](http://equinusocio.github.io/material-theme/), and built with\r\n\r\n- [AngularJS 2](https://angularjs.io/)\r\n- [Angular2 Hotkeys](https://github.com/brtnshrdr/angular2-hotkeys)\r\n- [TypeScript 2](https://www.typescriptlang.org/)\r\n- [Electron](http://electron.atom.io/)\r\n- [Source Code Pro](http://adobe-fonts.github.io/source-code-pro/)\r\n\r\nTo check the keyboard shortcuts type `?`\r\n\r\n<img src=\"resources/zazu.png\">\r\n\r\n## Contribute\r\n\r\nInstall modules with `npm i` and run `npm start` to boot development environment.\r\n\r\n## Test\r\n\r\nTo run tests use `npm test`.\r\n\r\n## Package\r\n\r\nTo package zazu, currently only for darwin platform, use `npm run deploy`.\r\n",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
