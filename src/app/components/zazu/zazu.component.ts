@@ -166,6 +166,12 @@ export class ZazuComponent implements OnInit {
    */
   createNew (current: boolean) {
     let mode = current ? 'createUnderCurrent' : 'create';
+
+    // If we already creating a new zazu do not create another temp zazu
+    if (this.isCreatingNew()) {
+      return;
+    }
+
     this.modes[mode] = true;
 
     this.zazu.id = 'temp';
@@ -174,6 +180,10 @@ export class ZazuComponent implements OnInit {
     this.ZazuService.create(Object.assign({}, this.zazu), false, current);
 
     this.refresh();
+  }
+
+  isCreatingNew (): boolean {
+    return this.modes.createUnderCurrent || this.modes.create;
   }
 
   /**
@@ -299,7 +309,7 @@ export class ZazuComponent implements OnInit {
   setupHotkeys () {
     this.hotkeysService.add(new Hotkey('mod+n', this.createNew.bind(this, false)));
     this.hotkeysService.add(new Hotkey('mod+shift+n', this.createNew.bind(this, true)));
-    this.hotkeysService.add(new Hotkey('esc', this.cancel.bind(this)));
+    this.hotkeysService.add(new Hotkey('esc', this.cancel.bind(this), ['INPUT']));
     this.hotkeysService.add(new Hotkey('down', this.selectNext.bind(this)));
     this.hotkeysService.add(new Hotkey('up', this.selectPrevious.bind(this)));
     this.hotkeysService.add(new Hotkey('mod+backspace', this.removeSelected.bind(this)));
