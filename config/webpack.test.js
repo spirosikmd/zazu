@@ -31,6 +31,17 @@ module.exports = {
         include: helpers.root('src', 'app'),
         loader: 'raw'
       }
+    ],
+
+    postLoaders: [
+      {
+        test: /\.ts$/, loader: 'istanbul-instrumenter-loader',
+        include: helpers.root('src'),
+        exclude: [
+          /\.spec\.ts$/,
+          /node_modules/
+        ]
+      }
     ]
   }
 };
