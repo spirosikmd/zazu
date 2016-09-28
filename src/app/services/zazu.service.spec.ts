@@ -3,8 +3,6 @@ import {Zazu} from '../models/zazu.model';
 import {FlagService} from './flag.service';
 import {StorageService} from './storage.service';
 import {ConfigService} from './config.service';
-require('angular-mocks');
-const angular = require('angular');
 
 describe('service: ZazuService', () => {
   let service: ZazuService;

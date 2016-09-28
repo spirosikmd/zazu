@@ -1,9 +1,7 @@
 import {StorageService} from './storage.service';
 import {Zazu} from '../models/zazu.model';
 import {ConfigService} from './config.service';
-require('angular-mocks');
 const randomstring = require('randomstring');
-const angular = require('angular');
 
 describe('service: StorageService', () => {
   let service: StorageService;
@@ -20,7 +18,7 @@ describe('service: StorageService', () => {
     storage = {
       'zazus.test': zazus,
       getItem: function (key) {
-        return angular.toJson(this[key]);
+        return JSON.stringify(this[key]);
       },
       setItem: function (key, data) {
         this[key] = data;
@@ -53,8 +51,8 @@ describe('service: StorageService', () => {
       expect(service.get()).toEqual(zazus);
     });
 
-    it('should return empty array if copy fails', () => {
-      spyOn(angular, 'copy').and.returnValue(null);
+    it('should return empty array if zazu array is null', () => {
+      service.zazus = null;
       expect(service.get()).toEqual([]);
     });
   });
@@ -68,14 +66,14 @@ describe('service: StorageService', () => {
       ];
       service.zazus = otherZazus;
       service.save();
-      expect(storage.setItem).toHaveBeenCalledWith('zazus.test', angular.toJson(otherZazus));
+      expect(storage.setItem).toHaveBeenCalledWith('zazus.test', JSON.stringify(otherZazus));
     });
 
     it('should save empty array to local storage if zazus is null', () => {
       spyOn(storage, 'setItem');
       service.zazus = null;
       service.save();
-      expect(storage.setItem).toHaveBeenCalledWith('zazus.test', angular.toJson([]));
+      expect(storage.setItem).toHaveBeenCalledWith('zazus.test', JSON.stringify([]));
     });
   });
 

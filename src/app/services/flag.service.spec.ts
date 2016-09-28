@@ -1,6 +1,5 @@
 import {FlagService} from './flag.service';
 import {ConfigService} from './config.service';
-require('angular-mocks');
 
 describe('service: FlagService', () => {
   let service: FlagService;
@@ -17,12 +16,13 @@ describe('service: FlagService', () => {
     storage = {
       'zazu.flags.test': flags,
       getItem: function (key) {
-        return angular.toJson(this[key]);
+        return JSON.stringify(this[key]);
       },
       setItem: function (key, data) {
         this[key] = data;
       }
     };
+    process.env.ENV = 'development';
     configService = new ConfigService();
     service = new FlagService(configService);
     service.storage = storage;
@@ -71,7 +71,7 @@ describe('service: FlagService', () => {
       spyOn(storage, 'setItem');
       service.setFlag('firstTime', true);
       expect(service.flags.firstTime).toEqual(true);
-      expect(storage.setItem).toHaveBeenCalledWith('zazu.flags.test', angular.toJson(service.flags));
+      expect(storage.setItem).toHaveBeenCalledWith('zazu.flags.test', JSON.stringify(service.flags));
     });
   });
 });
