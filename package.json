@@ -44,6 +44,7 @@
     "@types/angular-hotkeys": "0.0.31",
     "@types/core-js": "^0.9.34",
     "@types/jasmine": "^2.2.34",
+    "@types/mousetrap": "^1.5.32",
     "@types/node": "^6.0.41",
     "@types/randomstring": "^1.1.4",
     "angular2-template-loader": "^0.5.0",
