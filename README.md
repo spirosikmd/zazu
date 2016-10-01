@@ -23,4 +23,4 @@ To run tests use `npm test`.
 
 ## Package
 
-To package zazu, currently only for darwin platform, use `npm run deploy`.
+To package zazu, currently only for MacOSX, use `npm run deploy`.
