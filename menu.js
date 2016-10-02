@@ -1,7 +1,5 @@
 const {Menu} = require('electron');
 
-const development = process.env.ENV === 'development';
-
 const template = [
   {
     label: 'Edit',

@@ -1,5 +1,5 @@
 const path = require('path');
-const {ipcMain, BrowserWindow, app} = require('electron');
+const {BrowserWindow, app} = require('electron');
 
 const development = process.env.ENV === 'development';
 
