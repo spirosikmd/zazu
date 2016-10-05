@@ -136,7 +136,6 @@ export class ZazuComponent implements OnInit {
     }
     this.ZazuService.remove(zazu.id, true);
     this.refresh();
-    this.ZazuService.resetSelected();
   }
 
   /**
