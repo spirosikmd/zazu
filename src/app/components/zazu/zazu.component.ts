@@ -134,8 +134,13 @@ export class ZazuComponent implements OnInit {
     if (!zazu) {
       return;
     }
+    let isLastToDelete = this.ZazuService.isLastSelected();
     this.ZazuService.remove(zazu.id, true);
     this.refresh();
+    // If the last one is selected select the previous one
+    if (isLastToDelete) {
+      this.ZazuService.previous();
+    }
   }
 
   /**
