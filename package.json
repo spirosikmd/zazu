@@ -33,7 +33,7 @@
     "@angular/router": "^3.1.0",
     "@angular/upgrade": "^2.1.0",
     "angular2-elastic-input": "^1.1.1",
-    "angular2-focus": "^1.0.2",
+    "angular2-focus": "^1.0.3",
     "angular2-hotkeys": "^0.4.0",
     "core-js": "^2.4.1",
     "randomstring": "^1.1.5",
