@@ -4,7 +4,7 @@ import {DebugElement} from '@angular/core';
 import {Zazu} from '../../models/zazu.model';
 import {ZazuItemComponent} from './zazu-item.component';
 import {FormsModule} from '@angular/forms';
-import {FocusDirective} from '../../directives/focus.directive';
+import {FocusModule} from 'angular2-focus';
 
 describe('ZazuItemComponent', () => {
   let comp: ZazuItemComponent;
@@ -15,8 +15,8 @@ describe('ZazuItemComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [FormsModule],
-      declarations: [ZazuItemComponent, FocusDirective],
+      imports: [FormsModule, FocusModule],
+      declarations: [ZazuItemComponent],
     });
   }));
 

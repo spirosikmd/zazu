@@ -9,23 +9,23 @@ import {ZazuService} from './services/zazu.service';
 import {ZazuItemComponent} from './components/zazuItem/zazu-item.component';
 import {AppComponent} from './app.component';
 import {ZazuComponent} from './components/zazu/zazu.component';
-import {FocusDirective} from './directives/focus.directive';
 import {InViewportDirective} from './directives/in-viewport.directive';
-import {ElasticInput} from './directives/elastic-input.directive';
+import {ElasticInputModule} from 'angular2-elastic-input';
+import {FocusModule} from 'angular2-focus';
 
 @NgModule({
   imports: [
     BrowserModule,
     FormsModule,
-    HotkeyModule.forRoot()
+    HotkeyModule.forRoot(),
+    ElasticInputModule.forRoot(),
+    FocusModule.forRoot()
   ],
   declarations: [
     AppComponent,
     ZazuComponent,
     ZazuItemComponent,
-    FocusDirective,
-    InViewportDirective,
-    ElasticInput
+    InViewportDirective
   ],
   providers: [
     ConfigService,

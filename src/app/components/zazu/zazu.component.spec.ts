@@ -1,3 +1,119 @@
+import {ComponentFixture, TestBed, async} from '@angular/core/testing';
+import {DebugElement} from '@angular/core';
+import {Zazu} from '../../models/zazu.model';
+import {ZazuComponent} from './zazu.component';
+import {FormsModule} from '@angular/forms';
+import {ZazuService} from '../../services/zazu.service';
+import {ZazuItemComponent} from '../zazuItem/zazu-item.component';
+import {HotkeysService} from 'angular2-hotkeys/src/services/hotkeys.service';
+import {ElasticInputModule} from 'angular2-elastic-input';
+import {FocusModule} from 'angular2-focus/src/focus.module';
+
+describe('ZazuItemComponent', () => {
+  let comp: ZazuComponent;
+  let fixture: ComponentFixture<ZazuComponent>;
+  let zazuEl: DebugElement;
+  let zazu: Zazu;
+  let zazuServiceStub: ZazuService;
+  let zazuService: ZazuService;
+  let hotkeysServiceStub;
+  let hotkeysService;
+
+  beforeEach(async(() => {
+    // stub UserService for test purposes
+    hotkeysServiceStub = {
+      add: jasmine.createSpy('add')
+    };
+    zazuServiceStub = {
+      open: true,
+      selected: 0,
+      zazus: [new Zazu({
+        label: 'label',
+        checked: false
+      })],
+      filtered: [],
+      StorageService: null,
+      FlagService: null,
+      getSelectedIndex: jasmine.createSpy('getSelectedIndex'),
+      find: jasmine.createSpy('find'),
+      push: jasmine.createSpy('push'),
+      unshift: jasmine.createSpy('unshift'),
+      swap: jasmine.createSpy('swap'),
+      moveUp: jasmine.createSpy('moveUp'),
+      moveDown: jasmine.createSpy('moveDown'),
+      setFirstTime: jasmine.createSpy('setFirstTime'),
+      isFirstTime: jasmine.createSpy('isFirstTime'),
+      toggleOpen: jasmine.createSpy('toggleOpen'),
+      isFirstSelected: jasmine.createSpy('isFirstSelected'),
+      isLastSelected: jasmine.createSpy('isLastSelected'),
+      isEditing: jasmine.createSpy('isEditing'),
+      setEditing: jasmine.createSpy('setEditing'),
+      resetSelected: jasmine.createSpy('resetSelected'),
+      isSelected: jasmine.createSpy('isSelected'),
+      getSelected: jasmine.createSpy('getSelected'),
+      previous: jasmine.createSpy('previous'),
+      next: jasmine.createSpy('next'),
+      remove: jasmine.createSpy('remove'),
+      update: jasmine.createSpy('update'),
+      create: jasmine.createSpy('create'),
+      get: jasmine.createSpy('get'),
+      refresh: jasmine.createSpy('refresh'),
+      isOpen: jasmine.createSpy('isOpen')
+    };
+
+    TestBed.configureTestingModule({
+      imports: [FormsModule, ElasticInputModule, FocusModule],
+      declarations: [ZazuComponent, ZazuItemComponent],
+      providers: [{
+        provide: ZazuService, useValue: zazuServiceStub
+      }, {
+        provide: HotkeysService, useValue: hotkeysServiceStub
+      }]
+    });
+
+    fixture = TestBed.createComponent(ZazuComponent);
+    comp = fixture.componentInstance;
+
+    fixture.detectChanges();
+
+    // UserService from the root injector
+    zazuService = TestBed.get(ZazuService);
+  }));
+
+  it('#refresh calls get of ZazuService', () => {
+    comp.refresh();
+    expect(zazuService.get).toHaveBeenCalled();
+  });
+
+  it('#reset sets zazu to default zazu', () => {
+    expect(comp.zazu).toEqual(new Zazu({label: '', checked: false}));
+    comp.zazu = new Zazu({label: 'label', checked: true});
+    comp.reset();
+    expect(comp.zazu).toEqual(new Zazu({label: '', checked: false}));
+  });
+
+  describe('#create', () => {
+    it('should not create new zazu if label is length 0', () => {
+      comp.create(new Zazu({label: '', checked: false}));
+      expect(zazuService.create).not.toHaveBeenCalled();
+    });
+
+    it('creates new zazu', () => {
+      let zazu = new Zazu({label: 'label', checked: false});
+      spyOn(comp, 'resetModes');
+      spyOn(comp, 'refresh');
+      spyOn(comp, 'reset');
+      spyOn(comp, 'isInMode').and.returnValue(true);
+      comp.create(zazu);
+      expect(comp.isInMode).toHaveBeenCalledWith('createUnderCurrent');
+      expect(zazuService.create).toHaveBeenCalledWith(zazu, true, true);
+      expect(comp.refresh).toHaveBeenCalled();
+      expect(comp.reset).toHaveBeenCalled();
+      expect(comp.resetModes).toHaveBeenCalledWith();
+    });
+  });
+});
+
 // import {ZazuService} from '../../services/zazu.service';
 // import zazuApp from '../../app.component';
 // import {Zazu} from '../../models/zazu.model';

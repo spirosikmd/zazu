@@ -1,20 +1,19 @@
 import {Component, OnInit} from '@angular/core';
 import {ZazuService} from '../../services/zazu.service';
 import {Zazu} from '../../models/zazu.model';
-import {HotkeysService} from 'angular2-hotkeys/src/services/hotkeys.service';
-import {Hotkey} from 'angular2-hotkeys/src/models/hotkey.model';
+import {HotkeysService} from 'angular2-hotkeys';
+import {Hotkey} from 'angular2-hotkeys';
+
+const _clone = require('lodash/clone');
 
 @Component({
   selector: 'zazu',
   templateUrl: './zazu.html'
 })
 export class ZazuComponent implements OnInit {
-  defaultZazu: {
-    label: string;
-    checked: boolean
-  };
-  zazus: any[];
-  zazu: any;
+  defaultZazu: Zazu;
+  zazus: Zazu[];
+  zazu: Zazu;
   defaultModes: {
     create: boolean;
     createUnderCurrent: boolean;
@@ -66,7 +65,7 @@ export class ZazuComponent implements OnInit {
    * Reset the new model zazu to default.
    */
   reset () {
-    this.zazu = Object.assign({}, this.defaultZazu);
+    this.zazu = _clone(this.defaultZazu);
   };
 
   /**
@@ -78,7 +77,7 @@ export class ZazuComponent implements OnInit {
       return;
     }
 
-    this.ZazuService.create(Object.assign({}, zazu), true, this.isInMode('createUnderCurrent'));
+    this.ZazuService.create(_clone(zazu), true, this.isInMode('createUnderCurrent'));
     this.resetModes();
 
     this.refresh();

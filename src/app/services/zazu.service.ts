@@ -14,8 +14,8 @@ export class ZazuService {
 
   // @ngInject
   constructor (
-    private StorageService: StorageService,
-    private FlagService: FlagService
+    public StorageService: StorageService,
+    public FlagService: FlagService
   ) {
     // By default show only open zazus
     this.open = true;

@@ -9,12 +9,16 @@
 
 <app></app>
 
+<script src="http://localhost:8080/polyfill.js"></script>
+<script src="http://localhost:8080/vendor.js"></script>
+<script src="http://localhost:8080/app.js"></script>
 <script>
     (function () {
         function addDevScript (src) {
             const script = document.createElement('script');
             script.src = src;
-            document.write(script.outerHTML);
+            script.async = 1;
+            document.body.appendChild(script);
         }
 
         function addDevStyle (href) {
@@ -26,9 +30,9 @@
         }
 
         if (process.env.ENV === 'development') {
-            addDevScript('http://localhost:8080/polyfill.js');
-            addDevScript('http://localhost:8080/vendor.js');
-            addDevScript('http://localhost:8080/app.js');
+//            addDevScript('http://localhost:8080/polyfill.js');
+//            addDevScript('http://localhost:8080/vendor.js');
+//            addDevScript('http://localhost:8080/app.js');
             addDevStyle('http://localhost:8080/app.css');
         }
     }());

@@ -1,5 +1,3 @@
-const assign = require('lodash.assign');
-
 export class Zazu {
   id: string;
   label: string;
@@ -9,7 +7,7 @@ export class Zazu {
   editing: boolean;
 
   constructor (data = {}) {
-    assign(this, data);
+    Object.assign(this, data);
   }
 
   toJSON () {
