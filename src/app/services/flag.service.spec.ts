@@ -3,7 +3,6 @@ import {ConfigService} from './config.service';
 
 describe('service: FlagService', () => {
   let service: FlagService;
-  let storage;
   let flags: {
     firstTime: boolean;
   };
@@ -13,24 +12,13 @@ describe('service: FlagService', () => {
     flags = {
       firstTime: false
     };
-    storage = {
-      'zazu.flags.test': flags,
-      getItem: function (key) {
-        return JSON.stringify(this[key]);
-      },
-      setItem: function (key, data) {
-        this[key] = data;
-      }
-    };
     process.env.ENV = 'development';
     configService = new ConfigService();
     service = new FlagService(configService);
-    service.storage = storage;
   });
 
   afterAll(() => {
     service = null;
-    storage = null;
     flags = null;
   });
 
@@ -40,6 +28,7 @@ describe('service: FlagService', () => {
 
   describe('refresh', () => {
     it('should refresh flags from storage', () => {
+      spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify(flags));
       expect(service.flags).toEqual({});
       service.refresh();
       expect(service.flags).toEqual(flags);
@@ -68,10 +57,10 @@ describe('service: FlagService', () => {
     it('should set the specified flag with value and call storage setItem with flagsKey and flags data', () => {
       service.flags = flags;
       expect(service.flags.firstTime).toEqual(false);
-      spyOn(storage, 'setItem');
+      spyOn(localStorage, 'setItem');
       service.setFlag('firstTime', true);
       expect(service.flags.firstTime).toEqual(true);
-      expect(storage.setItem).toHaveBeenCalledWith('zazu.flags.test', JSON.stringify(service.flags));
+      expect(localStorage.setItem).toHaveBeenCalledWith('zazu.flags.test', JSON.stringify(service.flags));
     });
   });
 });

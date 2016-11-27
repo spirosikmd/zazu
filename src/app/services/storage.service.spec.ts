@@ -5,7 +5,6 @@ const randomstring = require('randomstring');
 
 describe('service: StorageService', () => {
   let service: StorageService;
-  let storage;
   let zazus: Zazu[];
   let configService: ConfigService;
 
@@ -15,24 +14,14 @@ describe('service: StorageService', () => {
       new Zazu({id: 'another-zazu-id', label: 'another-label', checked: false}),
       new Zazu({id: 'yet-another-zazu-id', label: 'yet-another-label', checked: true})
     ];
-    storage = {
-      'zazus.test': zazus,
-      getItem: function (key) {
-        return JSON.stringify(this[key]);
-      },
-      setItem: function (key, data) {
-        this[key] = data;
-      }
-    };
+    spyOn(localStorage, 'getItem').and.returnValue(JSON.stringify(zazus));
     configService = new ConfigService();
     service = new StorageService(configService);
-    service.storage = storage;
     service.refresh();
   });
 
   afterAll(() => {
     service = null;
-    storage = null;
     zazus = null;
   });
 
@@ -59,21 +48,21 @@ describe('service: StorageService', () => {
 
   describe('save', () => {
     it('should save current zazus to local storage', () => {
-      spyOn(storage, 'setItem');
+      spyOn(localStorage, 'setItem');
       let otherZazus = [
         new Zazu({id: 'zazu-id-1', label: 'label-1', checked: true}),
         new Zazu({id: 'zazu-id-2', label: 'label-2', checked: false})
       ];
       service.zazus = otherZazus;
       service.save();
-      expect(storage.setItem).toHaveBeenCalledWith('zazus.test', JSON.stringify(otherZazus));
+      expect(localStorage.setItem).toHaveBeenCalledWith('zazus.test', JSON.stringify(otherZazus));
     });
 
     it('should save empty array to local storage if zazus is null', () => {
-      spyOn(storage, 'setItem');
+      spyOn(localStorage, 'setItem');
       service.zazus = null;
       service.save();
-      expect(storage.setItem).toHaveBeenCalledWith('zazus.test', JSON.stringify([]));
+      expect(localStorage.setItem).toHaveBeenCalledWith('zazus.test', JSON.stringify([]));
     });
   });
 
