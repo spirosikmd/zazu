@@ -40,7 +40,7 @@
     "reflect-metadata": "^0.1.8",
     "rxjs": "^5.0.0-beta.12",
     "source-code-pro": "git://github.com/adobe-fonts/source-code-pro.git#release",
-    "zone.js": "^0.6.25"
+    "zone.js": "^0.7.0"
   },
   "devDependencies": {
     "@types/angular-hotkeys": "0.0.31",
